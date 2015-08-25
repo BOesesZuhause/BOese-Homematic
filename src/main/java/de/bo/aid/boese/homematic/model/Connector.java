@@ -1,11 +1,24 @@
 package de.bo.aid.boese.homematic.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Connector {
 	
 	private int id;
 	
 	private int idVerteiler;
 	
+	private Set<Device> devices = new HashSet<>();
+	
+	public Set<Device> getDevices() {
+		return devices;
+	}
+
+	public void setDevices(Set<Device> devices) {
+		this.devices = devices;
+	}
+
 	public int getIdVerteiler() {
 		return idVerteiler;
 	}

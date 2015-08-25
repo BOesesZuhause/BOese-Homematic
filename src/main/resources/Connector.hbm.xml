@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30.07.2015 11:14:41 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="de.bo.aid.boese.homematic.model.Connector" table="connector" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+	        <generator class="sequence">
+                <param name="sequence">connector_id_generator</param>
+        	</generator>
+	    </id>
+        <property name="name" type="string">
+            <column name="Name" length="25" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="secret" length="125" not-null="true" />
+        </property>
+        <property name="idVerteiler" type="int">
+            <column name="idVerteiler" unique="true" not-null="true" />
+        </property>
+        
+        <set name="devices" table="devices" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DevID" not-null="true" />
+            </key>
+            <one-to-many class="de.bo.aid.boese.homematic.model.Device" />
+        </set>
+       
+    </class>
+</hibernate-mapping>

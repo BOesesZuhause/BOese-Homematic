@@ -7,6 +7,8 @@ public class Component {
 	private int idVerteiler;
 	
 	private String name;
+	
+
 
 	public int getId() {
 		return id;

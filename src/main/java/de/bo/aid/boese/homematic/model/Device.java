@@ -1,5 +1,7 @@
 package de.bo.aid.boese.homematic.model;
 
+import java.util.HashSet;
+import java.util.Set;
 
 public class Device {
 	
@@ -8,6 +10,16 @@ public class Device {
 	private int idVerteiler;
 	
 	private String name;
+	
+	private Set<Component> components = new HashSet<>();
+
+	public Set<Component> getComponents() {
+		return components;
+	}
+
+	public void setComponents(Set<Component> components) {
+		this.components = components;
+	}
 	
 
 	public int getId() {
