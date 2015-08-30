@@ -13,7 +13,7 @@
             <column name="Name" length="25" not-null="true" />
         </property>
         <property name="password" type="string">
-            <column name="secret" length="125" not-null="true" />
+            <column name="secret" length="125" not-null="false" />
         </property>
         <property name="idVerteiler" type="int">
             <column name="idVerteiler" unique="true" not-null="true" />

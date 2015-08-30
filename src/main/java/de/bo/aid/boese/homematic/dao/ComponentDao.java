@@ -39,4 +39,9 @@ public class ComponentDao {
 
 	}
 
+	public static void updateComponent(Component component) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

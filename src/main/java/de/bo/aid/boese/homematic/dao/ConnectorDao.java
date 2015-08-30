@@ -1,5 +1,7 @@
 package de.bo.aid.boese.homematic.dao;
 
+import java.util.List;
+
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,19 +13,24 @@ import javassist.NotFoundException;
 public class ConnectorDao {
 static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
-	public static Connector getConnector(int id) throws NotFoundException{
+	public static Connector getConnector() throws Exception {
 		Session session = factory.openSession();
 		session.beginTransaction();
-		
+
 		Connector con = new Connector();
-		try{
-			session.load(con, id);
-			session.getTransaction().commit();
-		}
-		catch (ObjectNotFoundException onfe){
-			session.getTransaction().rollback();
-			session.close();
-			throw new NotFoundException("Connector with id: " + id + " not found");
+
+		List<Connector> cons = session.createQuery("from Connector").list();
+		session.getTransaction().commit();
+
+		if (cons.size() == 1) {
+			con = cons.get(0);
+		} else if (cons.size() > 1) {
+			throw new Exception(); //TODO
+		} else if (cons.size() == 0) {
+			con.setName("HomeMaticDefault");
+			con.setPassword(null);
+			con.setIdVerteiler(-1);
+
 		}
 		return con;
 	}
@@ -36,6 +43,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		}catch(Exception e){
 			//TODO
 		}
+		session.getTransaction().commit();
 
 	}
 }

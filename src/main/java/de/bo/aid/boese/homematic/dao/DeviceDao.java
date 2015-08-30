@@ -1,5 +1,8 @@
 package de.bo.aid.boese.homematic.dao;
 
+
+import java.util.List;
+
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,6 +31,17 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		return dev;
 	}
 	
+	public static List<Device> getDevices(){
+		Session session = factory.openSession();
+		session.beginTransaction();
+		
+		List<Device> devices;
+		devices = session.createQuery("From Device").list();
+		session.getTransaction().commit();
+		
+		return devices;
+	}
+	
 	public static void insertDevice(Device dev){
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -38,4 +52,11 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		}
 
 	}
+
+	public static void updateDevice(Device dev) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
 }
