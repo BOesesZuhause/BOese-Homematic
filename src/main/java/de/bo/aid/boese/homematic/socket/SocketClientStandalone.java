@@ -68,7 +68,6 @@ public class SocketClientStandalone {
      */
     @OnMessage
     public void onMessage(String message) {
-    	System.out.println("Connector received Message: " + message);
         if (this.messageHandler != null) {
             this.messageHandler.handleMessage(message);
         }

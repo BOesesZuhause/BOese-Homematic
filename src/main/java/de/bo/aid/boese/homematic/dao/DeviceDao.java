@@ -28,6 +28,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 			session.close();
 			throw new NotFoundException("Device with id: " + id + " not found");
 		}
+		session.close();
 		return dev;
 	}
 	
@@ -38,7 +39,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		List<Device> devices;
 		devices = session.createQuery("From Device").list();
 		session.getTransaction().commit();
-		
+		session.close();
 		return devices;
 	}
 	
@@ -50,12 +51,17 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		}catch(Exception e){
 			//TODO
 		}
-
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	public static void updateDevice(Device dev) {
 		// TODO Auto-generated method stub
-		
+		Session session = factory.openSession();
+		session.beginTransaction();
+		session.merge(dev);
+		session.getTransaction().commit();
+		session.close();
 		
 	}
 

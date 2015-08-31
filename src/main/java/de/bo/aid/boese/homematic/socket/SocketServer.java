@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
@@ -26,6 +28,7 @@ import de.bo.aid.boese.json.RequestConnection;
 import de.bo.aid.boese.json.RequestDeviceComponents;
 import de.bo.aid.boese.json.SendDeviceComponents;
 import de.bo.aid.boese.json.SendDevices;
+import de.bo.aid.boese.json.SendValue;
 
 
 
@@ -34,6 +37,8 @@ public class SocketServer implements MessageHandler{
 	private SocketClientStandalone client;
 	boolean connectionClosed = false;
 	DatabaseCache cache = DatabaseCache.getInstance();
+	
+	final static Logger logger = Logger.getLogger(SocketServer.class);
 	
 	public void start(String server){
 		URI uri = URI.create(server);
@@ -46,7 +51,7 @@ public class SocketServer implements MessageHandler{
 
 	@Override
 	public synchronized void handleMessage(String message) {
-		System.out.println("Client received Message: " + message);
+		logger.info("Client received Message: " + message);
 
 		BoeseJson bjMessage = BoeseJson.readMessage(new ByteArrayInputStream(message.getBytes()));
 
@@ -79,11 +84,35 @@ public class SocketServer implements MessageHandler{
 		case CONFIRMVALUE:
 			handleConfirmValue((ConfirmValue) bjMessage);
 			break;
+			
+		case SENDVALUE:
+			handleSendalue((SendValue) bjMessage);
+			break;
 		default:
+			//TODO Exception
 			break;
 
 		}
 	}
+	//wird von HomeMatic-Gerät aufgerufen
+	public void sendValue(double value, int devId, int devCompId, long time){
+
+		int conId = cache.getConnector().getIdverteiler();
+
+		SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
+		OutputStream os = new ByteArrayOutputStream();
+		BoeseJson.parseMessage(sendval, os);
+		client.sendMessage(os.toString());
+	}
+	
+	private void handleSendalue(SendValue bjMessage) {
+		
+		
+		
+		// TODO HomeMatic-Gerät schalten
+		
+	}
+
 	private void handleConfirmValue(ConfirmValue bjMessage) {
 		System.out.println("Server confirmed value");		
 	}
@@ -94,7 +123,7 @@ public class SocketServer implements MessageHandler{
 				int deviceId = bjMessage.getDeviceId();	
 				Device dev = null;
 				for(Device d : cache.getDevices()){
-					if(d.getId()== deviceId){
+					if(d.getIdverteiler()== deviceId){
 						dev = d;
 					}
 				}
@@ -112,7 +141,7 @@ public class SocketServer implements MessageHandler{
 				for (String componentName : compMap.keySet()) {	
 					for(Component component : actualComponents){
 						if(component.getName().equals(componentName)){
-							component.setIdVerteiler(compMap.get(componentName));
+							component.setIdverteiler(compMap.get(componentName));
 							ComponentDao.updateComponent(component); 
 						}
 					}
@@ -126,22 +155,26 @@ public class SocketServer implements MessageHandler{
 		//find Device
 		Device requestedDevice = null;
 		for(Device dev : cache.getDevices()){
-			if(dev.getId() == bjMessage.getDeviceId()){
+			if(dev.getIdverteiler() == bjMessage.getDeviceId()){
 				requestedDevice = dev;
 			}
 		}
 		
-		int conId = cache.getConnector().getIdVerteiler();
+		if(requestedDevice == null){
+			//TODO Exception
+		}
+		
+		int conId = cache.getConnector().getIdverteiler();
 		
 		//Convert Set of Components to HashSet of DeviceComponents
 		HashSet<DeviceComponents> components = new HashSet<>();
 		for(Component comp : requestedDevice.getComponents()){
-			DeviceComponents devComp = new DeviceComponents(comp.getIdVerteiler(), comp.getName(), 0, System.currentTimeMillis());
+			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), 0, System.currentTimeMillis());
 			components.add(devComp);
 		}
 		
 		//Send Components
-		SendDeviceComponents sendDevComp = new SendDeviceComponents(requestedDevice.getId(), components, conId, 0, 0, 0, System.currentTimeMillis());
+		SendDeviceComponents sendDevComp = new SendDeviceComponents(requestedDevice.getIdverteiler(), components, conId, 0, 0, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
 		BoeseJson.parseMessage(sendDevComp, os);
 		client.sendMessage(os.toString());
@@ -153,7 +186,7 @@ public class SocketServer implements MessageHandler{
 		for (String deviceName : devMap.keySet()) {	
 			for(Device dev : cache.getDevices()){
 				if(dev.getName().equals(deviceName)){
-					dev.setId(devMap.get(deviceName));
+					dev.setIdverteiler(devMap.get(deviceName));
 					DeviceDao.updateDevice(dev);
 				}
 			}
@@ -167,10 +200,10 @@ public class SocketServer implements MessageHandler{
 		
 		HashMap<String, Integer> devHash = new HashMap<>();
 		for(Device dev : cache.getDevices()){
-			devHash.put(dev.getName(), dev.getId());
+			devHash.put(dev.getName(), dev.getIdverteiler());
 		}
 		
-		int conId = cache.getConnector().getIdVerteiler();
+		int conId = cache.getConnector().getIdverteiler();
 		
 		SendDevices sendDevs = new SendDevices(devHash, conId, 0, 0, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
@@ -181,11 +214,11 @@ public class SocketServer implements MessageHandler{
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
 		// TODO test
 		Connector con = cache.getConnector();
-		if(con.getIdVerteiler()==bjMessage.getConnectorId()){
+		if(con.getIdverteiler()==bjMessage.getConnectorId()){
 			//TODO nichts
-		}else if(con.getIdVerteiler()== -1){
-			con.setIdVerteiler(bjMessage.getConnectorId());
-			con.setPassword(bjMessage.getPassword());
+		}else if(con.getIdverteiler()== -1){
+			con.setIdverteiler(bjMessage.getConnectorId());
+			con.setSecret(bjMessage.getPassword());
 			ConnectorDao.insertConnector(con);
 			cache.update();
 		}else{
@@ -201,7 +234,7 @@ public class SocketServer implements MessageHandler{
 		Connector con = cache.getConnector();
 		
 		// Request connection
-		RequestConnection reqCon = new RequestConnection(con.getName(), con.getPassword(), con.getIdVerteiler(), 0, 0, 0, System.currentTimeMillis());
+		RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, 0, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
 		BoeseJson.parseMessage(reqCon, os);
 		client.sendMessage(os.toString());
@@ -214,7 +247,6 @@ public class SocketServer implements MessageHandler{
 	@Override
 	public void closeConnection() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

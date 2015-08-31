@@ -16,15 +16,11 @@ public class ComponentDao {
 		session.beginTransaction();
 		
 		Component comp = new Component();
-		try{
+
 			session.load(comp, id);
 			session.getTransaction().commit();
-		}
-		catch (ObjectNotFoundException onfe){
-			session.getTransaction().rollback();
-			session.close();
-			throw new NotFoundException("Component with id: " + id + " not found");
-		}
+
+		session.close();
 		return comp;
 	}
 	
@@ -36,12 +32,17 @@ public class ComponentDao {
 		}catch(Exception e){
 			//TODO
 		}
-
+		session.getTransaction().commit();
+		session.close();
 	}
 
 	public static void updateComponent(Component component) {
 		// TODO Auto-generated method stub
-		
+		Session session = factory.openSession();
+		session.beginTransaction();
+		session.merge(component);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 }

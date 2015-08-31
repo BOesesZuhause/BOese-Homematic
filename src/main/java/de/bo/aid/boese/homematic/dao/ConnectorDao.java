@@ -28,10 +28,11 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 			throw new Exception(); //TODO
 		} else if (cons.size() == 0) {
 			con.setName("HomeMaticDefault");
-			con.setPassword(null);
-			con.setIdVerteiler(-1);
+			con.setSecret(null);
+			con.setIdverteiler(-1);
 
 		}
+		session.close();
 		return con;
 	}
 	
@@ -39,11 +40,18 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		Session session = factory.openSession();
 		session.beginTransaction();
 		try{
-			session.save(con);
+			session.saveOrUpdate(con);
 		}catch(Exception e){
 			//TODO
 		}
 		session.getTransaction().commit();
-
+		session.close();
+	}
+	public static void update(Connector con){
+		Session session = factory.openSession();
+		session.beginTransaction();
+		session.saveOrUpdate(con);
+		session.getTransaction().commit();
+		session.close();
 	}
 }
