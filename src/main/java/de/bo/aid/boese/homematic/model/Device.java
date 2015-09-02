@@ -13,7 +13,9 @@ public class Device implements java.io.Serializable {
 	private int devid;
 	private Connector connector;
 	private Integer idverteiler;
-	private String name;
+	private String adress;
+	private String type;
+	private int version;
 	private Set<Component> components = new HashSet<Component>(0);
 
 	public Device() {
@@ -24,11 +26,10 @@ public class Device implements java.io.Serializable {
 		this.connector = connector;
 	}
 
-	public Device(int devid, Connector connector, Integer idverteiler, String name, Set<Component> components) {
+	public Device(int devid, Connector connector, Integer idverteiler, Set<Component> components) {
 		this.devid = devid;
 		this.connector = connector;
 		this.idverteiler = idverteiler;
-		this.name = name;
 		this.components = components;
 	}
 
@@ -56,12 +57,29 @@ public class Device implements java.io.Serializable {
 		this.idverteiler = idverteiler;
 	}
 
-	public String getName() {
-		return this.name;
+
+	public String getAdress() {
+		return adress;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setAdress(String adress) {
+		this.adress = adress;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	public Set<Component> getComponents() {
@@ -70,6 +88,10 @@ public class Device implements java.io.Serializable {
 
 	public void setComponents(Set<Component> components) {
 		this.components = components;
+	}
+	
+	public String getName(){
+		return "HM_" + type + "_" + adress;
 	}
 
 }

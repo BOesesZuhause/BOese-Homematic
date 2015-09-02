@@ -14,8 +14,14 @@
         <property name="idverteiler" type="java.lang.Integer">
             <column name="idverteiler" unique="false" />
         </property>
-        <property name="name" type="string">
-            <column name="name" length="125" />
+        <property name="adress" type="string">
+            <column name="adress" length="125" />
+        </property>
+           <property name="type" type="string">
+            <column name="typ" length="125" />
+        </property>
+                <property name="version" type="int">
+            <column name="version"/>
         </property>
         <set name="components" table="component" inverse="true" lazy="false" fetch="select">
             <key>
