@@ -7,10 +7,61 @@ package de.bo.aid.boese.homematic.model;
  */
 public class Component implements java.io.Serializable {
 
+	@Override
+	public String toString() {
+		return "Component [compid=" + compid + ", device=" + device + ", idverteiler=" + idverteiler + ", name=" + name
+				+ ", address=" + address + ", type=" + hm_id + ", unit=" + unit + ", aktor=" + aktor + "]";
+	}
+
 	private int compid;
 	private Device device;
 	private Integer idverteiler;
 	private String name;
+	private String address;
+	private String hm_id;
+	private String unit;
+	private boolean aktor;
+	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getHM_ID() {
+		return hm_id;
+	}
+
+	public void setHM_ID(String hm_id) {
+		this.hm_id = hm_id;
+	}
+
+	public String getHm_id() {
+		return hm_id;
+	}
+
+	public void setHm_id(String hm_id) {
+		this.hm_id = hm_id;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public boolean isAktor() {
+		return aktor;
+	}
+
+	public void setAktor(boolean aktor) {
+		this.aktor = aktor;
+	}
 
 	public Component() {
 	}

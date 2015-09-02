@@ -22,19 +22,27 @@ public class SimulationTest {
 	
 	@Before
 	public void setUp(){
-		client.init();
-		client.saveDevices();
+//		client.init();
+//		client.saveKnownDevices();
 		
-		Connector con = new Connector();
-		con.setIdverteiler(-1);
-		con.setName("HomeMaticDefault");
-		ConnectorDao.insertConnector(con);
+//		client.printDevices();
+//		
+//		client.printComponents();
 		
-		for(Device dev : client.getDevices()){
-			dev.setConnector(con);
-			dev.setIdverteiler(-1);
-			DeviceDao.insertDevice(dev);
-		}
+//		Connector con = new Connector();
+//		con.setIdverteiler(-1);
+//		con.setName("HomeMaticDefault");
+//		ConnectorDao.insertConnector(con);
+//		
+//		for(Device dev : client.getDevices()){
+//			dev.setConnector(con);
+//			dev.setIdverteiler(-1);
+//			DeviceDao.insertDevice(dev);
+//		}
+//		
+//		for(Component comp : client.getComponents()){
+//			ComponentDao.insertComponent(comp);
+//		}
 		
 //		Device dev = new Device();
 //		dev.setIdverteiler(-1);
@@ -98,7 +106,7 @@ public class SimulationTest {
 //		server.start("ws://localhost:8081/events/");
 //
 //try {
-//	Thread.sleep(15000);
+//	Thread.sleep(20000);
 //} catch (InterruptedException e) {
 //	// TODO Auto-generated catch block
 //	e.printStackTrace();

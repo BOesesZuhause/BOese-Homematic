@@ -17,6 +17,7 @@ import de.bo.aid.boese.homematic.main.DatabaseCache;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
+import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.json.BoeseJson;
 import de.bo.aid.boese.json.ConfirmConnection;
 import de.bo.aid.boese.json.ConfirmDeviceComponents;
@@ -29,6 +30,7 @@ import de.bo.aid.boese.json.RequestDeviceComponents;
 import de.bo.aid.boese.json.SendDeviceComponents;
 import de.bo.aid.boese.json.SendDevices;
 import de.bo.aid.boese.json.SendValue;
+import javassist.NotFoundException;
 
 
 
@@ -106,10 +108,16 @@ public class SocketServer implements MessageHandler{
 	}
 	
 	private void handleSendalue(SendValue bjMessage) {
+		Component comp = null;
+		try {
+			comp = ComponentDao.getComponent(bjMessage.getDeviceComponentId());
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
-		
-		// TODO HomeMatic-Gerät schalten
+		//TODO Client-Object holen
+
 		
 	}
 

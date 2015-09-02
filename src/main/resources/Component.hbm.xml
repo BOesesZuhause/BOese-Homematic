@@ -17,5 +17,17 @@
         <property name="name" type="string">
             <column name="name" length="125" />
         </property>
+                <property name="address" type="string">
+            <column name="address" length="125" />
+        </property>
+                <property name="hm_id" type="string">
+            <column name="hm_id" length="125" />
+        </property>
+                <property name="unit" type="string">
+            <column name="unit" length="125" />
+        </property>
+                <property name="aktor" type="boolean">
+            <column name="aktor"/>
+        </property>
     </class>
 </hibernate-mapping>

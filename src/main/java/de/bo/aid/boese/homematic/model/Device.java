@@ -10,6 +10,12 @@ import java.util.Set;
  */
 public class Device implements java.io.Serializable {
 
+	@Override
+	public String toString() {
+		return "Device [devid=" + devid + ", connector=" + connector + ", idverteiler=" + idverteiler + ", adress="
+				+ adress + ", type=" + type + ", version=" + version + ", components=" + components + "]";
+	}
+
 	private int devid;
 	private Connector connector;
 	private Integer idverteiler;

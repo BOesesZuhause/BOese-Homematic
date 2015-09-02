@@ -13,12 +13,14 @@ public class ConnectionTest {
 	
 	@Before
 	public void setUp(){
-		client.init();
+	//	client.init();
 	}
 	
 	@Test
 	public void test(){
-		//client.listDevices();
+	//	client.listDevices();
+	//	client.saveDevices();
+	//	client.testSwitch();
 	}
 	
 	@After
