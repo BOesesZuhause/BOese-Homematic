@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Device>
+    <channel>
+        <component>
+            <aktor>true</aktor>
+            <description>Schalten</description>
+            <name>INSTALL_TEST</name>
+        </component>
+        <number>1</number>
+    </channel>
+    <channel>
+        <component>
+            <aktor>false</aktor>
+            <description>Spannung</description>
+            <name>VOLTAGE</name>
+            <unit>V</unit>
+        </component>
+        <number>2</number>
+    </channel>
+    <firmware>1.6</firmware>
+    <model>HM-ES-PMSw1-PI</model>
+</Device>
