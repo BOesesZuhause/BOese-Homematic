@@ -47,8 +47,6 @@ public class SocketServer implements MessageHandler{
 		client = new SocketClientStandalone();
 		client.addMessageHandler(this);
 		client.connect(uri);
-		
-		requestConnection();
 	}
 
 	@Override
@@ -107,6 +105,7 @@ public class SocketServer implements MessageHandler{
 		client.sendMessage(os.toString());
 	}
 	
+	//TODO test
 	private void handleSendalue(SendValue bjMessage) {
 		Component comp = null;
 		try {
@@ -115,10 +114,9 @@ public class SocketServer implements MessageHandler{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//TODO Client-Object holen
-
-		
+		//TODO Client auslager und über Methodenaufruf regeln
+		//TODO value prüfen und an HomeMatic anpassen oder im Protokoll einen Wertebereich mitgeben
+		XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue());		
 	}
 
 	private void handleConfirmValue(ConfirmValue bjMessage) {
@@ -223,7 +221,7 @@ public class SocketServer implements MessageHandler{
 		// TODO test
 		Connector con = cache.getConnector();
 		if(con.getIdverteiler()==bjMessage.getConnectorId()){
-			//TODO nichts
+			//TODO was passiert wenn der Connector schon eine ID hat?
 		}else if(con.getIdverteiler()== -1){
 			con.setIdverteiler(bjMessage.getConnectorId());
 			con.setSecret(bjMessage.getPassword());

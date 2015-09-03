@@ -16,7 +16,7 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 
 public class SimulationTest {
 	
-	XMLRPCClient client = new XMLRPCClient();
+	XMLRPCClient client = XMLRPCClient.getInstance();
 	
 	
 	
@@ -25,8 +25,7 @@ public class SimulationTest {
 //		client.init();
 //		client.saveKnownDevices();
 		
-//		client.printDevices();
-//		
+//		client.printDevices();		
 //		client.printComponents();
 		
 //		Connector con = new Connector();
@@ -41,6 +40,7 @@ public class SimulationTest {
 //		}
 //		
 //		for(Component comp : client.getComponents()){
+//			comp.setIdverteiler(-1);
 //			ComponentDao.insertComponent(comp);
 //		}
 		
@@ -104,6 +104,7 @@ public class SimulationTest {
 //Der Verteiler muss laufen sonst klappt der Test nicht
 //		SocketServer server = new SocketServer();
 //		server.start("ws://localhost:8081/events/");
+//		server.requestConnection();
 //
 //try {
 //	Thread.sleep(20000);

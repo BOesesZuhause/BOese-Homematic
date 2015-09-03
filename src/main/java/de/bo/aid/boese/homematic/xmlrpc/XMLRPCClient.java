@@ -1,32 +1,50 @@
 package de.bo.aid.boese.homematic.xmlrpc;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.naming.spi.DirStateFactory.Result;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
+import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-import de.bo.aid.boese.homematic.dao.ComponentDao;
-import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.devices.steckdose;
 import de.bo.aid.boese.homematic.model.Component;
-import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
+import de.bo.aid.boese.homematic.socket.SocketServer;
+import de.bo.aid.boese.homematic.xml.ChannelXML;
+import de.bo.aid.boese.homematic.xml.ComponentXML;
+import de.bo.aid.boese.homematic.xml.DeviceXML;
+import de.bo.aid.boese.homematic.xml.DevicesXML;
 
 
 public class XMLRPCClient {
 	
+	private static XMLRPCClient instance = new XMLRPCClient();
+	
+	private XMLRPCClient(){
+		
+	}
+	
+	public static XMLRPCClient getInstance(){
+		return instance;
+	}
+	
+	final static Logger logger = Logger.getLogger(SocketServer.class);
+	
 	List<Device> devices = new ArrayList<Device>();
 	List<Component> components = new ArrayList<Component>();
 	
-	private final String clientId = "123";
+	private final String clientId = "123"; //TODO save in DB
 	private XmlRpcClient client;
+	
+	DevicesXML xml;
 	
 	Object paramsetDescription;
 	
@@ -39,7 +57,24 @@ public class XMLRPCClient {
 			e.printStackTrace();
 		}
 	    client = new XmlRpcClient();
-	    client.setConfig(config);	    
+	    client.setConfig(config);	
+	    
+	    //XML einlesen
+	    xml = readXML("Devices.xml");
+	}  
+	
+	public DevicesXML readXML(String location){
+		try {
+			File file = new File(location);
+			JAXBContext context = JAXBContext.newInstance( DevicesXML.class );
+			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
+			return (DevicesXML)jaxbUnmarshaller.unmarshal(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 	
 	public void saveDevices(){
@@ -140,31 +175,47 @@ public class XMLRPCClient {
 		}
 		for(Object device : result){
 			map = (HashMap<String, Object>) device;
-			Device dev = new Device();
+			//TODO Als Klasse auslagern
+			String address = (String)map.get("ADDRESS");
+			String type = (String)map.get("TYPE");
+			int version = (int)map.get("VERSION");
 			
 					//ignore virtual devices
-					if(new String(map.get("ADDRESS").toString()).startsWith("BidCoS")){
+					if(address.startsWith("BidCoS")){
 						continue;
 					}
 					
 					//ignore channels
-					if(new String(map.get("ADDRESS").toString()).contains(":")){
+					if(address.contains(":")){
 						continue;
 					}
-					switch((String) map.get("TYPE")){
-					//TODO Switch als Liste
-					case "HM-ES-PMSw1-Pl":
-						steckdose steckdose = new steckdose(map.get("ADDRESS").toString());
-						dev.setAdress(map.get("ADDRESS").toString());
-						dev.setType(map.get("TYPE").toString());
-						dev.setVersion((int)map.get("VERSION"));
-						devices.add(dev);	
-						for(Component component : steckdose.getComponents()){
-							component.setDevice(dev);
-							components.add(component);
+					//XML aauswerten
+					//TODO loggen fals nicht gefunden
+					//TODO Validierung der XML-Eingaben mittels Abfragen am System
+					for(DeviceXML devXML : xml.getDevices()){						
+						if(devXML.getModel().equals(type)){
+							Device dev = new Device();
+							dev.setAdress(address);
+							dev.setType(type);
+							dev.setVersion(version);
+							devices.add(dev);
+							logger.info("Added Device via XML: " + dev);
+							for(ChannelXML channelXML : devXML.getChannels()){
+								int channelID = channelXML.getNumber();
+								for(ComponentXML compXML : channelXML.getComponents()){
+									Component comp = new Component();
+									comp.setDevice(dev);
+									comp.setAddress(address + ":" + channelID);
+									comp.setAktor(compXML.isAktor());
+									comp.setName(compXML.getDescription());
+									comp.setHm_id(compXML.getName());
+									components.add(comp);
+									logger.info("Added Component via XML: " + comp);
+								}
+							}
 						}
-						break;						
 					}
+					
 					
 		}
 	}
@@ -241,12 +292,10 @@ public class XMLRPCClient {
 	
 	
 	public void sendInit(String url){
-		
-		
-		
+			
 	    Object[] params = new Object[]{url, clientId};
 	    try {
-			Object[] result = (Object[]) client.execute("init", params);
+			client.execute("init", params);
 			
 
 		} catch (XmlRpcException e) {
@@ -280,6 +329,11 @@ public class XMLRPCClient {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void cleanTempData() {
+		devices = null;
+		components = null;
 	}
 	
 	

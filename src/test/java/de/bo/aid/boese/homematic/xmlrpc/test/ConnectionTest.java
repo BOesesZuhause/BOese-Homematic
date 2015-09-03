@@ -6,14 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
+import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
 public class ConnectionTest {
 	
-	XMLRPCClient client = new XMLRPCClient();
+	XMLRPCClient client = XMLRPCClient.getInstance();
 	
 	@Before
 	public void setUp(){
-	//	client.init();
+		//client.init();
 	}
 	
 	@Test
@@ -21,6 +22,15 @@ public class ConnectionTest {
 	//	client.listDevices();
 	//	client.saveDevices();
 	//	client.testSwitch();
+//		XMLRPCServer server = new XMLRPCServer();
+//		server.start();
+//		client.sendInit("192.168.23.178:8082");
+//		try {
+//			Thread.sleep(50000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	@After
