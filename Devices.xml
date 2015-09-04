@@ -39,7 +39,7 @@
                 <name>FREQUENCY</name>
                 <unit>Hz</unit>
             </component>
-            <component>
+           	<component>
                 <aktor>false</aktor>
         	    <description>Strom</description>
                 <name>CURRENT</name>
@@ -49,5 +49,192 @@
         </channel>
         <firmware>1.6</firmware>
         <model>HM-ES-PMSw1-Pl</model>
+    </device>
+	<device>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>1</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>2</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+             <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>3</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>4</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>5</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>6</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>7</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken loslassen</description>
+                <name>PRESS_LONG_RELEASE</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken</description>
+                <name>PRESS_SHORT</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>lange druecken</description>
+                <name>PRESS_LONG</name>
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Zaehler</description>
+                <name>PRESS_CONT</name>
+            </component>
+  	      	<number>8</number>
+        </channel>
+        <model>HM-RC-8</model>
     </device>
 </devices>
