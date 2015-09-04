@@ -1,6 +1,8 @@
 package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -209,6 +211,7 @@ public class XMLRPCClient {
 									comp.setAktor(compXML.isAktor());
 									comp.setName(compXML.getDescription());
 									comp.setHm_id(compXML.getName());
+									comp.setType(compXML.getType() + ":" + channelID);
 									components.add(comp);
 									logger.info("Added Component via XML: " + comp);
 								}
@@ -242,7 +245,14 @@ public class XMLRPCClient {
 		return components;
 	}
 	
-	public void listDevices(){
+	public void listDevices() throws IOException{
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(new File("HM.txt"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		Object[] params = new Object[]{};
 		Object[] result = new Object[]{};
 		HashMap<String, Object> map = new HashMap<>();
@@ -255,25 +265,31 @@ public class XMLRPCClient {
 				for(String key :map.keySet()){
 					if(key.equals("PARAMSETS")){
 						System.out.println("PARAMSETS: ");
+						fw.write("PARAMSETS: \n");
 						Object[] paramsets = (Object[]) map.get(key);
 						for(Object paramset : paramsets){
 							System.out.println("   " + paramset);
+							fw.write("   " + paramset + "\n");
 							try{
 							paramsetDescription = requestParamSets((String) map.get("ADDRESS"), (String)paramset);
 							HashMap<String, Object> paramSetDescriptionMap = (HashMap<String, Object>) paramsetDescription;
 							for(String keypD : paramSetDescriptionMap.keySet()){
 							System.out.println("      " + keypD + ": " + paramSetDescriptionMap.get(keypD));
+							fw.write("      " + keypD + ": " + paramSetDescriptionMap.get(keypD) + "\n");
 						}
 						}catch (Exception e){
 							System.out.println("      Fehler");
+							fw.write("      Fehler\n");
 						}
 						}
 					}else{
 						System.out.println(key + ": " + map.get(key));
+						fw.write(key + ": " + map.get(key) + "\n");
 					}
 
 				}
 				System.out.println();
+				fw.write("\n");
 			}
 
 		} catch (XmlRpcException e) {
@@ -306,7 +322,7 @@ public class XMLRPCClient {
 
 	public void testSwitch() {
 		// TODO Auto-generated method stub
-		Object[] params = new Object[]{"LEQ0930959:1", "INSTALL_TEST", true};
+		Object[] params = new Object[]{"LEQ0930959:1", "STATE", false};
 	    try {
 			Object result = client.execute("setValue", params);
 			System.out.println(result.toString());
@@ -319,10 +335,15 @@ public class XMLRPCClient {
 	}
 
 	public void setValue(String address, String name, double value) {
-		Object[] params = new Object[]{address, name, value};
+		boolean bool = false;
+		if(value==1){
+			bool=true;
+		}
+		Object[] params = new Object[]{address, name, bool};
 	    try {
 			Object result = client.execute("setValue", params);
 			System.out.println(result.toString());
+			System.out.println(System.currentTimeMillis());
 
 		} catch (XmlRpcException e) {
 			// TODO Auto-generated catch block

@@ -13,6 +13,7 @@ import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketServer;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
+import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
 public class SimulationTest {
 	
@@ -24,10 +25,10 @@ public class SimulationTest {
 	public void setUp(){
 //		client.init();
 //		client.saveKnownDevices();
-		
+//		
 //		client.printDevices();		
 //		client.printComponents();
-		
+//		
 //		Connector con = new Connector();
 //		con.setIdverteiler(-1);
 //		con.setName("HomeMaticDefault");
@@ -102,12 +103,21 @@ public class SimulationTest {
 	@Test
 	public void test(){
 //Der Verteiler muss laufen sonst klappt der Test nicht
-//		SocketServer server = new SocketServer();
+//		SocketServer server = SocketServer.getInstance();
 //		server.start("ws://localhost:8081/events/");
 //		server.requestConnection();
 //
 //try {
-//	Thread.sleep(20000);
+//	Thread.sleep(5000);
+//} catch (InterruptedException e) {
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//}
+//XMLRPCServer XMLserver = new XMLRPCServer();
+//XMLserver.start();
+//client.sendInit("192.168.23.178:8082");
+//try {
+//	Thread.sleep(500000000);
 //} catch (InterruptedException e) {
 //	// TODO Auto-generated catch block
 //	e.printStackTrace();

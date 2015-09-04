@@ -29,5 +29,8 @@
                 <property name="aktor" type="boolean">
             <column name="aktor"/>
         </property>
+                <property name="type" type="string">
+            <column name="type" length="125"/>
+        </property>
     </class>
 </hibernate-mapping>

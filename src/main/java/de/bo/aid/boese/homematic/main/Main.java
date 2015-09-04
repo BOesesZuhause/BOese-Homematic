@@ -27,7 +27,7 @@ public class Main {
 				initDatase(client);
 		
 				//Websocketserver starten
-				SocketServer server = new SocketServer();
+				SocketServer server = SocketServer.getInstance();;
 				server.start("ws://localhost:8081/events/");
 				//Beim Verteiler anmelden
 				server.requestConnection();

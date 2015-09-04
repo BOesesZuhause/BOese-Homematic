@@ -14,6 +14,14 @@ public class ComponentXML {
 	private String name;
 	private boolean aktor;
 	private String unit;
+	private String type;
+	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getName() {
 		return name;
 	}

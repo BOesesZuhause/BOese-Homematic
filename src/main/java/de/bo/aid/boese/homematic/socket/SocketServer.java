@@ -36,11 +36,21 @@ import javassist.NotFoundException;
 
 public class SocketServer implements MessageHandler{
 	
+	private static SocketServer instance = new SocketServer();
+	
 	private SocketClientStandalone client;
 	boolean connectionClosed = false;
 	DatabaseCache cache = DatabaseCache.getInstance();
 	
 	final static Logger logger = Logger.getLogger(SocketServer.class);
+	
+	private SocketServer(){
+		
+	}
+	
+	public static SocketServer getInstance(){
+		return instance;
+	}
 	
 	public void start(String server){
 		URI uri = URI.create(server);
@@ -175,7 +185,7 @@ public class SocketServer implements MessageHandler{
 		//Convert Set of Components to HashSet of DeviceComponents
 		HashSet<DeviceComponents> components = new HashSet<>();
 		for(Component comp : requestedDevice.getComponents()){
-			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), 0, System.currentTimeMillis());
+			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getHm_id(), 0, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
 			components.add(devComp);
 		}
 		
@@ -246,9 +256,6 @@ public class SocketServer implements MessageHandler{
 		client.sendMessage(os.toString());
 	}
 	
-	public void sendValue(double value, int deviceId, int deviceComponentId){
-		//TODO		
-	}
 	
 	@Override
 	public void closeConnection() {

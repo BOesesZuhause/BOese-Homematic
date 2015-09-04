@@ -9,10 +9,12 @@ public class Component implements java.io.Serializable {
 
 
 
+
+
 	@Override
 	public String toString() {
 		return "Component [compid=" + compid + ", idverteiler=" + idverteiler + ", name=" + name + ", address="
-				+ address + ", hm_id=" + hm_id + ", unit=" + unit + ", aktor=" + aktor + "]";
+				+ address + ", hm_id=" + hm_id + ", unit=" + unit + ", aktor=" + aktor + ", type=" + type + "]";
 	}
 
 	private int compid;
@@ -23,6 +25,7 @@ public class Component implements java.io.Serializable {
 	private String hm_id;
 	private String unit;
 	private boolean aktor;
+	private String type;
 	
 
 	public String getAddress() {
@@ -103,6 +106,14 @@ public class Component implements java.io.Serializable {
 
 	public void setHm_id(String hm_id) {
 		this.hm_id = hm_id;
+	}
+
+	public void setType(String type) {
+		this.type=type;		
+	}
+
+	public String getType() {
+		return type;
 	}
 	
 
