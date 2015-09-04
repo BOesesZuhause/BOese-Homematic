@@ -21,6 +21,30 @@
                 <name>VOLTAGE</name>
                 <unit>V</unit>
             </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Leistung</description>
+                <name>POWER</name>
+                <unit>W</unit>   
+            </component>
+            <component>
+                <aktor>false</aktor>
+                <description>Verbrauch</description>
+                <name>ENERGY_COUNTER</name>
+                <unit>Wh</unit>
+            </component>
+          	<component>
+                <aktor>false</aktor>
+        	    <description>Frequenz</description>
+                <name>FREQUENCY</name>
+                <unit>Hz</unit>
+            </component>
+            <component>
+                <aktor>false</aktor>
+        	    <description>Strom</description>
+                <name>CURRENT</name>
+                <unit>mA</unit>
+            </component>
             <number>2</number>
         </channel>
         <firmware>1.6</firmware>
