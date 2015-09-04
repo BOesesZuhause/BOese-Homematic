@@ -5,14 +5,8 @@
             <component>
                 <aktor>true</aktor>
                 <description>Schalten</description>
-                <name>INSTALL_TEST</name>
-                <type>action</type>
-            </component>
-            <component>
-                <aktor>false</aktor>
-                <description>Status lesen</description>
                 <name>STATE</name>
-                <type>bool</type>
+                <type>BOOL</type>
             </component>
             <number>1</number>
         </channel>
@@ -22,35 +16,35 @@
                 <description>Spannung</description>
                 <name>VOLTAGE</name>
                 <unit>V</unit>
-                <type>float</type>
+                <type>FLAOT</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>Leistung</description>
                 <name>POWER</name>
                 <unit>W</unit>
-                <type>float</type> 
+                <type>FLOAT</type> 
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>Verbrauch</description>
                 <name>ENERGY_COUNTER</name>
                 <unit>Wh</unit>
-                <type>float</type>
+                <type>FLOAT</type>
             </component>
           	<component>
                 <aktor>false</aktor>
         	    <description>Frequenz</description>
                 <name>FREQUENCY</name>
                 <unit>Hz</unit>
-                <type>float</type>
+                <type>FLOAT</type>
             </component>
            	<component>
                 <aktor>false</aktor>
         	    <description>Strom</description>
                 <name>CURRENT</name>
                 <unit>mA</unit>
-                <type>float</type>
+                <type>FLOAT</type>
             </component>
             <number>2</number>
         </channel>
@@ -63,25 +57,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>1</number>
         </channel>
@@ -90,25 +84,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>2</number>
         </channel>
@@ -117,25 +111,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>3</number>
         </channel>
@@ -144,25 +138,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>4</number>
         </channel>
@@ -171,25 +165,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>5</number>
         </channel>
@@ -198,25 +192,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>6</number>
         </channel>
@@ -225,25 +219,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                 <type>action</type>
+                 <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>7</number>
         </channel>
@@ -252,25 +246,25 @@
                 <aktor>false</aktor>
                 <description>lange druecken loslassen</description>
                 <name>PRESS_LONG_RELEASE</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>kurz druecken</description>
                 <name>PRESS_SHORT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>lange druecken</description>
                 <name>PRESS_LONG</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
             <component>
                 <aktor>false</aktor>
                 <description>dauerhaft druecken</description>
                 <name>PRESS_CONT</name>
-                <type>action</type>
+                <type>ACTION</type>
             </component>
   	      	<number>8</number>
         </channel>
