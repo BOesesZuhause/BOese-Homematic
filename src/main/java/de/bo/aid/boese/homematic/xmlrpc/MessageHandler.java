@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.util.Map;
@@ -8,8 +11,20 @@ import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketServer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MessageHandler.
+ */
 public class MessageHandler {
 
+	/**
+	 * Event.
+	 *
+	 * @param interface_id the interface_id
+	 * @param address the address
+	 * @param value_key the value_key
+	 * @param valueObj the value obj
+	 */
 	public void event(String interface_id, String address, String value_key, Object valueObj){
 		//TODO Nachricht an Verteiler senden
 		if(address.startsWith("LEQ0789433")){
@@ -58,6 +73,12 @@ public class MessageHandler {
 		SocketServer.getInstance().sendValue(value, devId, devCompId, System.currentTimeMillis());		
 	}
 	
+	/**
+	 * Multicall.
+	 *
+	 * @param args the args
+	 * @return the boolean[]
+	 */
 	public Boolean[] multicall(Object[] args) {
 		//System.out.println("multicall received");
 	    Boolean res[] = new Boolean[args.length]; 
@@ -75,10 +96,16 @@ public class MessageHandler {
 		return res;
 	}
 	
+	/**
+	 * List methods.
+	 */
 	public void listMethods(){
 		
 	}
 	
+	/**
+	 * List devices.
+	 */
 	public void listDevices(){
 		
 	}

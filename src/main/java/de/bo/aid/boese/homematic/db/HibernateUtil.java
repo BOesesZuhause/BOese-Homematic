@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.db;
 
 
@@ -5,11 +8,21 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HibernateUtil.
+ */
 public class HibernateUtil {
 	
-	 private static final SessionFactory sessionFactory = buildSessionFactory();
+	 /** The Constant sessionFactory. */
+ 	private static final SessionFactory sessionFactory = buildSessionFactory();
 
-	    private static SessionFactory buildSessionFactory() {
+	    /**
+    	 * Builds the session factory.
+    	 *
+    	 * @return the session factory
+    	 */
+    	private static SessionFactory buildSessionFactory() {
 	        try {
 	            // Create the SessionFactory from hibernate.cfg.xml
 	        	Configuration configuration = new Configuration().configure();
@@ -24,7 +37,12 @@ public class HibernateUtil {
 	        }
 	    }
 
-	    public static SessionFactory getSessionFactory() {
+	    /**
+    	 * Gets the session factory.
+    	 *
+    	 * @return the session factory
+    	 */
+    	public static SessionFactory getSessionFactory() {
 	        return sessionFactory;
 	    }
 

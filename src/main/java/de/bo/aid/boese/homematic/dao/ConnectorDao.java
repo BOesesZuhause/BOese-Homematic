@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.dao;
 
 import java.util.List;
@@ -10,9 +13,21 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ConnectorDao.
+ */
 public class ConnectorDao {
+
+/** The factory. */
 static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
+	/**
+	 * Gets the connector.
+	 *
+	 * @return the connector
+	 * @throws Exception the exception
+	 */
 	public static Connector getConnector() throws Exception {
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -36,6 +51,11 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		return con;
 	}
 	
+	/**
+	 * Insert connector.
+	 *
+	 * @param con the con
+	 */
 	public static void insertConnector(Connector con){
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -47,6 +67,12 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		session.getTransaction().commit();
 		session.close();
 	}
+	
+	/**
+	 * Update.
+	 *
+	 * @param con the con
+	 */
 	public static void update(Connector con){
 		Session session = factory.openSession();
 		session.beginTransaction();

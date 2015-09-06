@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.dao;
 
 import java.util.List;
@@ -13,9 +16,22 @@ import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ComponentDao.
+ */
 public class ComponentDao {
+	
+	/** The factory. */
 	static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
+	/**
+	 * Gets the component.
+	 *
+	 * @param id the id
+	 * @return the component
+	 * @throws NotFoundException the not found exception
+	 */
 	public static Component getComponent(int id) throws NotFoundException{
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -34,6 +50,11 @@ public class ComponentDao {
 		return comp;
 	}
 	
+	/**
+	 * Insert component.
+	 *
+	 * @param comp the comp
+	 */
 	public static void insertComponent(Component comp){
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -46,6 +67,11 @@ public class ComponentDao {
 		session.close();
 	}
 
+	/**
+	 * Update component.
+	 *
+	 * @param component the component
+	 */
 	public static void updateComponent(Component component) {
 		// TODO Auto-generated method stub
 		Session session = factory.openSession();
@@ -55,6 +81,13 @@ public class ComponentDao {
 		session.close();
 	}
 
+	/**
+	 * Gets the component by address and name.
+	 *
+	 * @param address the address
+	 * @param name the name
+	 * @return the component by address and name
+	 */
 	public static Component getComponentByAddressAndName(String address, String name) {
 		Session session = factory.openSession();
 		session.beginTransaction();

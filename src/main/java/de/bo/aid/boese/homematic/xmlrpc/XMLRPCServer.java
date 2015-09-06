@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.io.IOException;
@@ -9,8 +12,15 @@ import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XMLRPCServer.
+ */
 public class XMLRPCServer {
 	
+	/**
+	 * Start.
+	 */
 	public void start(){
 		final int port = 8082;
 

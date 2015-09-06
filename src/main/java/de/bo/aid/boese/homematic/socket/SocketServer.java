@@ -1,3 +1,5 @@
+
+
 package de.bo.aid.boese.homematic.socket;
 
 import java.io.ByteArrayInputStream;
@@ -34,24 +36,48 @@ import javassist.NotFoundException;
 
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SocketServer.
+ */
 public class SocketServer implements MessageHandler{
 	
+	/** The instance. */
 	private static SocketServer instance = new SocketServer();
 	
+	/** The client. */
 	private SocketClientStandalone client;
+	
+	/** The connection closed. */
 	boolean connectionClosed = false;
+	
+	/** The cache. */
 	DatabaseCache cache = DatabaseCache.getInstance();
 	
+	/** The Constant logger. */
 	final static Logger logger = Logger.getLogger(SocketServer.class);
 	
+	/**
+	 * Instantiates a new socket server.
+	 */
 	private SocketServer(){
 		
 	}
 	
+	/**
+	 * Gets the single instance of SocketServer.
+	 *
+	 * @return single instance of SocketServer
+	 */
 	public static SocketServer getInstance(){
 		return instance;
 	}
 	
+	/**
+	 * Start.
+	 *
+	 * @param server the server
+	 */
 	public void start(String server){
 		URI uri = URI.create(server);
 		client = new SocketClientStandalone();
@@ -59,6 +85,9 @@ public class SocketServer implements MessageHandler{
 		client.connect(uri);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.bo.aid.boese.homematic.socket.MessageHandler#handleMessage(java.lang.String)
+	 */
 	@Override
 	public synchronized void handleMessage(String message) {
 		logger.info("Client received Message: " + message);
@@ -104,6 +133,15 @@ public class SocketServer implements MessageHandler{
 
 		}
 	}
+	
+	/**
+	 * Send value.
+	 *
+	 * @param value the value
+	 * @param devId the dev id
+	 * @param devCompId the dev comp id
+	 * @param time the time
+	 */
 	//wird von HomeMatic-Gerät aufgerufen
 	public void sendValue(double value, int devId, int devCompId, long time){
 
@@ -115,7 +153,12 @@ public class SocketServer implements MessageHandler{
 		client.sendMessage(os.toString());
 	}
 	
-	//TODO test
+	
+	/**
+	 * Handle sendalue.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleSendalue(SendValue bjMessage) {
 		Component comp = null;
 		try {
@@ -129,9 +172,20 @@ public class SocketServer implements MessageHandler{
 		XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue());		
 	}
 
+	/**
+	 * Handle confirm value.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleConfirmValue(ConfirmValue bjMessage) {
 		System.out.println("Server confirmed value");		
 	}
+	
+	/**
+	 * Handle confirm device components.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleConfirmDeviceComponents(ConfirmDeviceComponents bjMessage) {
 		// TODO test
 		
@@ -165,6 +219,12 @@ public class SocketServer implements MessageHandler{
 		cache.update();
 		System.out.println("The cache was updated");
 	}
+	
+	/**
+	 * Handle request device components.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleRequestDeviceComponents(RequestDeviceComponents bjMessage) {
 		// TODO test
 		
@@ -196,6 +256,12 @@ public class SocketServer implements MessageHandler{
 		client.sendMessage(os.toString());
 		
 	}
+	
+	/**
+	 * Handle confirm devices.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleConfirmDevices(ConfirmDevices bjMessage) {
 		// TODO test
 		HashMap<String, Integer> devMap = bjMessage.getDevices();
@@ -210,6 +276,12 @@ public class SocketServer implements MessageHandler{
 		cache.update();
 		System.out.println("The cache was updated");
 	}
+	
+	/**
+	 * Handle request all devices.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleRequestAllDevices(RequestAllDevices bjMessage) {
 		// TODO test
 		
@@ -227,6 +299,12 @@ public class SocketServer implements MessageHandler{
 		client.sendMessage(os.toString());
 		
 	}
+	
+	/**
+	 * Handle confirmconnection.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
 		// TODO test
 		Connector con = cache.getConnector();
@@ -243,6 +321,9 @@ public class SocketServer implements MessageHandler{
 		
 	}
 	
+	/**
+	 * Request connection.
+	 */
 	public void requestConnection(){
 		
 		cache.update();	
@@ -257,6 +338,9 @@ public class SocketServer implements MessageHandler{
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see de.bo.aid.boese.homematic.socket.MessageHandler#closeConnection()
+	 */
 	@Override
 	public void closeConnection() {
 		// TODO Auto-generated method stub

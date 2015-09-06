@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.dao;
 
 
@@ -11,9 +14,22 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DeviceDao.
+ */
 public class DeviceDao {
+
+/** The factory. */
 static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
+	/**
+	 * Gets the device.
+	 *
+	 * @param id the id
+	 * @return the device
+	 * @throws NotFoundException the not found exception
+	 */
 	public static Device getDevice(int id) throws NotFoundException{
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -32,6 +48,11 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		return dev;
 	}
 	
+	/**
+	 * Gets the devices.
+	 *
+	 * @return the devices
+	 */
 	public static List<Device> getDevices(){
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -43,6 +64,11 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		return devices;
 	}
 	
+	/**
+	 * Insert device.
+	 *
+	 * @param dev the dev
+	 */
 	public static void insertDevice(Device dev){
 		Session session = factory.openSession();
 		session.beginTransaction();
@@ -55,6 +81,11 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		session.close();
 	}
 
+	/**
+	 * Update device.
+	 *
+	 * @param dev the dev
+	 */
 	public static void updateDevice(Device dev) {
 		// TODO Auto-generated method stub
 		Session session = factory.openSession();

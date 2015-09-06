@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.main;
 
 
@@ -11,11 +14,20 @@ import de.bo.aid.boese.homematic.socket.SocketServer;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Main.
+ */
 public class Main {
 	
 	
 	
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args){
 		
 				//XMLRPC Server starten
@@ -33,6 +45,11 @@ public class Main {
 				server.requestConnection();
 	}
 
+	/**
+	 * Inits the datase.
+	 *
+	 * @param client the client
+	 */
 	private static void initDatase(XMLRPCClient client) {
 		//Create connector in Database
 		Connector con = new Connector();

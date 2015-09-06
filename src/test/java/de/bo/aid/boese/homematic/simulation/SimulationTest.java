@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.simulation;
 
 
@@ -15,12 +18,20 @@ import de.bo.aid.boese.homematic.socket.SocketServer;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimulationTest.
+ */
 public class SimulationTest {
 	
+	/** The client. */
 	XMLRPCClient client = XMLRPCClient.getInstance();
 	
 	
 	
+	/**
+	 * Sets the up.
+	 */
 	@Before
 	public void setUp(){
 //		client.init();
@@ -100,6 +111,9 @@ public class SimulationTest {
 		
 	}
 
+	/**
+	 * Test.
+	 */
 	@Test
 	public void test(){
 //Der Verteiler muss laufen sonst klappt der Test nicht
@@ -124,6 +138,9 @@ public class SimulationTest {
 //}
 	}
 	
+	/**
+	 * Tear down.
+	 */
 	@After
 	public void tearDown(){
 		

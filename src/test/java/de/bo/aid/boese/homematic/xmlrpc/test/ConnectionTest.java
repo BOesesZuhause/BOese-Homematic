@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.xmlrpc.test;
 
 import java.io.IOException;
@@ -16,10 +19,18 @@ import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ConnectionTest.
+ */
 public class ConnectionTest {
 	
+	/** The client. */
 	XMLRPCClient client = XMLRPCClient.getInstance();
 	
+	/**
+	 * Sets the up.
+	 */
 	@Before
 	public void setUp(){
 //		client.init();
@@ -45,6 +56,9 @@ public class ConnectionTest {
 //		}
 	}
 	
+	/**
+	 * Test.
+	 */
 	@Test
 	public void test(){
 //		try {
@@ -66,6 +80,9 @@ public class ConnectionTest {
 //		}
 	}
 	
+	/**
+	 * Tear down.
+	 */
 	@After
 	public void tearDown(){
 		

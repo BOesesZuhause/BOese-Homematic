@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.xml.test;
 
 import java.io.File;
@@ -15,6 +18,10 @@ import de.bo.aid.boese.homematic.xml.ComponentXML;
 import de.bo.aid.boese.homematic.xml.DeviceXML;
 import de.bo.aid.boese.homematic.xml.DevicesXML;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SerialisationTest.
+ */
 public class SerialisationTest {
 	
 //	@Test
@@ -59,7 +66,10 @@ public class SerialisationTest {
 //		}
 //	}
 	
-	@Test
+	/**
+ * Read.
+ */
+@Test
 	public void read(){
 		File file = new File( "Devices.xml" );
 		try {
@@ -73,6 +83,11 @@ public class SerialisationTest {
 		}
 	}
 	
+	/**
+	 * To xml.
+	 *
+	 * @param device the device
+	 */
 	//prints the XML to the console
 	public void toXml(DevicesXML device) {
 	    try {

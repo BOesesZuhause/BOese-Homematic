@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.io.File;
@@ -26,30 +29,55 @@ import de.bo.aid.boese.homematic.xml.DeviceXML;
 import de.bo.aid.boese.homematic.xml.DevicesXML;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XMLRPCClient.
+ */
 public class XMLRPCClient {
 	
+	/** The instance. */
 	private static XMLRPCClient instance = new XMLRPCClient();
 	
+	/**
+	 * Instantiates a new XMLRPC client.
+	 */
 	private XMLRPCClient(){
 		
 	}
 	
+	/**
+	 * Gets the single instance of XMLRPCClient.
+	 *
+	 * @return single instance of XMLRPCClient
+	 */
 	public static XMLRPCClient getInstance(){
 		return instance;
 	}
 	
+	/** The Constant logger. */
 	final static Logger logger = Logger.getLogger(SocketServer.class);
 	
+	/** The devices. */
 	List<Device> devices = new ArrayList<Device>();
+	
+	/** The components. */
 	List<Component> components = new ArrayList<Component>();
 	
+	/** The client id. */
 	private final String clientId = "123"; //TODO save in DB
+	
+	/** The client. */
 	private XmlRpcClient client;
 	
+	/** The xml. */
 	DevicesXML xml;
 	
+	/** The paramset description. */
 	Object paramsetDescription;
 	
+	/**
+	 * Inits the.
+	 */
 	public void init(){
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 	    try {
@@ -65,6 +93,12 @@ public class XMLRPCClient {
 	    xml = readXML("Devices.xml");
 	}  
 	
+	/**
+	 * Read xml.
+	 *
+	 * @param location the location
+	 * @return the devices xml
+	 */
 	public DevicesXML readXML(String location){
 		try {
 			File file = new File(location);
@@ -79,6 +113,9 @@ public class XMLRPCClient {
 
 	}
 	
+	/**
+	 * Save devices.
+	 */
 	public void saveDevices(){
 		Object[] params = new Object[]{};
 		Object[] result = new Object[]{};
@@ -162,6 +199,9 @@ public class XMLRPCClient {
 	}
 	
 	
+	/**
+	 * Save known devices.
+	 */
 	public void saveKnownDevices(){
 		Object[] params = new Object[]{};
 		Object[] result = new Object[]{};
@@ -223,6 +263,9 @@ public class XMLRPCClient {
 		}
 	}
 	
+	/**
+	 * Prints the devices.
+	 */
 	public void printDevices(){
 		System.out.println("Size: " + devices.size());
 		for(Device dev : devices){
@@ -230,6 +273,9 @@ public class XMLRPCClient {
 		}
 	}
 	
+	/**
+	 * Prints the components.
+	 */
 	public void printComponents(){
 		System.out.println("Size: " + components.size());
 		for(Component comp : components){
@@ -237,14 +283,29 @@ public class XMLRPCClient {
 		}
 	}
 	
+	/**
+	 * Gets the devices.
+	 *
+	 * @return the devices
+	 */
 	public List<Device> getDevices(){
 		return devices;
 	}
 	
+	/**
+	 * Gets the components.
+	 *
+	 * @return the components
+	 */
 	public List<Component> getComponents(){
 		return components;
 	}
 	
+	/**
+	 * List devices.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void listDevices() throws IOException{
 		FileWriter fw = null;
 		try {
@@ -299,6 +360,14 @@ public class XMLRPCClient {
 		
 	}
 	
+	/**
+	 * Request param sets.
+	 *
+	 * @param adress the adress
+	 * @param typ the typ
+	 * @return the object
+	 * @throws XmlRpcException the xml rpc exception
+	 */
 	public Object requestParamSets(String adress, String typ) throws XmlRpcException{
 		Object[] params = new Object[]{adress, typ};
 		Object result = null;
@@ -307,6 +376,11 @@ public class XMLRPCClient {
 	}
 	
 	
+	/**
+	 * Send init.
+	 *
+	 * @param url the url
+	 */
 	public void sendInit(String url){
 			
 	    Object[] params = new Object[]{url, clientId};
@@ -320,6 +394,9 @@ public class XMLRPCClient {
 		}
 	}
 
+	/**
+	 * Test switch.
+	 */
 	public void testSwitch() {
 		// TODO Auto-generated method stub
 		Object[] params = new Object[]{"LEQ0930959:1", "STATE", false};
@@ -334,6 +411,13 @@ public class XMLRPCClient {
 	    
 	}
 
+	/**
+	 * Sets the value.
+	 *
+	 * @param address the address
+	 * @param name the name
+	 * @param value the value
+	 */
 	public void setValue(String address, String name, double value) {
 		boolean bool = false;
 		if(value==1){
@@ -352,6 +436,9 @@ public class XMLRPCClient {
 		
 	}
 
+	/**
+	 * Clean temp data.
+	 */
 	public void cleanTempData() {
 		devices = null;
 		components = null;
