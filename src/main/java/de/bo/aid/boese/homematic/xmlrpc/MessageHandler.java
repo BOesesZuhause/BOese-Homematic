@@ -6,9 +6,7 @@ package de.bo.aid.boese.homematic.xmlrpc;
 import java.util.Map;
 
 import de.bo.aid.boese.homematic.dao.ComponentDao;
-import de.bo.aid.boese.homematic.dao.DeviceDao;
 import de.bo.aid.boese.homematic.model.Component;
-import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketServer;
 
 // TODO: Auto-generated Javadoc
@@ -26,8 +24,6 @@ public class MessageHandler {
 	 * @param valueObj the value obj
 	 */
 	public void event(String interface_id, String address, String value_key, Object valueObj){
-		//TODO Nachricht an Verteiler senden
-		if(address.startsWith("LEQ0789433")){
 			System.out.println("event ausgelöst");
 			System.out.println("interface_id: " + interface_id);
 			System.out.println("Address: " + address);
@@ -35,8 +31,6 @@ public class MessageHandler {
 			System.out.println("value: " + valueObj.toString());
 			System.out.println(System.currentTimeMillis());
 			System.out.println();
-
-		}
 
 		
 		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
@@ -47,7 +41,7 @@ public class MessageHandler {
 		int devCompId = comp.getIdverteiler();
 		int devId = comp.getDevice().getIdverteiler();
 		double value = 0;
-		String type = comp.getType().substring(0, comp.getType().indexOf(":"));
+		String type = comp.getType();
 		switch(type){
 		case "BOOL":
 			if(valueObj.toString().equals("false")){
@@ -61,9 +55,10 @@ public class MessageHandler {
 			break;
 		case "ACTION":
 			value = 1;
-			break;
+			SocketServer.getInstance().sendAction(value, devId, devCompId, System.currentTimeMillis());
+			return;
 		case "INTEGER":
-			//value = 
+			value = Integer.parseInt(valueObj.toString());
 			break;
 		case "ENUM":
 			//value = 

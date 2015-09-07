@@ -168,8 +168,7 @@ public class SocketServer implements MessageHandler{
 			e.printStackTrace();
 		}
 		//TODO Client auslager und über Methodenaufruf regeln
-		//TODO value prüfen und an HomeMatic anpassen oder im Protokoll einen Wertebereich mitgeben
-		XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue());		
+		XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue(), comp.getType());		
 	}
 
 	/**
@@ -245,7 +244,7 @@ public class SocketServer implements MessageHandler{
 		//Convert Set of Components to HashSet of DeviceComponents
 		HashSet<DeviceComponents> components = new HashSet<>();
 		for(Component comp : requestedDevice.getComponents()){
-			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getHm_id(), 0, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
+			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), 0, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
 			components.add(devComp);
 		}
 		
@@ -344,6 +343,30 @@ public class SocketServer implements MessageHandler{
 	@Override
 	public void closeConnection() {
 		// TODO Auto-generated method stub
+	}
+
+	//TODO run in another Thread
+	public void sendAction(double value, int devId, int devCompId, long time) {
+
+		int conId = cache.getConnector().getIdverteiler();
+
+		SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
+		OutputStream os = new ByteArrayOutputStream();
+		BoeseJson.parseMessage(sendval, os);
+		client.sendMessage(os.toString());
+//		
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		sendval = new SendValue(devId, devCompId, 0, time, conId, 0, 0, 0, System.currentTimeMillis());
+		os = new ByteArrayOutputStream();
+		BoeseJson.parseMessage(sendval, os);
+		client.sendMessage(os.toString());
+		
 	}
 
 }

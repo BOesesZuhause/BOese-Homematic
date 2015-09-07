@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <devices>
-    <device>
-        <channel>
-            <component>
-                <aktor>true</aktor>
-        	    <description>schalten_test</description>
-                <name>INSTALL_TEST</name>
-                <type>ACTION</type>
-            </component>
-            <number>1</number>
-        </channel>
-        <firmware>1.6</firmware>
-        <model>HM-ES-PMSw1-Pl</model>
-    </device>
 	<device>
-        <channel>
-            <component>
-                <aktor>false</aktor>
-                <description>kurz druecken</description>
-                <name>PRESS_SHORT</name>
-                <type>ACTION</type>
-            </component>
-  	      	<number>1</number>
-        </channel>
-        <model>HM-RC-8</model>
-    </device>
+		<channel>
+			<component>
+				<aktor>true</aktor>
+				<description>Steckdose schalten</description>
+				<name>STATE</name>
+				<type>BOOL</type>
+			</component>
+
+			<number>1</number>
+		</channel>
+		<channel>
+			<component>
+				<aktor>false</aktor>
+				<description>Spannung messen</description>
+				<name>VOLTAGE</name>
+				<type>FLOAT</type>
+			</component>
+			<component>
+				<aktor>false</aktor>
+				<description>Strom messen</description>
+				<name>CURRENT</name>
+				<type>FLOAT</type>
+			</component>
+			<number>2</number>
+		</channel>
+		<firmware>1.6</firmware>
+		<model>HM-ES-PMSw1-Pl</model>
+	</device>
+	<device>
+		<channel>
+			<component>
+				<aktor>false</aktor>
+				<description>kurz druecken 1</description>
+				<name>PRESS_SHORT</name>
+				<type>ACTION</type>
+			</component>
+			<number>1</number>
+		</channel>
+		<channel>
+			<component>
+				<aktor>false</aktor>
+				<description>kurz druecken 2</description>
+				<name>PRESS_SHORT</name>
+				<type>ACTION</type>
+			</component>
+			<number>2</number>
+		</channel>
+		<model>HM-RC-8</model>
+	</device>
 </devices>

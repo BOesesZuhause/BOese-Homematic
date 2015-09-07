@@ -249,9 +249,9 @@ public class XMLRPCClient {
 									comp.setDevice(dev);
 									comp.setAddress(address + ":" + channelID);
 									comp.setAktor(compXML.isAktor());
-									comp.setName(compXML.getDescription());
+									comp.setName(compXML.getDescription() + ":" + channelID);
 									comp.setHm_id(compXML.getName());
-									comp.setType(compXML.getType() + ":" + channelID);
+									comp.setType(compXML.getType());
 									components.add(comp);
 									logger.info("Added Component via XML: " + comp);
 								}
@@ -417,13 +417,33 @@ public class XMLRPCClient {
 	 * @param address the address
 	 * @param name the name
 	 * @param value the value
+	 * @param type 
 	 */
-	public void setValue(String address, String name, double value) {
-		boolean bool = false;
-		if(value==1){
-			bool=true;
+	//TODO test switch
+	public void setValue(String address, String name, double value, String type) {
+		Object valueSent = null;
+		switch(type){
+		case "BOOL":
+			valueSent = false;
+			if(value==1){
+				valueSent = true;
+			}			
+			break;
+		case "FLOAT":
+			valueSent = value;
+			break;
+		case "ACTION":
+			valueSent = true;
+			break;
+		case "INTEGER":
+			valueSent = (int) value;
+			break;
+		case "ENUM":
+			//value = 
+			break;
+			default:
 		}
-		Object[] params = new Object[]{address, name, bool};
+		Object[] params = new Object[]{address, name, valueSent};
 	    try {
 			Object result = client.execute("setValue", params);
 			System.out.println(result.toString());

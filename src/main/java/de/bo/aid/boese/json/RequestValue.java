@@ -1,6 +1,4 @@
-/*
- * 
- */
+
 package de.bo.aid.boese.json;
 
 // TODO: Auto-generated Javadoc
@@ -28,6 +26,8 @@ public class RequestValue extends BoeseJson {
 	 */
 	public RequestValue(int deviceId, int deviceComponentId, int connectorId, int seqNr, int ackNr, int status, long timestamp) {
 		super(MessageType.REQUESTVALUE, connectorId, seqNr, ackNr, status, timestamp);
+		this.deviceId = deviceId;
+		this.deviceComponentId = deviceComponentId;
 	}
 
 	/**

@@ -1,6 +1,4 @@
-/*
- * 
- */
+
 package de.bo.aid.boese.json;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -43,27 +41,27 @@ public class BoeseJson {
 		
 		/** The requestconnection. */
 		REQUESTCONNECTION, 
- /** The confirmconnection. */
- CONFIRMCONNECTION, 
- /** The requestalldevices. */
- REQUESTALLDEVICES, 
- /** The senddevices. */
- SENDDEVICES, 
- /** The confirmdevices. */
- CONFIRMDEVICES, 
- /** The requestdevicecomponents. */
- REQUESTDEVICECOMPONENTS,
-		
+		/** The confirmconnection. */
+		CONFIRMCONNECTION, 
+		/** The requestalldevices. */
+		REQUESTALLDEVICES, 
+		/** The senddevices. */
+		SENDDEVICES, 
+		/** The confirmdevices. */
+		CONFIRMDEVICES, 
+		/** The requestdevicecomponents. */
+		REQUESTDEVICECOMPONENTS,
 		/** The senddevicecomponents. */
 		SENDDEVICECOMPONENTS, 
- /** The confirmdevicecomponents. */
- CONFIRMDEVICECOMPONENTS, 
- /** The sendvalue. */
- SENDVALUE, 
- /** The confirmvalue. */
- CONFIRMVALUE, 
- /** The requestvalue. */
- REQUESTVALUE
+		/** The confirmdevicecomponents. */
+		CONFIRMDEVICECOMPONENTS, 
+		/** The sendvalue. */
+		SENDVALUE, 
+		/** The confirmvalue. */
+		CONFIRMVALUE, 
+		/** The requestvalue. */
+		REQUESTVALUE,
+		SENDNOTIFICATION
 	}
 
 	/**
@@ -223,10 +221,6 @@ public class BoeseJson {
 				if (components.getJsonString("Description") != null) {
 					description = components.getString("Description");
 				}
-				boolean actor = false;
-				if (components.getJsonObject("Actor") != null) {
-					actor = components.getBoolean("Actor");
-				}
 				componentsSDC.add(
 						new DeviceComponents(components.getInt("DeviceComponentId", -1), 
 								components.getString("ComponentName"), 
@@ -234,7 +228,7 @@ public class BoeseJson {
 								components.getJsonNumber("Timestamp").longValue(),
 								unit,
 								description,
-								actor));
+								components.getBoolean("Actor", false)));
 			}
 			bj = new SendDeviceComponents(deviceIdSDC, componentsSDC, headerConnectorID, headerSeqNr, headerAckNr, headerStatus, headerTimestamp);
 			break;
@@ -265,6 +259,14 @@ public class BoeseJson {
 			int deviceIdRV = jo.getInt("DeviceId", -1);
 			int deviceComponentIdRV = jo.getInt("DeviceComponentId", -1);
 			bj = new RequestValue(deviceIdRV, deviceComponentIdRV, headerConnectorID, headerSeqNr, headerAckNr, headerStatus, headerTimestamp);
+			break;
+		case 12: // SendNotification
+			int deviceIdSN = jo.getInt("DeviceId", -1);
+			int deviceComponentIdSN = jo.getInt("DeviceComponentId", -1);
+			int notificationType = jo.getInt("NotificationType", -1);
+			long timestampSN = jo.getJsonNumber("Timestamp").longValue();
+			String notificationStringSN = jo.getString("NotificationText", "");
+			bj = new SendNotification(deviceIdSN, deviceComponentIdSN, notificationType, timestampSN, notificationStringSN, headerConnectorID, headerSeqNr, headerAckNr, headerStatus, headerTimestamp);
 			break;
 		default:
 			break;
@@ -365,10 +367,10 @@ public class BoeseJson {
 				deviceComponentSDC.add("ComponentName", deviceComponent.getComponentName());
 				deviceComponentSDC.add("Value", deviceComponent.getValue());
 				deviceComponentSDC.add("Timestamp", deviceComponent.getTimestamp());
-				if (deviceComponent.getUnit() != null) {					
+				if (deviceComponent.getUnit() != null) {
 					deviceComponentSDC.add("Unit", deviceComponent.getUnit());
 				}
-				if (deviceComponent.getDescription() != null) {
+				if (deviceComponent.getDescription() != null) {					
 					deviceComponentSDC.add("Description", deviceComponent.getDescription());
 				}
 				deviceComponentSDC.add("Actor", deviceComponent.isActor());
@@ -409,6 +411,16 @@ public class BoeseJson {
 			job.add("Header", addHeader(9, rv.getConnectorId(), rv.getSeqenceNr(), rv.getAcknowledgeId(), rv.getStatus(), rv.getTimestamp()));
 			job.add("DeviceId", rv.getDeviceId());
 			job.add("DeviceComponentId", rv.getDeviceComponentId());
+			break;
+		case SENDNOTIFICATION:
+			SendNotification sn = (SendNotification)message;
+			job.add("Header", addHeader(9, sn.getConnectorId(), sn.getSeqenceNr(), sn.getAcknowledgeId(), sn.getStatus(), sn.getTimestamp()));
+			job.add("DeviceId", sn.getDeviceId());
+			job.add("DeviceComponentId", sn.getDeviceComponentId());
+			job.add("NotificationType", sn.getNotificationType());
+			job.add("Timestamp", sn.getNotificationTimestamp());
+			job.add("NotificationText", sn.getNotificationText());
+			break;
 		default:
 			output = false;
 			break;

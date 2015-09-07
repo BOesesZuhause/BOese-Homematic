@@ -1,6 +1,4 @@
-/*
- * 
- */
+
 package de.bo.aid.boese.json;
 
 // TODO: Auto-generated Javadoc

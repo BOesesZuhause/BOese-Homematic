@@ -4,6 +4,9 @@
 package de.bo.aid.boese.homematic.simulation;
 
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -129,7 +132,12 @@ public class SimulationTest {
 //}
 //XMLRPCServer XMLserver = new XMLRPCServer();
 //XMLserver.start();
-//client.sendInit("192.168.23.178:8082");
+//try {
+//	client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":8082");
+//} catch (UnknownHostException e1) {
+//	// TODO Auto-generated catch block
+//	e1.printStackTrace();
+//}
 //try {
 //	Thread.sleep(500000000);
 //} catch (InterruptedException e) {

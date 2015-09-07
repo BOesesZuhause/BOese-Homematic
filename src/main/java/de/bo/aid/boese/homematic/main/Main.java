@@ -4,6 +4,9 @@
 package de.bo.aid.boese.homematic.main;
 
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
@@ -12,6 +15,7 @@ import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketServer;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
+import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
 
 // TODO: Auto-generated Javadoc
@@ -30,19 +34,34 @@ public class Main {
 	 */
 	public static void main(String[] args){
 		
-				//XMLRPC Server starten
+		XMLRPCClient client = XMLRPCClient.getInstance();
+
+		client.init();
+		client.saveKnownDevices();
+		initDatase(client);
 		
-				//XMLRPC-Client starten und Geräte abfragen
-				//TODO vorhandene Geräte behandeln
-				XMLRPCClient client = XMLRPCClient.getInstance();
-				client.saveKnownDevices(); //saves temporaerly
-				initDatase(client);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-				//Websocketserver starten
-				SocketServer server = SocketServer.getInstance();;
-				server.start("ws://localhost:8081/events/");
-				//Beim Verteiler anmelden
-				server.requestConnection();
+		SocketServer server = SocketServer.getInstance();
+		server.start("ws://localhost:8081/events/");
+		server.requestConnection();
+
+
+		
+		XMLRPCServer XMLserver = new XMLRPCServer();
+		XMLserver.start();
+		try {
+			client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":8082");
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	}
 
 	/**
