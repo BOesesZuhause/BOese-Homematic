@@ -6,6 +6,7 @@ package de.bo.aid.boese.homematic.xmlrpc;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -76,12 +77,12 @@ public class XMLRPCClient {
 	Object paramsetDescription;
 	
 	/**
-	 * Inits the.
+	 * Initalizes the client.
 	 */
-	public void init(){
+	public void init(String url){
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 	    try {
-			config.setServerURL(new URL("http://192.168.23.33:2001"));
+			config.setServerURL(new URL(url));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,7 +117,8 @@ public class XMLRPCClient {
 	/**
 	 * Save devices.
 	 */
-	public void saveDevices(){
+	//TODO save as XML
+	public void saveAllDevices(){
 		Object[] params = new Object[]{};
 		Object[] result = new Object[]{};
 		HashMap<String, Object> map = new HashMap<>();
@@ -207,14 +209,8 @@ public class XMLRPCClient {
 		Object[] result = new Object[]{};
 		HashMap<String, Object> map = new HashMap<>();
 		
-		
-		
-		try {
-			result = (Object[]) client.execute("listDevices", params);
-		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		result = (Object[]) makeRequest("listDevices", params); //TODO test
+
 		for(Object device : result){
 			map = (HashMap<String, Object>) device;
 			//TODO Als Klasse auslagern
@@ -306,7 +302,9 @@ public class XMLRPCClient {
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public void listDevices() throws IOException{
+	
+	//TODO
+	public void listDevicesToFile() throws IOException{
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(new File("HM.txt"));
@@ -370,9 +368,7 @@ public class XMLRPCClient {
 	 */
 	public Object requestParamSets(String adress, String typ) throws XmlRpcException{
 		Object[] params = new Object[]{adress, typ};
-		Object result = null;
-			result = client.execute("getParamsetDescription", params);
-		return result;
+		return makeRequest("getParamsetDescription", params); //TODO test
 	}
 	
 	
@@ -384,32 +380,9 @@ public class XMLRPCClient {
 	public void sendInit(String url){
 			
 	    Object[] params = new Object[]{url, clientId};
-	    try {
-			client.execute("init", params);
-			
+	    makeRequest("init", params);
+	    }
 
-		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Test switch.
-	 */
-	public void testSwitch() {
-		// TODO Auto-generated method stub
-		Object[] params = new Object[]{"LEQ0930959:1", "STATE", false};
-	    try {
-			Object result = client.execute("setValue", params);
-			System.out.println(result.toString());
-
-		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	}
 
 	/**
 	 * Sets the value.
@@ -419,7 +392,6 @@ public class XMLRPCClient {
 	 * @param value the value
 	 * @param type 
 	 */
-	//TODO test switch
 	public void setValue(String address, String name, double value, String type) {
 		Object valueSent = null;
 		switch(type){
@@ -444,16 +416,19 @@ public class XMLRPCClient {
 			default:
 		}
 		Object[] params = new Object[]{address, name, valueSent};
-	    try {
-			Object result = client.execute("setValue", params);
-			System.out.println(result.toString());
-			System.out.println(System.currentTimeMillis());
-
+			makeRequest("setValue", params);	
+	}
+	
+	private Object makeRequest(String method, Object[] params){
+		try {
+			return client.execute(method, params);
 		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(e.getCause() instanceof ConnectException){
+				logger.error("Timeout while sending request to HomeMatic XML-RPC-Server");
+			}
+			System.exit(0);
 		}
-		
+		return null;		
 	}
 
 	/**

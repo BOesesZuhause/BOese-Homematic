@@ -17,12 +17,13 @@ import org.apache.xmlrpc.webserver.WebServer;
  * The Class XMLRPCServer.
  */
 public class XMLRPCServer {
+	final int port = 8082;
 	
 	/**
 	 * Start.
 	 */
 	public void start(){
-		final int port = 8082;
+
 
 	          WebServer webServer = new WebServer(port);
 	        
@@ -65,6 +66,10 @@ public class XMLRPCServer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	}
+
+	public int getPort() {
+		return port;
 	}
 
 }

@@ -7,6 +7,12 @@ package de.bo.aid.boese.homematic.main;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
+
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
+
+import de.bo.aid.boese.homeamtic.cli.Parameters;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
@@ -24,7 +30,7 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
  */
 public class Main {
 	
-	
+	final static Logger logger = Logger.getLogger(SocketServer.class);
 	
 	
 	/**
@@ -33,22 +39,38 @@ public class Main {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args){
+		Parameters params = new Parameters();
+		JCommander cmd = new JCommander(params);
+		
+		try {
+	        cmd.parse(args);
+
+	    } catch (ParameterException ex) {
+	        System.out.println(ex.getMessage());
+	        cmd.usage();
+	        System.exit(0);
+	    }
+		
+		String durl = params.getDurl();
+		String hmurl = params.getHmurl();
 		
 		XMLRPCClient client = XMLRPCClient.getInstance();
 
-		client.init();
+		client.init(hmurl);
+		
+		if(params.isGenerate()){
+			client.saveAllDevices();
+			logger.info("Saved all devices in allDevices.xml");
+			System.exit(0);
+		}
+		
 		client.saveKnownDevices();
 		initDatase(client);
 		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		SocketServer server = SocketServer.getInstance();
-		server.start("ws://localhost:8081/events/");
+		server.start(durl);
+		//TODO wait for startup http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
 		server.requestConnection();
 
 
@@ -56,7 +78,7 @@ public class Main {
 		XMLRPCServer XMLserver = new XMLRPCServer();
 		XMLserver.start();
 		try {
-			client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":8082");
+			client.sendInit(InetAddress.getLocalHost().getHostAddress() + XMLserver.getPort());
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
