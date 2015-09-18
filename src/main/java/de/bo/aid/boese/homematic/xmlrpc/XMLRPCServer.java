@@ -5,11 +5,14 @@ package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
+
+import de.bo.aid.boese.homematic.socket.SocketServer;
 
 
 // TODO: Auto-generated Javadoc
@@ -18,6 +21,8 @@ import org.apache.xmlrpc.webserver.WebServer;
  */
 public class XMLRPCServer {
 	final int port = 8082;
+	
+	final static Logger logger = Logger.getLogger(XMLRPCServer.class);
 	
 	/**
 	 * Start.
@@ -62,6 +67,7 @@ public class XMLRPCServer {
 
 	          try {
 				webServer.start();
+				logger.info("XMLRPC-Server started");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

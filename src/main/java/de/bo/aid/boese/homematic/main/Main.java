@@ -30,7 +30,7 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
  */
 public class Main {
 	
-	final static Logger logger = Logger.getLogger(SocketServer.class);
+	final static Logger logger = Logger.getLogger(Main.class);
 	
 	
 	/**
@@ -54,6 +54,9 @@ public class Main {
 		String durl = params.getDurl();
 		String hmurl = params.getHmurl();
 		
+		durl = "ws://127.0.0.1:8081/events/";
+		hmurl = "http://192.168.23.33:2001";
+		
 		XMLRPCClient client = XMLRPCClient.getInstance();
 
 		client.init(hmurl);
@@ -63,22 +66,21 @@ public class Main {
 			logger.info("Saved all devices in allDevices.xml");
 			System.exit(0);
 		}
-		
 		client.saveKnownDevices();
-		initDatase(client);
+		initDatabase(client);
 		
 		
 		SocketServer server = SocketServer.getInstance();
 		server.start(durl);
 		//TODO wait for startup http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
-		server.requestConnection();
+		server.requestConnection(); //TODO nach dem abschicken warten bevor der XML-Server gestartet wird
 
 
-		
+		//TODO wait until flow with the distributor is finished
 		XMLRPCServer XMLserver = new XMLRPCServer();
 		XMLserver.start();
 		try {
-			client.sendInit(InetAddress.getLocalHost().getHostAddress() + XMLserver.getPort());
+			client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":" + XMLserver.getPort());
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -91,7 +93,7 @@ public class Main {
 	 *
 	 * @param client the client
 	 */
-	private static void initDatase(XMLRPCClient client) {
+	private static void initDatabase(XMLRPCClient client) {
 		//Create connector in Database
 		Connector con = new Connector();
 		con.setIdverteiler(-1);

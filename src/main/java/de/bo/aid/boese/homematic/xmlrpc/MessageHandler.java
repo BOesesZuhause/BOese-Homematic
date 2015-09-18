@@ -5,6 +5,8 @@ package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketServer;
@@ -14,6 +16,8 @@ import de.bo.aid.boese.homematic.socket.SocketServer;
  * The Class MessageHandler.
  */
 public class MessageHandler {
+	
+	final static Logger logger = Logger.getLogger(MessageHandler.class);
 
 	/**
 	 * Event.
@@ -24,14 +28,7 @@ public class MessageHandler {
 	 * @param valueObj the value obj
 	 */
 	public void event(String interface_id, String address, String value_key, Object valueObj){
-			System.out.println("event ausgelöst");
-			System.out.println("interface_id: " + interface_id);
-			System.out.println("Address: " + address);
-			System.out.println("value_key: " + value_key);
-			System.out.println("value: " + valueObj.toString());
-			System.out.println(System.currentTimeMillis());
-			System.out.println();
-
+		logger.info("received event: address: " + address + ", value_key: " + value_key + ", value: " + valueObj.toString());
 		
 		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
 		if(comp == null){

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
@@ -118,22 +119,27 @@ public class XMLRPCClient {
 	 * Save devices.
 	 */
 	//TODO save as XML
+	//TODO Mapper schreiben der HM-Antworten in Objekte parst
+	//TODO test
 	public void saveAllDevices(){
 		Object[] params = new Object[]{};
 		Object[] result = new Object[]{};
 		HashMap<String, Object> map = new HashMap<>();
+		DevicesXML devicesXML = new DevicesXML();
 		
 		
-		
+		//Get devices
 		try {
-			result = (Object[]) client.execute("listDevices", params);
-		} catch (XmlRpcException e) {
+			result = (Object[]) makeRequest("listDevices", params);
+		} catch (XmlRpcException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
+
 		for(Object device : result){
 			map = (HashMap<String, Object>) device;
 			Device dev = new Device();
+			DeviceXML devXML = new DeviceXML();
 			
 					//ignore virtual devices
 					if(new String(map.get("ADDRESS").toString()).startsWith("BidCoS")){
@@ -144,23 +150,36 @@ public class XMLRPCClient {
 					if(new String(map.get("ADDRESS").toString()).contains(":")){
 						continue;
 					}
-
-					
+								
 					dev.setAdress((String) map.get("ADDRESS"));
 					dev.setType((String) map.get("TYPE"));
 					dev.setVersion((int) map.get("VERSION"));
 					devices.add(dev);
 					
+					devXML.setFirmware((String) map.get("FIRMWARE"));
+					devXML.setModel((String) map.get("TYPE"));
+					
+					devicesXML.getDevices().add(devXML);
+					
 					//Kanäle abfragen
 					Object[] children = (Object[]) map.get("CHILDREN");
 					for(Object child : children){
+						
+						ChannelXML channelXML = new ChannelXML();
+						
+						int pos = child.toString().indexOf(":");
+						String channel = child.toString().substring(pos +1);
+
+						channelXML.setNumber(Integer.parseInt(channel));
+						devXML.getChannels().add(channelXML); //TODO nur nichtleere hinzufügen
+						
 						try {					
 							
 							paramsetDescription = requestParamSets((String) child, "VALUES");
-						} catch (XmlRpcException e) {
+						} catch (XmlRpcException e) { //fehlerhafte Geräte
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-							continue;
+							continue; 
 						}
 						HashMap<String, Object> paramSetDescriptionMap = (HashMap<String, Object>) paramsetDescription;
 						for(Object value : paramSetDescriptionMap.values()){
@@ -177,6 +196,13 @@ public class XMLRPCClient {
 								comp.setName((String) valueMap.get("ID"));
 								comp.setAktor(true);
 								components.add(comp);
+								
+								ComponentXML compXML = new ComponentXML();
+								compXML.setAktor(true);
+								compXML.setUnit((String) valueMap.get("UNIT"));
+								compXML.setType((String) valueMap.get("TYPE"));
+								compXML.setName((String) valueMap.get("ID"));
+								channelXML.getComponents().add(compXML);
 							}
 							
 							//Sensor
@@ -188,16 +214,32 @@ public class XMLRPCClient {
 								comp.setName((String) valueMap.get("ID"));
 								comp.setUnit((String) valueMap.get("UNIT"));
 								components.add(comp);
+								
+								ComponentXML compXML = new ComponentXML();
+								compXML.setAktor(false);
+								compXML.setUnit((String) valueMap.get("UNIT"));
+								compXML.setType((String) valueMap.get("TYPE"));
+								compXML.setName((String) valueMap.get("ID"));
+								channelXML.getComponents().add(compXML);
 							}
 					}
 						
-					}
-
-					
-
-					
-
+			 }
 		}
+		System.out.println("test");
+		//TODO kommt nicht bis hierhin
+		 try {
+		        JAXBContext ctx = JAXBContext.newInstance(devicesXML.getClass());
+		        Marshaller marshaller = ctx.createMarshaller();
+		        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		        marshaller.marshal(devicesXML, System.out);
+		    }
+		    catch (Exception
+		            e) {
+		    			e.printStackTrace();
+		              //catch exception 
+		    }
+		
 	}
 	
 	
@@ -209,11 +251,16 @@ public class XMLRPCClient {
 		Object[] result = new Object[]{};
 		HashMap<String, Object> map = new HashMap<>();
 		
-		result = (Object[]) makeRequest("listDevices", params); //TODO test
+		try {
+			result = (Object[]) makeRequest("listDevices", params);
+		} catch (XmlRpcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //TODO test
 
 		for(Object device : result){
 			map = (HashMap<String, Object>) device;
-			//TODO Als Klasse auslagern
+			//TODO Als Parser-Klasse auslagern
 			String address = (String)map.get("ADDRESS");
 			String type = (String)map.get("TYPE");
 			int version = (int)map.get("VERSION");
@@ -227,7 +274,7 @@ public class XMLRPCClient {
 					if(address.contains(":")){
 						continue;
 					}
-					//XML aauswerten
+					//XML auswerten
 					//TODO loggen fals nicht gefunden
 					//TODO Validierung der XML-Eingaben mittels Abfragen am System
 					for(DeviceXML devXML : xml.getDevices()){						
@@ -366,9 +413,11 @@ public class XMLRPCClient {
 	 * @return the object
 	 * @throws XmlRpcException the xml rpc exception
 	 */
+	
+	//TODO Methode loswerden
 	public Object requestParamSets(String adress, String typ) throws XmlRpcException{
 		Object[] params = new Object[]{adress, typ};
-		return makeRequest("getParamsetDescription", params); //TODO test
+		return makeRequest("getParamsetDescription", params);
 	}
 	
 	
@@ -380,7 +429,12 @@ public class XMLRPCClient {
 	public void sendInit(String url){
 			
 	    Object[] params = new Object[]{url, clientId};
-	    makeRequest("init", params);
+	    try {
+			makeRequest("init", params);
+		} catch (XmlRpcException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    }
 
 
@@ -416,17 +470,26 @@ public class XMLRPCClient {
 			default:
 		}
 		Object[] params = new Object[]{address, name, valueSent};
-			makeRequest("setValue", params);	
+			try {
+				makeRequest("setValue", params);
+			} catch (XmlRpcException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 	}
 	
-	private Object makeRequest(String method, Object[] params){
+	private Object makeRequest(String method, Object[] params) throws XmlRpcException{
 		try {
-			return client.execute(method, params);
+			logger.info("Send XMLRPC-Request: " + method);
+			return client.execute(method, params);			
 		} catch (XmlRpcException e) {
 			if(e.getCause() instanceof ConnectException){
 				logger.error("Timeout while sending request to HomeMatic XML-RPC-Server");
+			}else{
+				throw e;//TODO Exception anders werfen
 			}
-			System.exit(0);
+			e.printStackTrace();
+			//System.exit(0);
 		}
 		return null;		
 	}

@@ -3,6 +3,7 @@
  */
 package de.bo.aid.boese.homematic.xml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -22,7 +23,7 @@ public class DeviceXML {
 	private String firmware;
 	
 	/** The channels. */
-	private List<ChannelXML> channels;
+	private List<ChannelXML> channels = new ArrayList<>();
 	
 	/**
 	 * Gets the model.

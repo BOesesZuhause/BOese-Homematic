@@ -3,6 +3,7 @@
  */
 package de.bo.aid.boese.homematic.xml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -19,7 +20,7 @@ public class ChannelXML {
 	private int number;
 	
 	/** The components. */
-	private List<ComponentXML> components;
+	private List<ComponentXML> components = new ArrayList<>();
 	
 	/**
 	 * Gets the number.

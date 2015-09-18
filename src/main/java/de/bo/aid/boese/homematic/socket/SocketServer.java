@@ -90,7 +90,7 @@ public class SocketServer implements MessageHandler{
 	 */
 	@Override
 	public synchronized void handleMessage(String message) {
-		logger.info("Client received Message: " + message);
+		
 
 		BoeseJson bjMessage = BoeseJson.readMessage(new ByteArrayInputStream(message.getBytes()));
 
@@ -177,7 +177,7 @@ public class SocketServer implements MessageHandler{
 	 * @param bjMessage the bj message
 	 */
 	private void handleConfirmValue(ConfirmValue bjMessage) {
-		System.out.println("Server confirmed value");		
+		//TODO Abgleich ob confirmValue ankommt	
 	}
 	
 	/**

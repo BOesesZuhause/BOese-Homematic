@@ -5,8 +5,6 @@ package de.bo.aid.boese.homematic.socket;
 
 
 import java.net.URI;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -18,6 +16,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
+import org.apache.log4j.Logger;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -25,6 +25,8 @@ import javax.websocket.WebSocketContainer;
  */
 @ClientEndpoint
 public class SocketClientStandalone {
+	
+	final static Logger logger = Logger.getLogger(SocketClientStandalone.class);
 	
     /** The user session. */
     Session userSession = null;
@@ -79,6 +81,7 @@ public class SocketClientStandalone {
     @OnMessage
     public void onMessage(String message) {
         if (this.messageHandler != null) {
+        	logger.info("Client received Message: " + message);
             this.messageHandler.handleMessage(message);
         }
     }
@@ -91,7 +94,7 @@ public class SocketClientStandalone {
     @OnError
     public void onError(Throwable error){
     	messageHandler.closeConnection();
-    	Logger.getLogger(SocketClientStandalone.class.getName()).log(Level.SEVERE, null, error);
+    	logger.error(error.getMessage());
     }
 
     /**
@@ -109,6 +112,7 @@ public class SocketClientStandalone {
      * @param message the message
      */
     public void sendMessage(String message) {
+    	logger.info("Client sent Message: " + message);
         this.userSession.getAsyncRemote().sendText(message);
     }
 
