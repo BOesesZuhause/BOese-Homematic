@@ -1,5 +1,36 @@
-/*
- * 
+/*             
+ * 			  (                       
+ *			 ( )\         (        (   
+ *			 )((_)  (    ))\ (    ))\  
+ *			((_)_   )\  /((_))\  /((_) 
+ *			 | _ ) ((_)(_)) ((_)(_))   
+ *			 | _ \/ _ \/ -_)(_-</ -_)  
+ *			 |___/\___/\___|/__/\___|
+ *       
+ *           			;            
+ *		      +        ;;;         + 
+ *			  +       ;;;;;        + 
+ *			  +      ;;;;;;;       + 
+ *			  ++    ;;;;;;;;;     ++ 
+ *			  +++++;;;;;;;;;;;+++++  
+ *			   ++++;;;;;;;;;;;+++++  
+ *				++;;;;;;;;;;;;;++    
+ *			     ;;;;;;;;;;;;;;;     
+ *			    ;;;;;;;;;;;;;;;;;     
+ *				:::::::::::::::::    
+ * 				:::::::::::::::::      
+ *  			:::::::::::::::::    
+ *   			::::::@@@@@::::::    
+ *				:::::@:::::@:::::    
+ *				::::@:::::::@::::    
+ * 				:::::::::::::::::    
+ *  			:::::::::::::::::      
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
+ * ----------------------------------------------------------------------------
  */
 package de.bo.aid.boese.homematic.dao;
 
@@ -16,21 +47,20 @@ import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ComponentDao.
+ * This class defines an interface to access Component-Objects from the database.
  */
 public class ComponentDao {
 	
-	/** The factory. */
+	/** The SessionFactory to create a hibernate-session. */
 	static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
 	/**
 	 * Gets the component.
 	 *
-	 * @param id the id
+	 * @param id the id of the component
 	 * @return the component
-	 * @throws NotFoundException the not found exception
+	 * @throws NotFoundException occurs when the requested component was not found
 	 */
 	public static Component getComponent(int id) throws NotFoundException{
 		Session session = factory.openSession();
@@ -51,9 +81,9 @@ public class ComponentDao {
 	}
 	
 	/**
-	 * Insert component.
+	 * Inserts a component in the database
 	 *
-	 * @param comp the comp
+	 * @param comp the component to be inserted
 	 */
 	public static void insertComponent(Component comp){
 		Session session = factory.openSession();
@@ -68,9 +98,9 @@ public class ComponentDao {
 	}
 
 	/**
-	 * Update component.
+	 * updates a component in the database
 	 *
-	 * @param component the component
+	 * @param component the component to be updated
 	 */
 	public static void updateComponent(Component component) {
 		// TODO Auto-generated method stub
@@ -84,9 +114,9 @@ public class ComponentDao {
 	/**
 	 * Gets the component by address and name.
 	 *
-	 * @param address the address
-	 * @param name the name
-	 * @return the component by address and name
+	 * @param address the address of the component
+	 * @param name the name of the component
+	 * @return the component. Returns null if no component was found.
 	 */
 	public static Component getComponentByAddressAndName(String address, String name) {
 		Session session = factory.openSession();

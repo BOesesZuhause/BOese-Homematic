@@ -1,5 +1,36 @@
-/*
- * 
+/*             
+ * 			  (                       
+ *			 ( )\         (        (   
+ *			 )((_)  (    ))\ (    ))\  
+ *			((_)_   )\  /((_))\  /((_) 
+ *			 | _ ) ((_)(_)) ((_)(_))   
+ *			 | _ \/ _ \/ -_)(_-</ -_)  
+ *			 |___/\___/\___|/__/\___|
+ *       
+ *           			;            
+ *		      +        ;;;         + 
+ *			  +       ;;;;;        + 
+ *			  +      ;;;;;;;       + 
+ *			  ++    ;;;;;;;;;     ++ 
+ *			  +++++;;;;;;;;;;;+++++  
+ *			   ++++;;;;;;;;;;;+++++  
+ *				++;;;;;;;;;;;;;++    
+ *			     ;;;;;;;;;;;;;;;     
+ *			    ;;;;;;;;;;;;;;;;;     
+ *				:::::::::::::::::    
+ * 				:::::::::::::::::      
+ *  			:::::::::::::::::    
+ *   			::::::@@@@@::::::    
+ *				:::::@:::::@:::::    
+ *				::::@:::::::@::::    
+ * 				:::::::::::::::::    
+ *  			:::::::::::::::::      
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
+ * ----------------------------------------------------------------------------
  */
 package de.bo.aid.boese.homematic.xmlrpc;
 
@@ -79,6 +110,8 @@ public class XMLRPCClient {
 	
 	/**
 	 * Initalizes the client.
+	 *
+	 * @param url the url
 	 */
 	public void init(String url){
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -444,7 +477,7 @@ public class XMLRPCClient {
 	 * @param address the address
 	 * @param name the name
 	 * @param value the value
-	 * @param type 
+	 * @param type the type
 	 */
 	public void setValue(String address, String name, double value, String type) {
 		Object valueSent = null;
@@ -478,6 +511,14 @@ public class XMLRPCClient {
 			}	
 	}
 	
+	/**
+	 * Make request.
+	 *
+	 * @param method the method
+	 * @param params the params
+	 * @return the object
+	 * @throws XmlRpcException the xml rpc exception
+	 */
 	private Object makeRequest(String method, Object[] params) throws XmlRpcException{
 		try {
 			logger.info("Send XMLRPC-Request: " + method);

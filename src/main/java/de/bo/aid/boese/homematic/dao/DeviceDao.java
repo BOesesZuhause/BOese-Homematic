@@ -1,5 +1,36 @@
-/*
- * 
+/*             
+ * 			  (                       
+ *			 ( )\         (        (   
+ *			 )((_)  (    ))\ (    ))\  
+ *			((_)_   )\  /((_))\  /((_) 
+ *			 | _ ) ((_)(_)) ((_)(_))   
+ *			 | _ \/ _ \/ -_)(_-</ -_)  
+ *			 |___/\___/\___|/__/\___|
+ *       
+ *           			;            
+ *		      +        ;;;         + 
+ *			  +       ;;;;;        + 
+ *			  +      ;;;;;;;       + 
+ *			  ++    ;;;;;;;;;     ++ 
+ *			  +++++;;;;;;;;;;;+++++  
+ *			   ++++;;;;;;;;;;;+++++  
+ *				++;;;;;;;;;;;;;++    
+ *			     ;;;;;;;;;;;;;;;     
+ *			    ;;;;;;;;;;;;;;;;;     
+ *				:::::::::::::::::    
+ * 				:::::::::::::::::      
+ *  			:::::::::::::::::    
+ *   			::::::@@@@@::::::    
+ *				:::::@:::::@:::::    
+ *				::::@:::::::@::::    
+ * 				:::::::::::::::::    
+ *  			:::::::::::::::::      
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
+ * ----------------------------------------------------------------------------
  */
 package de.bo.aid.boese.homematic.dao;
 
@@ -14,21 +45,20 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DeviceDao.
+  * This class defines an interface to access Device-Objects from the database.
  */
 public class DeviceDao {
 
-/** The factory. */
+	/** The SessionFactory to create a hibernate-session. */
 static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
 	/**
 	 * Gets the device.
 	 *
-	 * @param id the id
+	 * @param id the id of the device
 	 * @return the device
-	 * @throws NotFoundException the not found exception
+	 * @throws NotFoundException occurs when the device is not found
 	 */
 	public static Device getDevice(int id) throws NotFoundException{
 		Session session = factory.openSession();
@@ -49,7 +79,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Gets the devices.
+	 * Gets all devices from the database
 	 *
 	 * @return the devices
 	 */
@@ -65,9 +95,9 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Insert device.
+	 * Inserts device in the database.
 	 *
-	 * @param dev the dev
+	 * @param dev the device to be inserted
 	 */
 	public static void insertDevice(Device dev){
 		Session session = factory.openSession();
@@ -82,9 +112,9 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 
 	/**
-	 * Update device.
+	 * Updates device in the database.
 	 *
-	 * @param dev the dev
+	 * @param dev the device to be updated
 	 */
 	public static void updateDevice(Device dev) {
 		// TODO Auto-generated method stub

@@ -1,3 +1,37 @@
+/*             
+ * 			  (                       
+ *			 ( )\         (        (   
+ *			 )((_)  (    ))\ (    ))\  
+ *			((_)_   )\  /((_))\  /((_) 
+ *			 | _ ) ((_)(_)) ((_)(_))   
+ *			 | _ \/ _ \/ -_)(_-</ -_)  
+ *			 |___/\___/\___|/__/\___|
+ *       
+ *           			;            
+ *		      +        ;;;         + 
+ *			  +       ;;;;;        + 
+ *			  +      ;;;;;;;       + 
+ *			  ++    ;;;;;;;;;     ++ 
+ *			  +++++;;;;;;;;;;;+++++  
+ *			   ++++;;;;;;;;;;;+++++  
+ *				++;;;;;;;;;;;;;++    
+ *			     ;;;;;;;;;;;;;;;     
+ *			    ;;;;;;;;;;;;;;;;;     
+ *				:::::::::::::::::    
+ * 				:::::::::::::::::      
+ *  			:::::::::::::::::    
+ *   			::::::@@@@@::::::    
+ *				:::::@:::::@:::::    
+ *				::::@:::::::@::::    
+ * 				:::::::::::::::::    
+ *  			:::::::::::::::::      
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
+ * ----------------------------------------------------------------------------
+ */
 
 
 package de.bo.aid.boese.homematic.socket;
@@ -345,6 +379,14 @@ public class SocketServer implements MessageHandler{
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Send action.
+	 *
+	 * @param value the value
+	 * @param devId the dev id
+	 * @param devCompId the dev comp id
+	 * @param time the time
+	 */
 	//TODO run in another Thread
 	public void sendAction(double value, int devId, int devCompId, long time) {
 
