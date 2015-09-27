@@ -62,13 +62,12 @@ import de.bo.aid.boese.homematic.xml.DeviceXML;
 import de.bo.aid.boese.homematic.xml.DevicesXML;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class XMLRPCClient.
+ * Client to send requests to the HomeMatic-XMLRPC-Server
  */
 public class XMLRPCClient {
 	
-	/** The instance. */
+	/** The sigleton-instance. */
 	private static XMLRPCClient instance = new XMLRPCClient();
 	
 	/**
@@ -87,31 +86,31 @@ public class XMLRPCClient {
 		return instance;
 	}
 	
-	/** The Constant logger. */
+	/** The logger for log4j. */
 	final static Logger logger = Logger.getLogger(SocketServer.class);
 	
-	/** The devices. */
+	/** List of devices to store the homematic devices temporarely. */
 	List<Device> devices = new ArrayList<Device>();
 	
-	/** The components. */
+	/** List of components to store the homematic components temporarely. */
 	List<Component> components = new ArrayList<Component>();
 	
-	/** The client id. */
+	/** The id of the client. This is used by the homematic-server to identify the client. */
 	private final String clientId = "123"; //TODO save in DB
 	
 	/** The client. */
 	private XmlRpcClient client;
 	
-	/** The xml. */
+	/** The object-reprasentation of the xml-file with known devices. */
 	DevicesXML xml;
 	
 	/** The paramset description. */
 	Object paramsetDescription;
 	
 	/**
-	 * Initalizes the client.
+	 * Initalizes the client and reads the xml-File (Devices.xml in the root directory of the classpath)
 	 *
-	 * @param url the url
+	 * @param url the url of the homematic XMLRPS-Server
 	 */
 	public void init(String url){
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -129,10 +128,10 @@ public class XMLRPCClient {
 	}  
 	
 	/**
-	 * Read xml.
+	 * Reads the xml-file with the known devices.
 	 *
-	 * @param location the location
-	 * @return the devices xml
+	 * @param location the location of the file
+	 * @return the object representation of the xml
 	 */
 	public DevicesXML readXML(String location){
 		try {
@@ -149,7 +148,7 @@ public class XMLRPCClient {
 	}
 	
 	/**
-	 * Save devices.
+	 * Converts all found Homematic-Devices to the format used in the known-devices-xml-file and outputs it.
 	 */
 	//TODO save as XML
 	//TODO Mapper schreiben der HM-Antworten in Objekte parst
@@ -207,8 +206,8 @@ public class XMLRPCClient {
 						devXML.getChannels().add(channelXML); //TODO nur nichtleere hinzufügen
 						
 						try {					
-							
-							paramsetDescription = requestParamSets((String) child, "VALUES");
+							params = new Object[]{(String) child, "VALUES"};
+							paramsetDescription = makeRequest("getParamsetDescription", params); //TODO test	
 						} catch (XmlRpcException e) { //fehlerhafte Geräte
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -277,7 +276,8 @@ public class XMLRPCClient {
 	
 	
 	/**
-	 * Save known devices.
+	 * Saves all known devices temporarily.
+	 * The devices are compared to the devices defined in the xml-file and saved when found.
 	 */
 	public void saveKnownDevices(){
 		Object[] params = new Object[]{};
@@ -340,7 +340,7 @@ public class XMLRPCClient {
 	}
 	
 	/**
-	 * Prints the devices.
+	 * Prints the devices to the console.
 	 */
 	public void printDevices(){
 		System.out.println("Size: " + devices.size());
@@ -350,7 +350,7 @@ public class XMLRPCClient {
 	}
 	
 	/**
-	 * Prints the components.
+	 * Prints the components to the console.
 	 */
 	public void printComponents(){
 		System.out.println("Size: " + components.size());
@@ -378,7 +378,7 @@ public class XMLRPCClient {
 	}
 	
 	/**
-	 * List devices.
+	 * Dumps all devices with all information to the file: HM.txt
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
@@ -410,7 +410,9 @@ public class XMLRPCClient {
 							System.out.println("   " + paramset);
 							fw.write("   " + paramset + "\n");
 							try{
-							paramsetDescription = requestParamSets((String) map.get("ADDRESS"), (String)paramset);
+							params = new Object[]{(String) map.get("ADDRESS"), (String)paramset};
+							paramsetDescription = makeRequest("getParamsetDescription", params); //TODO test					
+							
 							HashMap<String, Object> paramSetDescriptionMap = (HashMap<String, Object>) paramsetDescription;
 							for(String keypD : paramSetDescriptionMap.keySet()){
 							System.out.println("      " + keypD + ": " + paramSetDescriptionMap.get(keypD));
@@ -438,24 +440,11 @@ public class XMLRPCClient {
 		
 	}
 	
-	/**
-	 * Request param sets.
-	 *
-	 * @param adress the adress
-	 * @param typ the typ
-	 * @return the object
-	 * @throws XmlRpcException the xml rpc exception
-	 */
-	
-	//TODO Methode loswerden
-	public Object requestParamSets(String adress, String typ) throws XmlRpcException{
-		Object[] params = new Object[]{adress, typ};
-		return makeRequest("getParamsetDescription", params);
-	}
-	
+
 	
 	/**
-	 * Send init.
+	 * Sends the init-message to the homematic XMLRPC-Server.
+	 * THis is needed to register a callback for events
 	 *
 	 * @param url the url
 	 */
@@ -472,13 +461,15 @@ public class XMLRPCClient {
 
 
 	/**
-	 * Sets the value.
+	 * Sets a value in the homematic-system
 	 *
-	 * @param address the address
-	 * @param name the name
+	 * @param address the address of the device
+	 * @param name the name of the value to be set
 	 * @param value the value
-	 * @param type the type
+	 * @param type the type of the value (BOOL, FLOAT, ACTION, INTEGER, ENUM)
 	 */
+	
+	//TODO add STRING-type
 	public void setValue(String address, String name, double value, String type) {
 		Object valueSent = null;
 		switch(type){
@@ -512,12 +503,12 @@ public class XMLRPCClient {
 	}
 	
 	/**
-	 * Make request.
+	 * Sends a request to the XMLRPC-Server.
 	 *
-	 * @param method the method
-	 * @param params the params
-	 * @return the object
-	 * @throws XmlRpcException the xml rpc exception
+	 * @param method the methodname of the called method
+	 * @param params the parameters for the method
+	 * @return the answer
+	 * @throws XmlRpcException 
 	 */
 	private Object makeRequest(String method, Object[] params) throws XmlRpcException{
 		try {
@@ -536,7 +527,7 @@ public class XMLRPCClient {
 	}
 
 	/**
-	 * Clean temp data.
+	 * Clears the temporarily saved devices and components
 	 */
 	public void cleanTempData() {
 		devices = null;

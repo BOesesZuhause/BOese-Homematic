@@ -42,18 +42,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class DeviceXML.
+ * The xml-model-class for a single device
  */
 @XmlRootElement( name = "Device")
 public class DeviceXML {
 	
-	/** The model. */
+	/** The model of the device (equivalent to the homematic-modellnumber)*/
 	private String model;
 	
-	/** The firmware. */
+	/** The firmware-version of the device. */
 	private String firmware;
 	
-	/** The channels. */
+	/** A list of all channels of the device. */
 	private List<ChannelXML> channels = new ArrayList<>();
 	
 	/**

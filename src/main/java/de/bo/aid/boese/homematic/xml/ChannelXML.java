@@ -42,15 +42,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ChannelXML.
+ * The xml-model for channels
  */
 @XmlRootElement( name = "channel")
 public class ChannelXML {
 	
-	/** The number. */
+	/** The number of the channel. */
 	private int number;
 	
-	/** The components. */
+	/** The components of the channel. One chanel can have multiple components */
 	private List<ComponentXML> components = new ArrayList<>();
 	
 	/**

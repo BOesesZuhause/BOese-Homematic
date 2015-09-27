@@ -42,12 +42,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class DevicesXML.
+ * The xml-model for devices
  */
 @XmlRootElement( name="devices")
 public class DevicesXML {
 	
-	/** The devices. */
+	/** A list of all devices */
 	private List<DeviceXML> devices = new ArrayList<>();;
 
 	/**

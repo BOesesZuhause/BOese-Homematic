@@ -43,23 +43,19 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 
-import de.bo.aid.boese.homematic.socket.SocketServer;
-
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class XMLRPCServer.
+ * Defines an XMLRPC-server. The server can be registered as callback in the homematic-central.
  */
 public class XMLRPCServer {
 	
-	/** The port. */
+	/** The port of the server. */
 	final int port = 8082;
 	
-	/** The Constant logger. */
+	/** The logger from log4j. */
 	final static Logger logger = Logger.getLogger(XMLRPCServer.class);
 	
 	/**
-	 * Start.
+	 * Starts the server with the properties defined in MyHandlers.properties.
 	 */
 	public void start(){
 

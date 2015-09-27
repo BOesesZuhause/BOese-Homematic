@@ -40,13 +40,11 @@ package de.bo.aid.boese.homematic.dao;
 
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
-import javassist.NotFoundException;
 
 /**
  *  This class defines an interface to access Connector-Objects from the database.

@@ -57,16 +57,16 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Main.
+ * Mainclass for the connector.
  */
 public class Main {
 	
-	/** The Constant logger. */
+	/** The Constant logger for log4j. */
 	final static Logger logger = Logger.getLogger(Main.class);
 	
 	
 	/**
-	 * The main method.
+	 * The main method. Starts the connector
 	 *
 	 * @param args the arguments
 	 */
@@ -98,15 +98,14 @@ public class Main {
 			logger.info("Saved all devices in allDevices.xml");
 			System.exit(0);
 		}
-		client.saveKnownDevices();
+		client.saveKnownDevices(); //saves devices temporarily
 		initDatabase(client);
 		
 		
 		SocketServer server = SocketServer.getInstance();
 		server.start(durl);
-		//TODO wait for startup http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
-		server.requestConnection(); //TODO nach dem abschicken warten bevor der XML-Server gestartet wird
-
+		//returns when server is started http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
+		server.requestConnection(); 
 
 		//TODO wait until flow with the distributor is finished
 		XMLRPCServer XMLserver = new XMLRPCServer();
@@ -114,14 +113,16 @@ public class Main {
 		try {
 			client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":" + XMLserver.getPort());
 		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
+			logger.error("Unknown Host: " + e1.getMessage());
 			e1.printStackTrace();
+			System.exit(0); //TODO shutdown method
 		}
 		
 	}
 
+	//TODO don't create data which is already in the database
 	/**
-	 * Inits the datase.
+	 * Initalises the database for the first startup.
 	 *
 	 * @param client the client
 	 */

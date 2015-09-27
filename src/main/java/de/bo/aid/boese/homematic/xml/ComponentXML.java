@@ -36,14 +36,13 @@ package de.bo.aid.boese.homematic.xml;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ComponentXML.
+ * The xml-model-class for components.
  */
 @XmlRootElement(name = "component")
 public class ComponentXML {
 	
-	/** The description. */
+	/** The description of the component. */
 	private String description;
 	
 	/**
@@ -64,16 +63,16 @@ public class ComponentXML {
 		this.description = description;
 	}
 	
-	/** The name. */
+	/** The name of the component. */
 	private String name;
 	
-	/** The aktor. */
+	/** Is set to true when the component is an actor. */
 	private boolean aktor;
 	
-	/** The unit. */
+	/** The unit of the component. */
 	private String unit;
 	
-	/** The type. */
+	/** The homematic-type of the component. */
 	private String type;
 	
 	/**

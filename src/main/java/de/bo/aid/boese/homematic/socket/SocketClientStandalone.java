@@ -50,20 +50,19 @@ import javax.websocket.WebSocketContainer;
 import org.apache.log4j.Logger;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class SocketClientStandalone.
+ * class which acts as a websocketclient.
  */
 @ClientEndpoint
 public class SocketClientStandalone {
 	
-	/** The Constant logger. */
+	/** logger for log4j. */
 	final static Logger logger = Logger.getLogger(SocketClientStandalone.class);
 	
-    /** The user session. */
+    /** The session of the client. */
     Session userSession = null;
     
-    /** The message handler. */
+    /** The messagehandler which is subscribed. */
     private MessageHandler messageHandler;
 
     
@@ -121,7 +120,7 @@ public class SocketClientStandalone {
     /**
      * On error.
      *
-     * @param error the error
+     * @param error The Exception which occured
      */
     @OnError
     public void onError(Throwable error){
@@ -132,14 +131,14 @@ public class SocketClientStandalone {
     /**
      * register message handler.
      *
-     * @param msgHandler the msg handler
+     * @param msgHandler the handler which should be registered
      */
     public void addMessageHandler(MessageHandler msgHandler) {
         this.messageHandler = msgHandler;
     }
 
     /**
-     * Send a message.
+     * Send a message over the connection.
      *
      * @param message the message
      */

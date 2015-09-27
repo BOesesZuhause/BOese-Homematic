@@ -36,24 +36,29 @@ package de.bo.aid.boese.homematic.main;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DatabaseCache.
+ * Defines a cache for the database. Singleton class.
+ * Holds instances of connector and device.
  */
 public class DatabaseCache {
+	
+	/** The logger for log4j. */
+	final static Logger logger = Logger.getLogger(DatabaseCache.class);
 	
 	/** The instance. */
 	private static DatabaseCache instance = new DatabaseCache();
 	
-	/** The connector. */
+	/** The connectorase from the datab. */
 	private Connector connector;
 	
-	/** The devices. */
+	/** A list of devices from the database */
 	private List<Device> devices;
 	
 	/**
@@ -72,7 +77,7 @@ public class DatabaseCache {
 	}
 	
 	/**
-	 * Update.
+	 * Updates the cache.
 	 */
 	public void update(){
 		try {
@@ -82,6 +87,7 @@ public class DatabaseCache {
 			e.printStackTrace();
 		}
 		devices = DeviceDao.getDevices();
+		logger.info("The database-cache was updated");
 	}
 
 	/**

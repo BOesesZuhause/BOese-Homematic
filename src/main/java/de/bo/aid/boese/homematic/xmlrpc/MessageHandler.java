@@ -42,22 +42,21 @@ import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketServer;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MessageHandler.
+ * The messagehandler used by the XMLRPC-Server.
  */
 public class MessageHandler {
 	
-	/** The Constant logger. */
+	/** The logger from log4j. */
 	final static Logger logger = Logger.getLogger(MessageHandler.class);
 
 	/**
-	 * Event.
+	 * receives event-messages from the HomeMatic-System.
 	 *
-	 * @param interface_id the interface_id
-	 * @param address the address
-	 * @param value_key the value_key
-	 * @param valueObj the value obj
+	 * @param interface_id the id of the XMLRPC-Server
+	 * @param address the address of the component
+	 * @param value_key name of the value
+	 * @param valueObj the value 
 	 */
 	public void event(String interface_id, String address, String value_key, Object valueObj){
 		logger.info("received event: address: " + address + ", value_key: " + value_key + ", value: " + valueObj.toString());
@@ -98,7 +97,7 @@ public class MessageHandler {
 	}
 	
 	/**
-	 * Multicall.
+	 * handles multicall-messages which contain more than one message.
 	 *
 	 * @param args the args
 	 * @return the boolean[]
@@ -120,17 +119,17 @@ public class MessageHandler {
 		return res;
 	}
 	
-	/**
-	 * List methods.
-	 */
-	public void listMethods(){
-		
-	}
-	
-	/**
-	 * List devices.
-	 */
-	public void listDevices(){
-		
-	}
+//	/**
+//	 * List methods.
+//	 */
+//	public void listMethods(){
+//		
+//	}
+//	
+//	/**
+//	 * List devices.
+//	 */
+//	public void listDevices(){
+//		
+//	}
 }
