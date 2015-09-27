@@ -94,7 +94,7 @@ public class Main {
 		client.init(hmurl);
 		
 		if(params.isGenerate()){
-			client.saveAllDevices();
+			client.saveAllDevices(); //TODO define output per cli
 			logger.info("Saved all devices in allDevices.xml");
 			System.exit(0);
 		}
@@ -124,14 +124,19 @@ public class Main {
 	/**
 	 * Initalises the database for the first startup.
 	 *
-	 * @param client the client
+	 * @param client the client object
 	 */
 	private static void initDatabase(XMLRPCClient client) {
-		//Create connector in Database
-		Connector con = new Connector();
-		con.setIdverteiler(-1);
-		con.setName("HomeMaticDefault");
-		ConnectorDao.insertConnector(con);
+		DatabaseCache cache = DatabaseCache.getInstance();
+		cache.update();
+		
+			//Create connector in Database		
+			Connector con = new Connector();
+			con.setIdverteiler(-1);
+			con.setName("HomeMaticDefault");
+			ConnectorDao.insertConnector(con);
+
+		
 		
 		//Create Devices in Database
 		for(Device dev : client.getDevices()){

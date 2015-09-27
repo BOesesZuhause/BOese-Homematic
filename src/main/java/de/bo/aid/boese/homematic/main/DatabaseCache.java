@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
+import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 
@@ -124,6 +125,21 @@ public class DatabaseCache {
 	 */
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
+	}
+	
+	public boolean isKnown(Device dev){
+		return false;
+		
+	}
+	
+	public boolean isKnown(Component comp){
+		return false;
+		
+	}
+	
+	public boolean hasConnector(){
+		return false;
+		
 	}
 
 }

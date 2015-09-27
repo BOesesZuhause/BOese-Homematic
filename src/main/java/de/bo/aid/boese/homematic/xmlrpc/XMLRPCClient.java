@@ -55,7 +55,6 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
-import de.bo.aid.boese.homematic.socket.SocketServer;
 import de.bo.aid.boese.homematic.xml.ChannelXML;
 import de.bo.aid.boese.homematic.xml.ComponentXML;
 import de.bo.aid.boese.homematic.xml.DeviceXML;
@@ -87,7 +86,7 @@ public class XMLRPCClient {
 	}
 	
 	/** The logger for log4j. */
-	final static Logger logger = Logger.getLogger(SocketServer.class);
+	final static Logger logger = Logger.getLogger(XMLRPCClient.class);
 	
 	/** List of devices to store the homematic devices temporarely. */
 	List<Device> devices = new ArrayList<Device>();
@@ -520,7 +519,6 @@ public class XMLRPCClient {
 			}else{
 				throw e;//TODO Exception anders werfen
 			}
-			e.printStackTrace();
 			//System.exit(0);
 		}
 		return null;		
