@@ -44,6 +44,11 @@ import java.util.Set;
  */
 public class Device implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6215317994521160493L;
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

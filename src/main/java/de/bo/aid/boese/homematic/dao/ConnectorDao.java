@@ -60,7 +60,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	 * @return the connector
 	 * @throws Exception the exception
 	 */
-	public static Connector getConnector() throws Exception {
+	public static Connector getConnector() throws Exception  {
 		Session session = factory.openSession();
 		session.beginTransaction();
 
@@ -69,11 +69,13 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		List<Connector> cons = session.createQuery("from Connector").list();
 		session.getTransaction().commit();
 
+		
 		if (cons.size() == 1) {
 			con = cons.get(0);
 		} else if (cons.size() > 1) {
 			throw new Exception(); //TODO
 		} else if (cons.size() == 0) {
+			//TODO save newly created connector
 			con.setName("HomeMaticDefault");
 			con.setSecret(null);
 			con.setIdverteiler(-1);

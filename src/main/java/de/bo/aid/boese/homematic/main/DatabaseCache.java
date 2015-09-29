@@ -128,8 +128,12 @@ public class DatabaseCache {
 	}
 	
 	public boolean isKnown(Device dev){
+		for(Device devDB : devices){
+			if(devDB.getAdress().equals(dev.getAdress())){
+				return true;
+			}
+		}
 		return false;
-		
 	}
 	
 	public boolean isKnown(Component comp){
@@ -137,9 +141,13 @@ public class DatabaseCache {
 		
 	}
 	
+	/**
+	 * Determines wether a connector is saved in the database
+	 *
+	 * @return true if a connector is already in the database, false if not.
+	 */
 	public boolean hasConnector(){
-		return false;
-		
+		return !(connector == null);		
 	}
 
 }

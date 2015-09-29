@@ -55,7 +55,6 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * Mainclass for the connector.
  */
@@ -121,6 +120,7 @@ public class Main {
 	}
 
 	//TODO don't create data which is already in the database
+	//TODO set status if saved devices are not found in homematic-central
 	/**
 	 * Initalises the database for the first startup.
 	 *
@@ -130,25 +130,42 @@ public class Main {
 		DatabaseCache cache = DatabaseCache.getInstance();
 		cache.update();
 		
+		Connector con = null;
+		if(cache.hasConnector()){ //connector is already saved
+			con = cache.getConnector();
+		}else{
 			//Create connector in Database		
-			Connector con = new Connector();
+			con = new Connector();
 			con.setIdverteiler(-1);
 			con.setName("HomeMaticDefault");
 			ConnectorDao.insertConnector(con);
+			logger.info("Created new Connector in database");
+		}
+		
 
-		
-		
 		//Create Devices in Database
 		for(Device dev : client.getDevices()){
-			dev.setConnector(con);
-			dev.setIdverteiler(-1);
-			DeviceDao.insertDevice(dev);
+			if(!cache.isKnown(dev)){
+				dev.setConnector(con);
+				dev.setIdverteiler(-1);
+				DeviceDao.insertDevice(dev);
+				logger.info("Saved decvice in database: " + dev);
+				
+				//insert all components for new devices
+				for(Component comp : dev.getComponents()){
+					comp.setIdverteiler(-1);
+					ComponentDao.insertComponent(comp);
+					logger.info("Saved component in database: " + comp);
+					client.getComponents().remove(comp); //remove saved components
+				}
+			}
 		}
 		
 		//Create Components in Database
 		for(Component comp : client.getComponents()){
 			comp.setIdverteiler(-1);
 			ComponentDao.insertComponent(comp);
+			logger.info("Saved component in database: " + comp);
 		}
 		client.cleanTempData(); //clean up
 	}
