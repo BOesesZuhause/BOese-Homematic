@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -47,6 +47,7 @@ import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class defines an interface to access Component-Objects from the database.
  */
@@ -62,7 +63,7 @@ public class ComponentDao {
 	 * @return the component
 	 * @throws NotFoundException occurs when the requested component was not found
 	 */
-	public static Component getComponent(int id) throws NotFoundException{
+	public static Component getByVertID(int id) throws NotFoundException{
 		Session session = factory.openSession();
 		session.beginTransaction();
 		
@@ -81,7 +82,7 @@ public class ComponentDao {
 	}
 	
 	/**
-	 * Inserts a component in the database
+	 * Inserts a component in the database.
 	 *
 	 * @param comp the component to be inserted
 	 */
@@ -98,7 +99,7 @@ public class ComponentDao {
 	}
 
 	/**
-	 * updates a component in the database
+	 * updates a component in the database.
 	 *
 	 * @param component the component to be updated
 	 */

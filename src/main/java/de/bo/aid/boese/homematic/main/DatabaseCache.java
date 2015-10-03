@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -44,6 +44,7 @@ import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 
+// TODO: Auto-generated Javadoc
 /**
  * Defines a cache for the database. Singleton class.
  * Holds instances of connector and device.
@@ -59,7 +60,7 @@ public class DatabaseCache {
 	/** The connectorase from the datab. */
 	private Connector connector;
 	
-	/** A list of devices from the database */
+	/**  A list of devices from the database. */
 	private List<Device> devices;
 	
 	/**
@@ -127,6 +128,12 @@ public class DatabaseCache {
 		this.devices = devices;
 	}
 	
+	/**
+	 * Checks if is known.
+	 *
+	 * @param dev the dev
+	 * @return true, if is known
+	 */
 	public boolean isKnown(Device dev){
 		for(Device devDB : devices){
 			if(devDB.getAdress().equals(dev.getAdress())){
@@ -136,13 +143,19 @@ public class DatabaseCache {
 		return false;
 	}
 	
+	/**
+	 * Checks if is known.
+	 *
+	 * @param comp the comp
+	 * @return true, if is known
+	 */
 	public boolean isKnown(Component comp){
 		return false;
 		
 	}
 	
 	/**
-	 * Determines wether a connector is saved in the database
+	 * Determines wether a connector is saved in the database.
 	 *
 	 * @return true if a connector is already in the database, false if not.
 	 */

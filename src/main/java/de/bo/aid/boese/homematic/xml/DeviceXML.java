@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -42,12 +42,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 // TODO: Auto-generated Javadoc
 /**
- * The xml-model-class for a single device
+ * The xml-model-class for a single device.
  */
 @XmlRootElement( name = "Device")
 public class DeviceXML {
 	
-	/** The model of the device (equivalent to the homematic-modellnumber)*/
+	/**  The model of the device (equivalent to the homematic-modellnumber). */
 	private String model;
 	
 	/** The firmware-version of the device. */

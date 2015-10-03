@@ -21,7 +21,7 @@
         <configuration>
                 <archive>
             <manifest>
-              <mainClass>de.bo.aid.boese.homematic.main.Main</mainClass>
+              <mainClass>de.bo.aid.boese.homematic.main.HMConnector</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

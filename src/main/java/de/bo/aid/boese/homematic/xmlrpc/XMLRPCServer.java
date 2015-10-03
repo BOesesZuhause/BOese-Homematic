@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -43,6 +43,7 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 
+// TODO: Auto-generated Javadoc
 /**
  * Defines an XMLRPC-server. The server can be registered as callback in the homematic-central.
  */

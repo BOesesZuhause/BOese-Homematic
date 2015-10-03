@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -35,25 +35,26 @@
 package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-import de.bo.aid.boese.homematic.model.Component;
+import de.bo.aid.boese.homematic.mapper.DeviceMapper;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.xml.ChannelXML;
 import de.bo.aid.boese.homematic.xml.ComponentXML;
@@ -61,12 +62,13 @@ import de.bo.aid.boese.homematic.xml.DeviceXML;
 import de.bo.aid.boese.homematic.xml.DevicesXML;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * Client to send requests to the HomeMatic-XMLRPC-Server
+ * Client to send requests to the HomeMatic-XMLRPC-Server.
  */
 public class XMLRPCClient {
 	
-	/** The sigleton-instance. */
+	/** The singleton-instance. */
 	private static XMLRPCClient instance = new XMLRPCClient();
 	
 	/**
@@ -88,11 +90,7 @@ public class XMLRPCClient {
 	/** The logger for log4j. */
 	final static Logger logger = Logger.getLogger(XMLRPCClient.class);
 	
-	/** List of devices to store the homematic devices temporarely. */
-	List<Device> devices = new ArrayList<Device>();
-	
-	/** List of components to store the homematic components temporarely. */
-	List<Component> components = new ArrayList<Component>();
+
 	
 	/** The id of the client. This is used by the homematic-server to identify the client. */
 	private final String clientId = "123"; //TODO save in DB
@@ -100,8 +98,7 @@ public class XMLRPCClient {
 	/** The client. */
 	private XmlRpcClient client;
 	
-	/** The object-reprasentation of the xml-file with known devices. */
-	DevicesXML xml;
+
 	
 	/** The paramset description. */
 	Object paramsetDescription;
@@ -116,43 +113,21 @@ public class XMLRPCClient {
 	    try {
 			config.setServerURL(new URL(url));
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			logger.error("Homematic url is invalid: " + url);
 			e.printStackTrace();
+			System.exit(0);
 		}
 	    client = new XmlRpcClient();
 	    client.setConfig(config);	
 	    
-	    //XML einlesen
-	    xml = readXML("Devices.xml");
-	}  
-	
-	/**
-	 * Reads the xml-file with the known devices.
-	 *
-	 * @param location the location of the file
-	 * @return the object representation of the xml
-	 */
-	public DevicesXML readXML(String location){
-		try {
-			File file = new File(location);
-			JAXBContext context = JAXBContext.newInstance( DevicesXML.class );
-			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
-			return (DevicesXML)jaxbUnmarshaller.unmarshal(file);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-
 	}
 	
 	/**
 	 * Converts all found Homematic-Devices to the format used in the known-devices-xml-file and outputs it.
 	 */
-	//TODO save as XML
-	//TODO Mapper schreiben der HM-Antworten in Objekte parst
+
 	//TODO test
-	public void saveAllDevices(){
+	public void generateXML(){
 		Object[] params = new Object[]{};
 		Object[] result = new Object[]{};
 		HashMap<String, Object> map = new HashMap<>();
@@ -185,7 +160,6 @@ public class XMLRPCClient {
 					dev.setAdress((String) map.get("ADDRESS"));
 					dev.setType((String) map.get("TYPE"));
 					dev.setVersion((int) map.get("VERSION"));
-					devices.add(dev);
 					
 					devXML.setFirmware((String) map.get("FIRMWARE"));
 					devXML.setModel((String) map.get("TYPE"));
@@ -220,13 +194,6 @@ public class XMLRPCClient {
 							
 							//Schaltaktor
 							if(valueMap.get("TYPE").equals("ACTION")){
-								Component comp = new Component();
-								comp.setIdverteiler(-1);
-								comp.setDevice(dev);
-								comp.setAddress((String) child);
-								comp.setName((String) valueMap.get("ID"));
-								comp.setAktor(true);
-								components.add(comp);
 								
 								ComponentXML compXML = new ComponentXML();
 								compXML.setAktor(true);
@@ -238,13 +205,6 @@ public class XMLRPCClient {
 							
 							//Sensor
 							if(valueMap.get("UNIT") != null){
-								Component comp = new Component();
-								comp.setIdverteiler(-1);
-								comp.setDevice(dev);
-								comp.setAddress((String) child);
-								comp.setName((String) valueMap.get("ID"));
-								comp.setUnit((String) valueMap.get("UNIT"));
-								components.add(comp);
 								
 								ComponentXML compXML = new ComponentXML();
 								compXML.setAktor(false);
@@ -257,8 +217,6 @@ public class XMLRPCClient {
 						
 			 }
 		}
-		System.out.println("test");
-		//TODO kommt nicht bis hierhin
 		 try {
 		        JAXBContext ctx = JAXBContext.newInstance(devicesXML.getClass());
 		        Marshaller marshaller = ctx.createMarshaller();
@@ -273,109 +231,30 @@ public class XMLRPCClient {
 		
 	}
 	
-	
 	/**
-	 * Saves all known devices temporarily.
-	 * The devices are compared to the devices defined in the xml-file and saved when found.
+	 * Gets the HM devices.
+	 *
+	 * @return the HM devices
 	 */
-	public void saveKnownDevices(){
-		Object[] params = new Object[]{};
-		Object[] result = new Object[]{};
-		HashMap<String, Object> map = new HashMap<>();
+	public List<Device> getHMDevices(){
 		
+		Object[] params = new Object[]{};
+		Object obj = null;
 		try {
-			result = (Object[]) makeRequest("listDevices", params);
+			obj = makeRequest("listDevices", params);
 		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
+			logger.error("error while sending xmlrpc-request");
 			e.printStackTrace();
-		} //TODO test
+		}
+//		obj = readDump();
+		if(obj == null){
+			logger.error("no devices returned from homematic");
+		}
+		
+		return DeviceMapper.map(obj, true);
+	}
 
-		for(Object device : result){
-			map = (HashMap<String, Object>) device;
-			//TODO Als Parser-Klasse auslagern
-			String address = (String)map.get("ADDRESS");
-			String type = (String)map.get("TYPE");
-			int version = (int)map.get("VERSION");
-			
-					//ignore virtual devices
-					if(address.startsWith("BidCoS")){
-						continue;
-					}
-					
-					//ignore channels
-					if(address.contains(":")){
-						continue;
-					}
-					//XML auswerten
-					//TODO loggen fals nicht gefunden
-					//TODO Validierung der XML-Eingaben mittels Abfragen am System
-					for(DeviceXML devXML : xml.getDevices()){						
-						if(devXML.getModel().equals(type)){
-							Device dev = new Device();
-							dev.setAdress(address);
-							dev.setType(type);
-							dev.setVersion(version);
-							devices.add(dev);
-							logger.info("Added Device via XML: " + dev);
-							for(ChannelXML channelXML : devXML.getChannels()){
-								int channelID = channelXML.getNumber();
-								for(ComponentXML compXML : channelXML.getComponents()){
-									Component comp = new Component();
-									comp.setDevice(dev);
-									comp.setAddress(address + ":" + channelID);
-									comp.setAktor(compXML.isAktor());
-									comp.setName(compXML.getDescription() + ":" + channelID);
-									comp.setHm_id(compXML.getName());
-									comp.setType(compXML.getType());
-									components.add(comp);
-									logger.info("Added Component via XML: " + comp);
-								}
-							}
-						}
-					}
-					
-					
-		}
-	}
-	
-	/**
-	 * Prints the devices to the console.
-	 */
-	public void printDevices(){
-		System.out.println("Size: " + devices.size());
-		for(Device dev : devices){
-			System.out.println(dev);
-		}
-	}
-	
-	/**
-	 * Prints the components to the console.
-	 */
-	public void printComponents(){
-		System.out.println("Size: " + components.size());
-		for(Component comp : components){
-			System.out.println(comp);
-		}
-	}
-	
-	/**
-	 * Gets the devices.
-	 *
-	 * @return the devices
-	 */
-	public List<Device> getDevices(){
-		return devices;
-	}
-	
-	/**
-	 * Gets the components.
-	 *
-	 * @return the components
-	 */
-	public List<Component> getComponents(){
-		return components;
-	}
-	
+
 	/**
 	 * Dumps all devices with all information to the file: HM.txt
 	 *
@@ -460,7 +339,7 @@ public class XMLRPCClient {
 
 
 	/**
-	 * Sets a value in the homematic-system
+	 * Sets a value in the homematic-system.
 	 *
 	 * @param address the address of the device
 	 * @param name the name of the value to be set
@@ -468,7 +347,7 @@ public class XMLRPCClient {
 	 * @param type the type of the value (BOOL, FLOAT, ACTION, INTEGER, ENUM)
 	 */
 	
-	//TODO add STRING-type
+	//TODO Dataformat for String and Enum
 	public void setValue(String address, String name, double value, String type) {
 		Object valueSent = null;
 		switch(type){
@@ -490,6 +369,9 @@ public class XMLRPCClient {
 		case "ENUM":
 			//value = 
 			break;
+		case "STRING":
+			//value=
+			break;
 			default:
 		}
 		Object[] params = new Object[]{address, name, valueSent};
@@ -507,7 +389,7 @@ public class XMLRPCClient {
 	 * @param method the methodname of the called method
 	 * @param params the parameters for the method
 	 * @return the answer
-	 * @throws XmlRpcException 
+	 * @throws XmlRpcException the xml rpc exception
 	 */
 	private Object makeRequest(String method, Object[] params) throws XmlRpcException{
 		try {
@@ -525,11 +407,27 @@ public class XMLRPCClient {
 	}
 
 	/**
-	 * Clears the temporarily saved devices and components
+	 * Read dump.
+	 *
+	 * @return the object
 	 */
-	public void cleanTempData() {
-		devices = null;
-		components = null;
+	public Object readDump(){
+		  try {
+			ObjectInputStream o = new ObjectInputStream(new FileInputStream("response"));
+			try {
+				return o.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  return null;
 	}
 	
 	

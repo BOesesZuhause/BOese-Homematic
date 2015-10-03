@@ -27,27 +27,21 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
  */
 package de.bo.aid.boese.homematic.model;
-// default package
-// Generated 31.08.2015 00:11:54 by Hibernate Tools 4.3.1
-
-import java.util.HashSet;
-import java.util.Set;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * model-class for connectors.
  */
 public class Connector implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 7737400320190925963L;
 
 	/** The primary key. */
@@ -62,8 +56,17 @@ public class Connector implements java.io.Serializable {
 	/** The name of the connector. */
 	private String name;
 	
-	/** The devices of the connector. One connector can have many devices. One device must have one connector */
-	private Set devices = new HashSet(0);
+	/** The hm url. */
+	private String hmURL;
+	
+	/** The distr url. */
+	private String distrURL;
+	
+	/** The known devices file. */
+	private String knownDevicesFile;
+	
+	
+	
 
 	/**
 	 * Instantiates a new connector.
@@ -83,11 +86,7 @@ public class Connector implements java.io.Serializable {
 	/**
 	 * Instantiates a new connector.
 	 *
-	 * @param conid the conid
-	 * @param idverteiler the idverteiler
-	 * @param secret the secret
-	 * @param name the name
-	 * @param devices the devices
+	 * @return the conid
 	 */
 
 
@@ -164,21 +163,59 @@ public class Connector implements java.io.Serializable {
 	}
 
 	/**
-	 * Gets the devices.
+	 * Gets the hm url.
 	 *
-	 * @return the devices
+	 * @return the hm url
 	 */
-	public Set getDevices() {
-		return this.devices;
+	public String getHmURL() {
+		return hmURL;
 	}
 
 	/**
-	 * Sets the devices.
+	 * Sets the hm url.
 	 *
-	 * @param devices the new devices
+	 * @param hmURL the new hm url
 	 */
-	public void setDevices(Set devices) {
-		this.devices = devices;
+	public void setHmURL(String hmURL) {
+		this.hmURL = hmURL;
 	}
+
+	/**
+	 * Gets the distr url.
+	 *
+	 * @return the distr url
+	 */
+	public String getDistrURL() {
+		return distrURL;
+	}
+
+	/**
+	 * Sets the distr url.
+	 *
+	 * @param distrURL the new distr url
+	 */
+	public void setDistrURL(String distrURL) {
+		this.distrURL = distrURL;
+	}
+
+	/**
+	 * Gets the known devices file.
+	 *
+	 * @return the known devices file
+	 */
+	public String getKnownDevicesFile() {
+		return knownDevicesFile;
+	}
+
+	/**
+	 * Sets the known devices file.
+	 *
+	 * @param knownDevicesFile the new known devices file
+	 */
+	public void setKnownDevicesFile(String knownDevicesFile) {
+		this.knownDevicesFile = knownDevicesFile;
+	}
+
+
 
 }

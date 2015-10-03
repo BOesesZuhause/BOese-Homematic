@@ -25,16 +25,12 @@
  *				::::@:::::::@::::    
  * 				:::::::::::::::::    
  *  			:::::::::::::::::      
- *  
- *  
- * 
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
- *  
  */
 package de.bo.aid.boese.homematic.dao;
 
@@ -46,6 +42,7 @@ import org.hibernate.SessionFactory;
 import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
 
+// TODO: Auto-generated Javadoc
 /**
  *  This class defines an interface to access Connector-Objects from the database.
  */
@@ -66,23 +63,31 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 
 		Connector con = new Connector();
 
+		@SuppressWarnings("unchecked")
 		List<Connector> cons = session.createQuery("from Connector").list();
 		session.getTransaction().commit();
 
 		
 		if (cons.size() == 1) {
 			con = cons.get(0);
-		} else if (cons.size() > 1) {
-			throw new Exception(); //TODO
-		} else if (cons.size() == 0) {
-			//TODO save newly created connector
-			con.setName("HomeMaticDefault");
-			con.setSecret(null);
-			con.setIdverteiler(-1);
-
+		} else if (cons.size() == 0){
+			return null;
+		}		
+		else {
+			throw new Exception("Failed to load connector from database");
 		}
 		session.close();
 		return con;
+	}
+	
+	/**
+	 * Insert default.
+	 */
+	public static void insertDefault(){
+		Connector con = new Connector();
+		con.setName("HomeMaticDefault");
+		con.setSecret(null);
+		insertConnector(con);
 	}
 	
 	/**
@@ -103,7 +108,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Updats a connector in the database
+	 * Updats a connector in the database.
 	 *
 	 * @param con the connector to be updated
 	 */

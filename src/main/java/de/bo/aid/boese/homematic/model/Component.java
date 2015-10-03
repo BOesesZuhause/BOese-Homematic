@@ -27,24 +27,23 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
  */
 package de.bo.aid.boese.homematic.model;
 
+// TODO: Auto-generated Javadoc
 // default package
 // Generated 31.08.2015 00:11:54 by Hibernate Tools 4.3.1
 
 /**
- * Model class for components
+ * Model class for components.
  */
 public class Component implements java.io.Serializable {
 
-	/**
-	 * id for serialisation
-	 */
+	/** id for serialisation. */
 	private static final long serialVersionUID = -3549055388306323793L;
 
 
@@ -146,16 +145,6 @@ public class Component implements java.io.Serializable {
 	public Component() {
 	}
 
-	/**
-	 * Instantiates a new component.
-	 *
-	 * @param compid the compid
-	 * @param device the device
-	 */
-	public Component(int compid, Device device) {
-		this.compid = compid;
-		this.device = device;
-	}
 
 	/**
 	 * Instantiates a new component.

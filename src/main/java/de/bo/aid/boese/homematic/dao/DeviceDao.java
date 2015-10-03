@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -38,6 +38,7 @@ package de.bo.aid.boese.homematic.dao;
 import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -45,6 +46,7 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
 /**
   * This class defines an interface to access Device-Objects from the database.
  */
@@ -79,7 +81,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Gets all devices from the database
+	 * Gets all devices from the database.
 	 *
 	 * @return the devices
 	 */
@@ -124,6 +126,26 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 		session.getTransaction().commit();
 		session.close();
 		
+	}
+	
+	/**
+	 * Gets the by address.
+	 *
+	 * @param address the address
+	 * @return the by address
+	 */
+	public static Device getByAddress(String address){
+		Session session = factory.openSession();
+		session.beginTransaction();
+		Query query = session.createQuery("from Device where adress = :address");
+		query.setParameter("address", address);
+		List<?> list = query.list();
+		if(list.size() != 1){
+			return null;
+		}
+		Device dev = (Device) list.get(0);
+		session.getTransaction().commit();
+		return dev;
 	}
 
 }

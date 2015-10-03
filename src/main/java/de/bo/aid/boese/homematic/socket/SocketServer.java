@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -70,9 +70,10 @@ import javassist.NotFoundException;
 
 
 
+// TODO: Auto-generated Javadoc
 // TODO externer Handler?
 /**
- * This singleton class defines a Websocketendpoint for Websocketconnections
+ * This singleton class defines a Websocketendpoint for Websocketconnections.
  */
 public class SocketServer implements MessageHandler{
 	
@@ -129,7 +130,8 @@ public class SocketServer implements MessageHandler{
 		BoeseJson bjMessage = BoeseJson.readMessage(new ByteArrayInputStream(message.getBytes()));
 
 		if (bjMessage == null) {
-			return; // TODO Fehlermeldungen
+			logger.error("Failed to parse message: " + message);
+			return; 
 		}
 
 		switch (bjMessage.getType()) {
@@ -162,7 +164,7 @@ public class SocketServer implements MessageHandler{
 			handleSendvalue((SendValue) bjMessage);
 			break;
 		default:
-			//TODO Exception
+			logger.warn("Unknown Messagetype: " + bjMessage.getType());
 			break;
 
 		}
@@ -196,9 +198,9 @@ public class SocketServer implements MessageHandler{
 	private void handleSendvalue(SendValue bjMessage) {
 		Component comp = null;
 		try {
-			comp = ComponentDao.getComponent(bjMessage.getDeviceComponentId());
+			comp = ComponentDao.getByVertID(bjMessage.getDeviceComponentId());
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
+			logger.warn("requested component with id: " + bjMessage.getDeviceComponentId() + " not found");
 			e.printStackTrace();
 		}
 		//TODO Client auslager und über Methodenaufruf regeln
@@ -206,8 +208,8 @@ public class SocketServer implements MessageHandler{
 	}
 
 	/**
-	 * Handle thes confirm value message.
-	 * Doesnt do anything at the moment
+	 * Handle the confirm value message.
+	 * Doesn't do anything at the moment
 	 *
 	 * @param bjMessage the bj message
 	 */
@@ -250,7 +252,6 @@ public class SocketServer implements MessageHandler{
 					}
 				}
 		cache.update();
-		System.out.println("The cache was updated");
 	}
 	
 	/**

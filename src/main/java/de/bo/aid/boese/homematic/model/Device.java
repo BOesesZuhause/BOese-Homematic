@@ -27,7 +27,7 @@
  *  			:::::::::::::::::      
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebasian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
  * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
  * ----------------------------------------------------------------------------
@@ -39,14 +39,13 @@ package de.bo.aid.boese.homematic.model;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
- * model-class for devices
+ * model-class for devices.
  */
 public class Device implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6215317994521160493L;
 
 	/* (non-Javadoc)
@@ -54,15 +53,14 @@ public class Device implements java.io.Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Device [devid=" + devid + ", connector=" + connector + ", idverteiler=" + idverteiler + ", adress="
-				+ adress + ", type=" + type + ", version=" + version + ", components=" + components + "]";
+		return "Device [devid=" + devid + ",  idverteiler=" + idverteiler + ", adress="
+				+ adress + ", type=" + type + ", version=" + version + ", firmware=" + firmware + ", components="
+				+ components + "]";
 	}
 
 	/** The primary key. */
 	private int devid;
 	
-	/** The connector. */
-	private Connector connector;
 	
 	/** The id under which the device is saved in the distributor. */
 	private Integer idverteiler;
@@ -76,6 +74,27 @@ public class Device implements java.io.Serializable {
 	/** The homematic-version of the device. */
 	private int version;
 	
+	/** The firmware. */
+	private String firmware;
+	
+	/**
+	 * Gets the firmware.
+	 *
+	 * @return the firmware
+	 */
+	public String getFirmware() {
+		return firmware;
+	}
+
+	/**
+	 * Sets the firmware.
+	 *
+	 * @param firmware the new firmware
+	 */
+	public void setFirmware(String firmware) {
+		this.firmware = firmware;
+	}
+
 	/** The components of the device. One device can have many components. One component must have one device */
 	private Set<Component> components = new HashSet<Component>(0);
 
@@ -85,16 +104,7 @@ public class Device implements java.io.Serializable {
 	public Device() {
 	}
 
-	/**
-	 * Instantiates a new device.
-	 *
-	 * @param devid the devid
-	 * @param connector the connector
-	 */
-	public Device(int devid, Connector connector) {
-		this.devid = devid;
-		this.connector = connector;
-	}
+
 
 
 
@@ -121,18 +131,7 @@ public class Device implements java.io.Serializable {
 	 *
 	 * @return the connector
 	 */
-	public Connector getConnector() {
-		return this.connector;
-	}
 
-	/**
-	 * Sets the connector.
-	 *
-	 * @param connector the new connector
-	 */
-	public void setConnector(Connector connector) {
-		this.connector = connector;
-	}
 
 	/**
 	 * Gets the idverteiler.
