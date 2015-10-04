@@ -43,13 +43,11 @@ import com.beust.jcommander.Parameter;
  */
 public class Parameters {
 	
-	//TODO
 	/**  Parameter for the generation of an xml-file with all devices. */
 	@Parameter(names = "-generate", description = "Generates XML-File with all responding HomeMatic-Devices")
 	private boolean generate = false;
 	
 	/** The validate. */
-	//TODO
 	@Parameter(names = "-validate", description = "Validates the content of the xml-file against homematic")
 	private boolean validate = false;
 	
@@ -60,7 +58,6 @@ public class Parameters {
 	
 	
 	/** The gen config. */
-	//TODO
 	@Parameter(names = "-genconfig", description = "Generates a default config file at the location configured with -config")
 	private boolean genConfig = false;
 	

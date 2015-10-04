@@ -48,7 +48,7 @@ import de.bo.aid.boese.homematic.dao.DeviceDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
-import de.bo.aid.boese.homematic.socket.SocketServer;
+import de.bo.aid.boese.homematic.socket.SocketHandler;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 

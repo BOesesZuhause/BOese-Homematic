@@ -39,7 +39,6 @@ package de.bo.aid.boese.homematic.socket;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,7 +60,6 @@ import de.bo.aid.boese.json.ConfirmDevices;
 import de.bo.aid.boese.json.ConfirmValue;
 import de.bo.aid.boese.json.DeviceComponents;
 import de.bo.aid.boese.json.RequestAllDevices;
-import de.bo.aid.boese.json.RequestConnection;
 import de.bo.aid.boese.json.RequestDeviceComponents;
 import de.bo.aid.boese.json.SendDeviceComponents;
 import de.bo.aid.boese.json.SendDevices;
@@ -71,17 +69,14 @@ import javassist.NotFoundException;
 
 
 // TODO: Auto-generated Javadoc
-// TODO externer Handler?
 /**
  * This singleton class defines a Websocketendpoint for Websocketconnections.
  */
-public class SocketServer implements MessageHandler{
+public class SocketHandler implements MessageHandler{
 	
-	/** The singleton instance. */
-	private static SocketServer instance = new SocketServer();
 	
 	/** The client used by the connection. */
-	private SocketClientStandalone client;
+	private SocketClient client;
 	
 	/** Is used to check, wether the connection should be closed. */
 	boolean connectionClosed = false;
@@ -90,35 +85,17 @@ public class SocketServer implements MessageHandler{
 	DatabaseCache cache = DatabaseCache.getInstance();
 	
 	/** The logger for log4j. */
-	final static Logger logger = Logger.getLogger(SocketServer.class);
+	final static Logger logger = Logger.getLogger(SocketHandler.class);
 	
 	/**
 	 * Instantiates a new socket server.
 	 */
-	private SocketServer(){
-		
+	public SocketHandler(SocketClient client){
+		this.client = client;
 	}
 	
-	/**
-	 * Gets the single instance of SocketServer.
-	 *
-	 * @return single instance of SocketServer
-	 */
-	public static SocketServer getInstance(){
-		return instance;
-	}
 	
-	/**
-	 * Starts the server and connects to it.
-	 *
-	 * @param serverUri the uri of the server
-	 */
-	public void start(String serverUri){
-		URI uri = URI.create(serverUri);
-		client = new SocketClientStandalone();
-		client.addMessageHandler(this);
-		client.connect(uri);
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see de.bo.aid.boese.homematic.socket.MessageHandler#handleMessage(java.lang.String)
@@ -170,24 +147,7 @@ public class SocketServer implements MessageHandler{
 		}
 	}
 	
-	/**
-	 * Sends a value to the distributor.
-	 *
-	 * @param value the value
-	 * @param devId the id of the device, which is saved in the distributor
-	 * @param devCompId the id of the deviceComponent, which is saved in the distributor
-	 * @param time the timestamp of the value
-	 */
-	//wird von HomeMatic-Gerät aufgerufen
-	public void sendValue(double value, int devId, int devCompId, long time){
 
-		int conId = cache.getConnector().getIdverteiler();
-
-		SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
-		OutputStream os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(sendval, os);
-		client.sendMessage(os.toString());
-	}
 	
 	
 	/**
@@ -328,8 +288,7 @@ public class SocketServer implements MessageHandler{
 		SendDevices sendDevs = new SendDevices(devHash, conId, 0, 0, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
 		BoeseJson.parseMessage(sendDevs, os);
-		client.sendMessage(os.toString());
-		
+		client.sendMessage(os.toString());	
 	}
 	
 	/**
@@ -354,20 +313,6 @@ public class SocketServer implements MessageHandler{
 		
 	}
 	
-	/**
-	 * Sends a request-connection message to the distributor.
-	 */
-	public void requestConnection(){
-		
-		cache.update();	
-		Connector con = cache.getConnector();
-		
-		// Request connection
-		RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, 0, 0, System.currentTimeMillis());
-		OutputStream os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(reqCon, os);
-		client.sendMessage(os.toString());
-	}
 	
 	
 	/* (non-Javadoc)
@@ -378,37 +323,6 @@ public class SocketServer implements MessageHandler{
 		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * Sendvalue message for components with type=action.
-	 * It automatically sends a second message which resets the value.
-	 *
-	 * @param value the value
-	 * @param devId the id of the device, which is saved in the distributor
-	 * @param devCompId the id of the deviceComponent, which is saved in the distributor
-	 * @param time the timestamp of the value
-	 */
-	//TODO run in another Thread
-	public void sendAction(double value, int devId, int devCompId, long time) {
 
-		int conId = cache.getConnector().getIdverteiler();
-
-		SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
-		OutputStream os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(sendval, os);
-		client.sendMessage(os.toString());
-//		
-//		try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		sendval = new SendValue(devId, devCompId, 0, time, conId, 0, 0, 0, System.currentTimeMillis());
-		os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(sendval, os);
-		client.sendMessage(os.toString());
-		
-	}
 
 }

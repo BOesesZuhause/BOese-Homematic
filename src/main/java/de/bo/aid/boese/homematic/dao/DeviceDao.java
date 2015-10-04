@@ -85,6 +85,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	 *
 	 * @return the devices
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Device> getDevices(){
 		Session session = factory.openSession();
 		session.beginTransaction();

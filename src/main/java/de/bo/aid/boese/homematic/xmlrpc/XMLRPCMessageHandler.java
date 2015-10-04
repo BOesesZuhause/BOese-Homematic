@@ -40,16 +40,16 @@ import org.apache.log4j.Logger;
 
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
-import de.bo.aid.boese.homematic.socket.SocketServer;
+import de.bo.aid.boese.homematic.socket.SocketClient;
 
 // TODO: Auto-generated Javadoc
 /**
  * The messagehandler used by the XMLRPC-Server.
  */
-public class MessageHandler {
+public class XMLRPCMessageHandler {
 	
 	/** The logger from log4j. */
-	final static Logger logger = Logger.getLogger(MessageHandler.class);
+	final static Logger logger = Logger.getLogger(XMLRPCMessageHandler.class);
 
 	/**
 	 * receives event-messages from the HomeMatic-System.
@@ -84,7 +84,7 @@ public class MessageHandler {
 			break;
 		case "ACTION":
 			value = 1;
-			SocketServer.getInstance().sendAction(value, devId, devCompId, System.currentTimeMillis());
+			SocketClient.getInstance().sendAction(value, devId, devCompId, System.currentTimeMillis());
 			return;
 		case "INTEGER":
 			value = Integer.parseInt(valueObj.toString());
@@ -94,7 +94,7 @@ public class MessageHandler {
 			break;
 			default:
 		}
-		SocketServer.getInstance().sendValue(value, devId, devCompId, System.currentTimeMillis());		
+		SocketClient.getInstance().sendValue(value, devId, devCompId, System.currentTimeMillis());		
 	}
 	
 	/**

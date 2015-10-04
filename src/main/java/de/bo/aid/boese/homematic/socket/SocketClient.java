@@ -35,6 +35,8 @@
 package de.bo.aid.boese.homematic.socket;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.net.URI;
 
 import javax.websocket.ClientEndpoint;
@@ -49,22 +51,56 @@ import javax.websocket.WebSocketContainer;
 
 import org.apache.log4j.Logger;
 
+import de.bo.aid.boese.homematic.main.DatabaseCache;
+import de.bo.aid.boese.homematic.model.Connector;
+import de.bo.aid.boese.json.BoeseJson;
+import de.bo.aid.boese.json.RequestConnection;
+import de.bo.aid.boese.json.SendValue;
+
 
 // TODO: Auto-generated Javadoc
 /**
  * class which acts as a websocketclient.
  */
 @ClientEndpoint
-public class SocketClientStandalone {
+public class SocketClient {
 	
 	/** logger for log4j. */
-	final static Logger logger = Logger.getLogger(SocketClientStandalone.class);
+	final static Logger logger = Logger.getLogger(SocketClient.class);
 	
     /** The session of the client. */
     Session userSession = null;
     
     /** The messagehandler which is subscribed. */
     private MessageHandler messageHandler;
+    
+	/** The databasecache used to read data quickly. */
+	DatabaseCache cache = DatabaseCache.getInstance();
+	
+	private static SocketClient instance;
+	
+	private SocketClient(){
+		
+	}
+	
+	public static SocketClient getInstance(){
+		if(instance == null){
+			instance = new SocketClient();
+		}
+		return instance;
+	}
+    
+    /**
+	 * Starts the server and connects to it.
+	 *
+	 * @param serverUri the uri of the server
+	 */
+	public void start(String serverUri){
+		URI uri = URI.create(serverUri);
+		MessageHandler handler = new SocketHandler(this);
+		addMessageHandler(handler);
+		connect(uri);
+	}
 
     
     /**
@@ -148,6 +184,69 @@ public class SocketClientStandalone {
         this.userSession.getAsyncRemote().sendText(message);
     }
 
+
+    
+    
+    //Protocol specific methods
+
+		/**
+		 * Sends a request-connection message to the distributor.
+		 */
+		public void requestConnection(){
+			
+			cache.update();	
+			Connector con = cache.getConnector();
+			
+			// Request connection
+			RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, 0, 0, System.currentTimeMillis());
+			OutputStream os = new ByteArrayOutputStream();
+			BoeseJson.parseMessage(reqCon, os);
+			sendMessage(os.toString());
+		}
+
+		/**
+		 * Sends a value to the distributor.
+		 *
+		 * @param value the value
+		 * @param devId the id of the device, which is saved in the distributor
+		 * @param devCompId the id of the deviceComponent, which is saved in the distributor
+		 * @param time the timestamp of the value
+		 */
+		//wird von HomeMatic-Gerät aufgerufen
+		public void sendValue(double value, int devId, int devCompId, long time){
+
+			int conId = cache.getConnector().getIdverteiler();
+
+			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
+			OutputStream os = new ByteArrayOutputStream();
+			BoeseJson.parseMessage(sendval, os);
+			sendMessage(os.toString());
+		}
+		
+		/**
+		 * Sendvalue message for components with type=action.
+		 * It automatically sends a second message which resets the value.
+		 *
+		 * @param value the value
+		 * @param devId the id of the device, which is saved in the distributor
+		 * @param devCompId the id of the deviceComponent, which is saved in the distributor
+		 * @param time the timestamp of the value
+		 */
+		public void sendAction(double value, int devId, int devCompId, long time) {
+
+			int conId = cache.getConnector().getIdverteiler();
+
+			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
+			OutputStream os = new ByteArrayOutputStream();
+			BoeseJson.parseMessage(sendval, os);
+			sendMessage(os.toString());
+			
+			sendval = new SendValue(devId, devCompId, 0, time, conId, 0, 0, 0, System.currentTimeMillis());
+			os = new ByteArrayOutputStream();
+			BoeseJson.parseMessage(sendval, os);
+			sendMessage(os.toString());
+			
+		}
 
   
 

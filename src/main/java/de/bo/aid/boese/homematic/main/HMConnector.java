@@ -48,6 +48,9 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
@@ -62,7 +65,7 @@ import de.bo.aid.boese.homematic.dao.DeviceDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
-import de.bo.aid.boese.homematic.socket.SocketServer;
+import de.bo.aid.boese.homematic.socket.SocketClient;
 import de.bo.aid.boese.homematic.xml.ChannelXML;
 import de.bo.aid.boese.homematic.xml.ComponentXML;
 import de.bo.aid.boese.homematic.xml.DeviceXML;
@@ -80,8 +83,10 @@ public class HMConnector {
 	/** The client. */
 	private XMLRPCClient client;
 	
+	XMLRPCServer XMLserver;
+	
 	/** The server. */
-	private SocketServer server;
+	private SocketClient socketClient;
 	
 	/** The durl. */
 	private String durl;
@@ -90,10 +95,15 @@ public class HMConnector {
 	private String hmurl;
 	
 	/** The config path. */
-	private String configPath;
+	private String configFilePath;
 	
 	/** The name. */
 	private String name;
+	
+	private String devFilePath;
+	
+	private boolean validate;
+	
 	
 	/**
 	 * Gets the durl.
@@ -149,7 +159,7 @@ public class HMConnector {
 		connector.checkArguments(args);	
 		connector.loadProperties();		//TODO	validate the config		
 		connector.saveSettings();
-		connector.loadXML("Devices.xml"); //TODO configparameter for filename
+		connector.loadXML(); 
 		connector.initializeXMLRPCClient();	
 		List<Device> devices = connector.getDevices();		
 		connector.initDatabase(devices);		
@@ -164,14 +174,14 @@ public class HMConnector {
 	 * Start flow.
 	 */
 	private void startFlow() {
-		server.requestConnection();
+		socketClient.requestConnection();
 	}
 
 	/**
 	 * Inits the xmlrpc server.
 	 */
 	private void initXMLRPCServer() {
-		XMLRPCServer XMLserver = new XMLRPCServer();
+		XMLserver = new XMLRPCServer();
 		XMLserver.start();
 		try {
 			client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":" + XMLserver.getPort());
@@ -186,8 +196,8 @@ public class HMConnector {
 	 * Inits the websocket server.
 	 */
 	private void initWebsocketServer() {
-		server = SocketServer.getInstance();
-		server.start(durl);	//returns when server is started http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call	
+		socketClient = SocketClient.getInstance();
+		socketClient.start(durl);	//returns when server is started http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call	
 	}
 	
 	/**
@@ -287,6 +297,9 @@ public class HMConnector {
 					for(ChannelXML channelXML : devXML.getChannels()){
 						int channelID = channelXML.getNumber();
 						for(ComponentXML compXML : channelXML.getComponents()){
+							if(validate){
+								//TODO check if components in xml match the components in homematic
+							}
 							Component comp = new Component();
 							comp.setDevice(dev);
 							comp.setAddress(dev.getAdress() + ":" + channelID);
@@ -317,9 +330,9 @@ public class HMConnector {
 	 *
 	 * @param location the location
 	 */
-	private void loadXML(String location){
+	private void loadXML(){
 		try {
-			File file = new File(location);
+			File file = new File(devFilePath);
 			JAXBContext context = JAXBContext.newInstance( DevicesXML.class );
 			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
 			xml = (DevicesXML)jaxbUnmarshaller.unmarshal(file);
@@ -349,17 +362,67 @@ public class HMConnector {
 	        System.exit(0);
 	    }
 		
-		configPath = params.getConfig();
+		configFilePath = params.getConfig();
+		validate = params.isValidate();
+		
 		
 		if(params.isGenConfig()){
 			createDefaultProperties();
-			logger.info("created default properties-file at: " + configPath);
+			logger.info("created default properties-file at: " + configFilePath);
+			System.exit(0);
+		}
+		
+		if(params.isGenerate()){
+			generateXML();
+			logger.info("created xml-file with all devices found");
 			System.exit(0);
 		}
 		
 		
 	}
 	
+	private void generateXML() {
+	 
+			 	DevicesXML devicesXML= client.getDevicesAsXML();
+			 	
+
+			 	
+		        JAXBContext ctx = null;
+				try {
+					ctx = JAXBContext.newInstance(devicesXML.getClass());
+				} catch (JAXBException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        Marshaller marshaller = null;
+				try {
+					marshaller = ctx.createMarshaller();
+				} catch (JAXBException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        try {
+					marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+				} catch (PropertyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		        FileOutputStream out = null;
+				try {
+					out = new FileOutputStream(devFilePath);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        try {
+					marshaller.marshal(devicesXML, out);
+				} catch (JAXBException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+	}
+
 	/**
 	 * Load properties.
 	 */
@@ -370,9 +433,9 @@ public class HMConnector {
 
 	    //load the file handle
 	    try {
-			file = new FileInputStream(configPath);
+			file = new FileInputStream(configFilePath);
 		} catch (FileNotFoundException e) {
-			logger.error("config File not found at: " + configPath);
+			logger.error("config File not found at: " + configFilePath);
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -399,6 +462,7 @@ public class HMConnector {
 	    hmurl = props.getProperty("HomematicURL");
 	    durl = props.getProperty("DistributorURL");
 	    name = props.getProperty("ConnectorName");
+	    devFilePath = props.getProperty("KnownDevicesFilePath");
 	}
 	
 	/**
@@ -411,11 +475,12 @@ public class HMConnector {
 		prop.setProperty("HomematicURL", "http://example.org:9090");
 		prop.setProperty("DistributorURL", "ws://example.org:8080/events");
 		prop.setProperty("ConnectorName", "HomematicConnector");
+		prop.setProperty("KnownDevicesFilePath", "Devices.xml");
 		
 		try {
-			output = new FileOutputStream(configPath);
+			output = new FileOutputStream(configFilePath);
 		} catch (FileNotFoundException e) {
-			logger.error("Could not open file: " + configPath);
+			logger.error("Could not open file: " + configFilePath);
 			e.printStackTrace();
 			System.exit(0);
 		}

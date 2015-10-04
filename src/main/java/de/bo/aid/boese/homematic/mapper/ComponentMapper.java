@@ -34,9 +34,44 @@
  */
 package de.bo.aid.boese.homematic.mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import de.bo.aid.boese.homematic.model.Component;
+
 /**
  * The Class ComponentMapper.
  */
 public class ComponentMapper {
+
+	//TODO test
+	@SuppressWarnings("unchecked")
+	public List<Component> map(Object obj) {
+		HashMap<String, Object> paramsetDescriptionMap = (HashMap<String, Object>) obj;
+		List<Component> out = new ArrayList<>();
+
+		for (Object value : paramsetDescriptionMap.values()) {
+			HashMap<String, Object> valueMap = (HashMap<String, Object>) value;
+			Component comp = new Component();
+			comp.setUnit((String) valueMap.get("UNIT"));
+			comp.setType((String) valueMap.get("TYPE"));
+			comp.setName((String) valueMap.get("ID"));
+
+			// Schaltaktor
+			if (valueMap.get("TYPE").equals("ACTION")) {
+				comp.setAktor(true);
+			}
+
+			// Sensor
+			if (valueMap.get("UNIT") != null) {
+				comp.setAktor(false);
+			}
+
+			out.add(comp);
+		}
+
+		return out;
+	}
 
 }

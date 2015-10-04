@@ -36,15 +36,12 @@ package de.bo.aid.boese.homematic.dao;
 
 import java.util.List;
 
-import org.eclipse.jetty.util.PathWatcher.DepthLimitedFileVisitor;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Component;
-import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
 // TODO: Auto-generated Javadoc
