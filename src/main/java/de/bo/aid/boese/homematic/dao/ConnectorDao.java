@@ -81,16 +81,6 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Insert default.
-	 */
-	public static void insertDefault(){
-		Connector con = new Connector();
-		con.setName("HomeMaticDefault");
-		con.setSecret(null);
-		insertConnector(con);
-	}
-	
-	/**
 	 * Inserts a connector in the database.
 	 *
 	 * @param con the connector to be inserted
@@ -108,7 +98,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Updats a connector in the database.
+	 * Updates a connector in the database.
 	 *
 	 * @param con the connector to be updated
 	 */

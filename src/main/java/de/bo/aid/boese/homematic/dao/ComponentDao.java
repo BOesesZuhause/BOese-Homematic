@@ -101,7 +101,6 @@ public class ComponentDao {
 	 * @param component the component to be updated
 	 */
 	public static void updateComponent(Component component) {
-		// TODO Auto-generated method stub
 		Session session = factory.openSession();
 		session.beginTransaction();
 		session.merge(component);

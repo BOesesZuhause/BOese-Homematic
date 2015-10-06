@@ -52,7 +52,6 @@ public class Parameters {
 	private boolean validate = false;
 	
 	/** The config. */
-	//TODO file in the same directory
 	@Parameter(names = "-config", description = "Path to the config-file", required=true)
 	private String config;
 	

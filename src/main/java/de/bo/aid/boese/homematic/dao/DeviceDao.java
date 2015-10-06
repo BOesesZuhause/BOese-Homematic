@@ -120,7 +120,6 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	 * @param dev the device to be updated
 	 */
 	public static void updateDevice(Device dev) {
-		// TODO Auto-generated method stub
 		Session session = factory.openSession();
 		session.beginTransaction();
 		session.merge(dev);

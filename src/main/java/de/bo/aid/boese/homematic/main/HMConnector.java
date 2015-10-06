@@ -472,8 +472,8 @@ public class HMConnector {
 		Properties prop = new Properties();
 		OutputStream output = null;
 		
-		prop.setProperty("HomematicURL", "http://example.org:9090");
-		prop.setProperty("DistributorURL", "ws://example.org:8080/events");
+		prop.setProperty("HomematicURL", "http:\\\\example.org:2001");
+		prop.setProperty("DistributorURL", "ws:\\\\example.org:8081\\events");
 		prop.setProperty("ConnectorName", "HomematicConnector");
 		prop.setProperty("KnownDevicesFilePath", "Devices.xml");
 		
