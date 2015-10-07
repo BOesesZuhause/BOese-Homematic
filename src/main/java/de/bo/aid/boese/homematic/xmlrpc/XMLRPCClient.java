@@ -38,18 +38,10 @@ import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-
-import de.bo.aid.boese.homematic.mapper.DeviceMapper;
-import de.bo.aid.boese.homematic.model.Device;
-
-import de.bo.aid.boese.homematic.xml.DeviceXML;
-import de.bo.aid.boese.homematic.xml.DevicesXML;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -117,42 +109,28 @@ public class XMLRPCClient {
 	 *
 	 * @return the HM devices
 	 */
-	public List<Device> getHMDevices() {
+	public Object getDevices() {
 
 		Object[] params = new Object[] {};
 		Object obj = null;
-		try {
-			obj = makeRequest("listDevices", params);
-		} catch (XmlRpcException e) {
-			logger.error("error while sending xmlrpc-request");
-			e.printStackTrace();
-		}
+		obj = makeRequest("listDevices", params);
 		if (obj == null) {
 			logger.error("no devices returned from homematic");
 		}
 
-		return DeviceMapper.map(obj, true);
+		return obj;
 	}
 
-	/**
-	 * Converts all found Homematic-Devices to the format used in the
-	 * known-devices-xml-file and outputs it.
-	 * 
-	 * @return
-	 */
+	public Object getParamSets(String address) {
 
-	// TODO test
-	public DevicesXML getDevicesAsXML() {
-		DevicesXML out = new DevicesXML();
+		Object[] params = new Object[] { address, "VALUES" };
+		Object obj = null;
+		obj = makeRequest("getParamsetDescription", params);
+		if (obj == null) {
+			logger.warn("no paramsets returned from homematic for device with address: " + address);
+		}
 
-		for (Device dev : getHMDevices()) {
-			DeviceXML devXML = new DeviceXML();
-			devXML.setFirmware(dev.getFirmware());
-			devXML.setModel(dev.getType());
-
-			out.getDevices().add(devXML);
-		} // TODO getChannels and Components
-		return out;
+		return obj;
 	}
 
 	/**
@@ -165,12 +143,7 @@ public class XMLRPCClient {
 	public void sendInit(String url) {
 
 		Object[] params = new Object[] { url, clientId };
-		try {
-			makeRequest("init", params);
-		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		makeRequest("init", params);
 	}
 
 	/**
@@ -214,12 +187,7 @@ public class XMLRPCClient {
 		default:
 		}
 		Object[] params = new Object[] { address, name, valueSent };
-		try {
-			makeRequest("setValue", params);
-		} catch (XmlRpcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		makeRequest("setValue", params);
 	}
 
 	/**
@@ -233,7 +201,7 @@ public class XMLRPCClient {
 	 * @throws XmlRpcException
 	 *             the xml rpc exception
 	 */
-	private Object makeRequest(String method, Object[] params) throws XmlRpcException {
+	private Object makeRequest(String method, Object[] params) {
 		try {
 			logger.info("Send XMLRPC-Request: " + method);
 			return client.execute(method, params);
@@ -241,7 +209,8 @@ public class XMLRPCClient {
 			if (e.getCause() instanceof ConnectException) {
 				logger.error("Timeout while sending request to HomeMatic XML-RPC-Server");
 			} else {
-				throw e;// TODO Exception anders werfen
+				logger.error("error while sending xmlrpc-request:");
+				e.printStackTrace();
 			}
 			// System.exit(0);
 		}

@@ -56,6 +56,7 @@ public class Parameters {
 	private String config;
 	
 	
+	//TODO parameter for output file
 	/** The gen config. */
 	@Parameter(names = "-genconfig", description = "Generates a default config file at the location configured with -config")
 	private boolean genConfig = false;

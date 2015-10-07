@@ -62,6 +62,8 @@ import de.bo.aid.boese.homeamtic.cli.Parameters;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
+import de.bo.aid.boese.homematic.mapper.DeviceMapper;
+import de.bo.aid.boese.homematic.mapper.DevicesXMLMapper;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
@@ -267,7 +269,7 @@ public class HMConnector {
 	 * @return the devices
 	 */
 	private List<Device> getDevices() {
-		List<Device> devices = client.getHMDevices();
+		List<Device> devices = DeviceMapper.map(client.getDevices(), true);
 		devices = filterDevices(devices);
 		return devices;
 	}
@@ -382,8 +384,10 @@ public class HMConnector {
 	}
 	
 	private void generateXML() {
-	 
-			 	DevicesXML devicesXML= client.getDevicesAsXML();
+		
+		loadProperties();
+		initializeXMLRPCClient();
+			 	DevicesXML devicesXML= DevicesXMLMapper.map(client.getDevices(), true);
 			 	
 
 			 	
