@@ -62,6 +62,9 @@ public class DeviceComponents {
 	/** The description. */
 	private String description;
 	
+	/** The status. */
+	private int status;
+	
 	/**
 	 * Instantiates a new device components.
 	 *
@@ -81,6 +84,38 @@ public class DeviceComponents {
 		this.actor = actor;
 		this.unit = unit;
 		this.description = description;
+		this.status = -1;
+	}
+	
+	/**
+	 * Instantiates a new device components.
+	 *
+	 * @param deviceComponentId the device component id
+	 * @param componentName the component name
+	 * @param value the value
+	 * @param unit the unit
+	 * @param description the description
+	 * @param actor the actor
+	 * @param status the status
+	 */
+	public DeviceComponents(int deviceComponentId, String componentName, double value, String unit, String description, boolean actor, int status) {
+		this.deviceComponentId = deviceComponentId;
+		this.componentName = componentName;
+		this.value = value;
+		this.timestamp = -1;
+		this.actor = actor;
+		this.unit = unit;
+		this.description = description;
+		this.status = status;
+	}
+	
+	/**
+	 * Gets the status.
+	 *
+	 * @return the status
+	 */
+	public int getStatus(){
+		return status;
 	}
 	
 	/**

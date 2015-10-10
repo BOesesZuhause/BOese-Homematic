@@ -56,6 +56,9 @@ import de.bo.aid.boese.homematic.xml.DevicesXML;
  */
 public class SerialisationTest {
 	
+	/**
+	 * Test.
+	 */
 	@Before
 	@Test
 	public void test(){

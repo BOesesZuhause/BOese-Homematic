@@ -34,8 +34,6 @@
  */
 package de.bo.aid.boese.homematic.model;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * model-class for connectors.
  */
@@ -56,18 +54,6 @@ public class Connector implements java.io.Serializable {
 	/** The name of the connector. */
 	private String name;
 	
-	/** The hm url. */
-	private String hmURL;
-	
-	/** The distr url. */
-	private String distrURL;
-	
-	/** The known devices file. */
-	private String knownDevicesFile;
-	
-	
-	
-
 	/**
 	 * Instantiates a new connector.
 	 */
@@ -161,61 +147,5 @@ public class Connector implements java.io.Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	/**
-	 * Gets the hm url.
-	 *
-	 * @return the hm url
-	 */
-	public String getHmURL() {
-		return hmURL;
-	}
-
-	/**
-	 * Sets the hm url.
-	 *
-	 * @param hmURL the new hm url
-	 */
-	public void setHmURL(String hmURL) {
-		this.hmURL = hmURL;
-	}
-
-	/**
-	 * Gets the distr url.
-	 *
-	 * @return the distr url
-	 */
-	public String getDistrURL() {
-		return distrURL;
-	}
-
-	/**
-	 * Sets the distr url.
-	 *
-	 * @param distrURL the new distr url
-	 */
-	public void setDistrURL(String distrURL) {
-		this.distrURL = distrURL;
-	}
-
-	/**
-	 * Gets the known devices file.
-	 *
-	 * @return the known devices file
-	 */
-	public String getKnownDevicesFile() {
-		return knownDevicesFile;
-	}
-
-	/**
-	 * Sets the known devices file.
-	 *
-	 * @param knownDevicesFile the new known devices file
-	 */
-	public void setKnownDevicesFile(String knownDevicesFile) {
-		this.knownDevicesFile = knownDevicesFile;
-	}
-
-
 
 }

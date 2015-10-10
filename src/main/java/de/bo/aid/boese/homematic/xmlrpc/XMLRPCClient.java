@@ -43,7 +43,6 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
-// TODO: Auto-generated Javadoc
 /**
  * Client to send requests to the HomeMatic-XMLRPC-Server.
  */
@@ -121,6 +120,12 @@ public class XMLRPCClient {
 		return obj;
 	}
 
+	/**
+	 * Gets the param sets.
+	 *
+	 * @param address the address
+	 * @return the param sets
+	 */
 	public Object getParamSets(String address) {
 
 		Object[] params = new Object[] { address, "VALUES" };
@@ -134,11 +139,11 @@ public class XMLRPCClient {
 	}
 
 	/**
-	 * Sends the init-message to the homematic XMLRPC-Server. THis is needed to
+	 * Sends the init-message to the homematic XMLRPC-Server. This is needed to
 	 * register a callback for events
 	 *
-	 * @param url
-	 *            the url
+	 * @param url of the xmlrpc-server for callbacks
+	 *           
 	 */
 	public void sendInit(String url) {
 
@@ -193,13 +198,9 @@ public class XMLRPCClient {
 	/**
 	 * Sends a request to the XMLRPC-Server.
 	 *
-	 * @param method
-	 *            the methodname of the called method
-	 * @param params
-	 *            the parameters for the method
+	 * @param method            the methodname of the called method
+	 * @param params            the parameters for the method
 	 * @return the answer
-	 * @throws XmlRpcException
-	 *             the xml rpc exception
 	 */
 	private Object makeRequest(String method, Object[] params) {
 		try {
@@ -212,7 +213,6 @@ public class XMLRPCClient {
 				logger.error("error while sending xmlrpc-request:");
 				e.printStackTrace();
 			}
-			// System.exit(0);
 		}
 		return null;
 	}

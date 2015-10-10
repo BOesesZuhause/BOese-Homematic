@@ -40,11 +40,10 @@ import org.apache.log4j.Logger;
 
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * Defines a cache for the database. Singleton class.
  * Holds instances of connector and device.
@@ -54,10 +53,10 @@ public class DatabaseCache {
 	/** The logger for log4j. */
 	final static Logger logger = Logger.getLogger(DatabaseCache.class);
 	
-	/** The instance. */
+	/** The singleton-instance. */
 	private static DatabaseCache instance = new DatabaseCache();
 	
-	/** The connectorase from the datab. */
+	/** The connector from the database. */
 	private Connector connector;
 	
 	/**  A list of devices from the database. */
@@ -126,41 +125,6 @@ public class DatabaseCache {
 	 */
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
-	}
-	
-	/**
-	 * Checks if is known.
-	 *
-	 * @param dev the dev
-	 * @return true, if is known
-	 */
-	public boolean isKnown(Device dev){
-		for(Device devDB : devices){
-			if(devDB.getAdress().equals(dev.getAdress())){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * Checks if is known.
-	 *
-	 * @param comp the comp
-	 * @return true, if is known
-	 */
-	public boolean isKnown(Component comp){
-		return false;
-		
-	}
-	
-	/**
-	 * Determines wether a connector is saved in the database.
-	 *
-	 * @return true if a connector is already in the database, false if not.
-	 */
-	public boolean hasConnector(){
-		return !(connector == null);		
 	}
 
 }

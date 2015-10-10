@@ -43,7 +43,6 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.WebServer;
 
-// TODO: Auto-generated Javadoc
 /**
  * Defines an XMLRPC-server. The server can be registered as callback in the homematic-central.
  */
@@ -75,10 +74,11 @@ public class XMLRPCServer {
 				phm.load(Thread.currentThread().getContextClassLoader(),
 				           "MyHandlers.properties");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				logger.error("Could not load properties file for xmlrpc-server handler:");
 				e.printStackTrace();
+				System.exit(0);
 			} catch (XmlRpcException e) {
-				// TODO Auto-generated catch block
+				logger.error("Error while loading properties for XMLRPC-Server:");
 				e.printStackTrace();
 			}
 
@@ -100,8 +100,9 @@ public class XMLRPCServer {
 				webServer.start();
 				logger.info("XMLRPC-Server started");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				logger.error("Error while starting xmlrpc-server:");
 				e.printStackTrace();
+				System.exit(0);
 			}
 	}
 

@@ -34,10 +34,6 @@
  */
 package de.bo.aid.boese.homematic.model;
 
-// TODO: Auto-generated Javadoc
-// default package
-// Generated 31.08.2015 00:11:54 by Hibernate Tools 4.3.1
-
 /**
  * Model class for components.
  */

@@ -63,14 +63,12 @@ public class SendNotification extends BoeseJson {
 	 * @param notificationTimestamp the notification timestamp
 	 * @param notificationText the notification text
 	 * @param connectorId the connector id
-	 * @param seqNr the seq nr
-	 * @param ackNr the ack nr
 	 * @param status the status
 	 * @param timestamp the timestamp
 	 */
 	public SendNotification(int deviceId, int deviceComponentId, int notificationType, long notificationTimestamp, String notificationText,
-			int connectorId, int seqNr, int ackNr, int status, long timestamp) {
-		super(MessageType.SENDNOTIFICATION, connectorId, seqNr, ackNr, status, timestamp);
+			int connectorId, int status, long timestamp) {
+		super(MessageType.SENDNOTIFICATION, connectorId, status, timestamp);
 		this.deviceId = deviceId;
 		this.deviceComponentId = deviceComponentId;
 	}

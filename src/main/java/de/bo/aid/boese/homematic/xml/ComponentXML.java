@@ -36,7 +36,6 @@ package de.bo.aid.boese.homematic.xml;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-// TODO: Auto-generated Javadoc
 /**
  * The xml-model-class for components.
  */

@@ -1,3 +1,37 @@
+/*             
+ * 			  (                       
+ *			 ( )\         (        (   
+ *			 )((_)  (    ))\ (    ))\  
+ *			((_)_   )\  /((_))\  /((_) 
+ *			 | _ ) ((_)(_)) ((_)(_))   
+ *			 | _ \/ _ \/ -_)(_-</ -_)  
+ *			 |___/\___/\___|/__/\___|
+ *       
+ *           			;            
+ *		      +        ;;;         + 
+ *			  +       ;;;;;        + 
+ *			  +      ;;;;;;;       + 
+ *			  ++    ;;;;;;;;;     ++ 
+ *			  +++++;;;;;;;;;;;+++++  
+ *			   ++++;;;;;;;;;;;+++++  
+ *				++;;;;;;;;;;;;;++    
+ *			     ;;;;;;;;;;;;;;;     
+ *			    ;;;;;;;;;;;;;;;;;     
+ *				:::::::::::::::::    
+ * 				:::::::::::::::::      
+ *  			:::::::::::::::::    
+ *   			::::::@@@@@::::::    
+ *				:::::@:::::@:::::    
+ *				::::@:::::::@::::    
+ * 				:::::::::::::::::    
+ *  			:::::::::::::::::      
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
+ * ----------------------------------------------------------------------------
+ */
 package de.bo.aid.boese.homematic.mapper;
 
 import java.util.HashMap;
@@ -10,11 +44,22 @@ import de.bo.aid.boese.homematic.xml.DeviceXML;
 import de.bo.aid.boese.homematic.xml.DevicesXML;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 
+
+/**
+ * Maps homematic devices and components to xml.
+ */
 public class DevicesXMLMapper {
 	
 	/** The logger for log4j. */
 	final static Logger logger = Logger.getLogger(DevicesXMLMapper.class);
 
+	/**
+	 * Maps the .
+	 *
+	 * @param obj the answer from the listdevices request
+	 * @param ignoreVirtual  If true virtual devices are ignored
+	 * @return the XML-Object of the devices
+	 */
 	//TODO don't save empty channels
 	@SuppressWarnings("unchecked")
 	public static DevicesXML map(Object obj, boolean ignoreVirtual) {

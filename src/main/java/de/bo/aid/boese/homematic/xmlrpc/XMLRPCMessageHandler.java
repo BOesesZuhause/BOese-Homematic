@@ -42,7 +42,6 @@ import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 
-// TODO: Auto-generated Javadoc
 /**
  * The messagehandler used by the XMLRPC-Server.
  */
@@ -90,7 +89,8 @@ public class XMLRPCMessageHandler {
 			value = Integer.parseInt(valueObj.toString());
 			break;
 		case "ENUM":
-			//value = 
+			break;
+		case "STRING":
 			break;
 			default:
 		}
@@ -100,12 +100,9 @@ public class XMLRPCMessageHandler {
 	/**
 	 * handles multicall-messages which contain more than one message.
 	 *
-	 * @param args the args
-	 * @return the boolean[]
+	 * @param args the messages
 	 */
-	public Boolean[] multicall(Object[] args) {
-		//System.out.println("multicall received");
-	    Boolean res[] = new Boolean[args.length]; 
+	public void multicall(Object[] args) {
 	    for (int i=0; i<args.length; i++) {
 	      Map<?, ?> call = (Map<?, ?>) args[i];
 	      String method = (String)call.get("methodName");
@@ -114,10 +111,8 @@ public class XMLRPCMessageHandler {
 	      if ("event".equals(method)) {
 	        // hier erfolgt der Aufruf der "event"-Methode
 	        event(margs[0].toString(), margs[1].toString(), margs[2].toString(), margs[3]);
-	        res[i] = Boolean.TRUE;
 	      }
 	    }
-		return res;
 	}
 	
 //	/**

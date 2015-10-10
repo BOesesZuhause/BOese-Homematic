@@ -44,7 +44,6 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Component;
 import javassist.NotFoundException;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class defines an interface to access Component-Objects from the database.
  */
@@ -86,11 +85,7 @@ public class ComponentDao {
 	public static void insertComponent(Component comp){
 		Session session = factory.openSession();
 		session.beginTransaction();
-		try{
-			session.save(comp);
-		}catch(Exception e){
-			//TODO
-		}
+		session.save(comp);
 		session.getTransaction().commit();
 		session.close();
 	}

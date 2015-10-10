@@ -36,8 +36,6 @@ package de.bo.aid.boese.homeamtic.cli;
 
 import com.beust.jcommander.Parameter;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * This class defines the commandline-parameters.
  */
@@ -47,17 +45,16 @@ public class Parameters {
 	@Parameter(names = "-generate", description = "Generates XML-File with all responding HomeMatic-Devices")
 	private boolean generate = false;
 	
-	/** The validate. */
+	/**  If set, the devices configured in the xml-file are validated against the homematic system. */
 	@Parameter(names = "-validate", description = "Validates the content of the xml-file against homematic")
 	private boolean validate = false;
 	
-	/** The config. */
+	/**  Describes the path to the config file. */
 	@Parameter(names = "-config", description = "Path to the config-file", required=true)
 	private String config;
 	
 	
-	//TODO parameter for output file
-	/** The gen config. */
+	/**  If set a defalt config is genrated. */
 	@Parameter(names = "-genconfig", description = "Generates a default config file at the location configured with -config")
 	private boolean genConfig = false;
 	

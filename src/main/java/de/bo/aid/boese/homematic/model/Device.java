@@ -33,13 +33,10 @@
  * ----------------------------------------------------------------------------
  */
 package de.bo.aid.boese.homematic.model;
-// default package
-// Generated 31.08.2015 00:11:54 by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO: Auto-generated Javadoc
 /**
  * model-class for devices.
  */
@@ -74,7 +71,7 @@ public class Device implements java.io.Serializable {
 	/** The homematic-version of the device. */
 	private int version;
 	
-	/** The firmware. */
+	/** The firmware of the device. */
 	private String firmware;
 	
 	/**
@@ -104,10 +101,6 @@ public class Device implements java.io.Serializable {
 	public Device() {
 	}
 
-
-
-
-
 	/**
 	 * Gets the devid.
 	 *
@@ -125,12 +118,6 @@ public class Device implements java.io.Serializable {
 	public void setDevid(int devid) {
 		this.devid = devid;
 	}
-
-	/**
-	 * Gets the connector.
-	 *
-	 * @return the connector
-	 */
 
 
 	/**

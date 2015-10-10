@@ -46,7 +46,6 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
-// TODO: Auto-generated Javadoc
 /**
   * This class defines an interface to access Device-Objects from the database.
  */
@@ -105,11 +104,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	public static void insertDevice(Device dev){
 		Session session = factory.openSession();
 		session.beginTransaction();
-		try{
-			session.save(dev);
-		}catch(Exception e){
-			//TODO
-		}
+		session.save(dev);
 		session.getTransaction().commit();
 		session.close();
 	}

@@ -34,7 +34,6 @@
  */
 package de.bo.aid.boese.homematic.socket;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -58,7 +57,6 @@ import de.bo.aid.boese.json.RequestConnection;
 import de.bo.aid.boese.json.SendValue;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * class which acts as a websocketclient.
  */
@@ -77,12 +75,21 @@ public class SocketClient {
 	/** The databasecache used to read data quickly. */
 	DatabaseCache cache = DatabaseCache.getInstance();
 	
+	/** The singleton-instance. */
 	private static SocketClient instance;
 	
+	/**
+	 * Instantiates a new socket client.
+	 */
 	private SocketClient(){
 		
 	}
 	
+	/**
+	 * Gets the single instance of SocketClient.
+	 *
+	 * @return single instance of SocketClient
+	 */
 	public static SocketClient getInstance(){
 		if(instance == null){
 			instance = new SocketClient();
@@ -155,7 +162,7 @@ public class SocketClient {
     }
     
     /**
-     * On error.
+     * On error-method. Called when errors occur.
      *
      * @param error The Exception which occured
      */
@@ -198,7 +205,7 @@ public class SocketClient {
 			Connector con = cache.getConnector();
 			
 			// Request connection
-			RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, 0, 0, System.currentTimeMillis());
+			RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
 			OutputStream os = new ByteArrayOutputStream();
 			BoeseJson.parseMessage(reqCon, os);
 			sendMessage(os.toString());
@@ -217,7 +224,7 @@ public class SocketClient {
 
 			int conId = cache.getConnector().getIdverteiler();
 
-			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
+			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
 			OutputStream os = new ByteArrayOutputStream();
 			BoeseJson.parseMessage(sendval, os);
 			sendMessage(os.toString());
@@ -236,12 +243,12 @@ public class SocketClient {
 
 			int conId = cache.getConnector().getIdverteiler();
 
-			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, 0, 0, System.currentTimeMillis());
+			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
 			OutputStream os = new ByteArrayOutputStream();
 			BoeseJson.parseMessage(sendval, os);
 			sendMessage(os.toString());
 			
-			sendval = new SendValue(devId, devCompId, 0, time, conId, 0, 0, 0, System.currentTimeMillis());
+			sendval = new SendValue(devId, devCompId, 0, time, conId, 0, System.currentTimeMillis());
 			os = new ByteArrayOutputStream();
 			BoeseJson.parseMessage(sendval, os);
 			sendMessage(os.toString());

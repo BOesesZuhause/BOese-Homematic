@@ -42,7 +42,7 @@ import org.hibernate.SessionFactory;
 import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
 
-// TODO: Auto-generated Javadoc
+
 /**
  *  This class defines an interface to access Connector-Objects from the database.
  */
@@ -88,11 +88,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	public static void insertConnector(Connector con){
 		Session session = factory.openSession();
 		session.beginTransaction();
-		try{
-			session.saveOrUpdate(con);
-		}catch(Exception e){
-			//TODO
-		}
+		session.saveOrUpdate(con);
 		session.getTransaction().commit();
 		session.close();
 	}

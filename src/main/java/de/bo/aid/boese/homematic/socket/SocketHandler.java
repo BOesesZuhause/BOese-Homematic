@@ -67,8 +67,6 @@ import de.bo.aid.boese.json.SendValue;
 import javassist.NotFoundException;
 
 
-
-// TODO: Auto-generated Javadoc
 /**
  * This singleton class defines a Websocketendpoint for Websocketconnections.
  */
@@ -89,21 +87,18 @@ public class SocketHandler implements MessageHandler{
 	
 	/**
 	 * Instantiates a new socket server.
+	 *
+	 * @param client websocketclient
 	 */
 	public SocketHandler(SocketClient client){
 		this.client = client;
 	}
-	
-	
-	
 
 	/* (non-Javadoc)
 	 * @see de.bo.aid.boese.homematic.socket.MessageHandler#handleMessage(java.lang.String)
 	 */
 	@Override
 	public synchronized void handleMessage(String message) {
-		
-
 		BoeseJson bjMessage = BoeseJson.readMessage(new ByteArrayInputStream(message.getBytes()));
 
 		if (bjMessage == null) {
@@ -163,7 +158,6 @@ public class SocketHandler implements MessageHandler{
 			logger.warn("requested component with id: " + bjMessage.getDeviceComponentId() + " not found");
 			e.printStackTrace();
 		}
-		//TODO Client auslager und über Methodenaufruf regeln
 		XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue(), comp.getType());		
 	}
 
@@ -193,7 +187,7 @@ public class SocketHandler implements MessageHandler{
 					}
 				}
 				if(dev == null){
-					//TODO add Error handling
+					logger.warn("Could not find the device with id: " + bjMessage.getDeviceId() + " in the database");
 				}
 				
 				//Confirmed Components
@@ -231,7 +225,7 @@ public class SocketHandler implements MessageHandler{
 		}
 		
 		if(requestedDevice == null){
-			//TODO Exception
+			logger.warn("Could not find the device with id: " + bjMessage.getDeviceId() + " in the database");
 		}
 		
 		int conId = cache.getConnector().getIdverteiler();
@@ -244,7 +238,7 @@ public class SocketHandler implements MessageHandler{
 		}
 		
 		//Send Components
-		SendDeviceComponents sendDevComp = new SendDeviceComponents(requestedDevice.getIdverteiler(), components, conId, 0, 0, 0, System.currentTimeMillis());
+		SendDeviceComponents sendDevComp = new SendDeviceComponents(requestedDevice.getIdverteiler(), components, conId, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
 		BoeseJson.parseMessage(sendDevComp, os);
 		client.sendMessage(os.toString());
@@ -285,7 +279,7 @@ public class SocketHandler implements MessageHandler{
 		
 		int conId = cache.getConnector().getIdverteiler();
 		
-		SendDevices sendDevs = new SendDevices(devHash, conId, 0, 0, 0, System.currentTimeMillis());
+		SendDevices sendDevs = new SendDevices(devHash, conId, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
 		BoeseJson.parseMessage(sendDevs, os);
 		client.sendMessage(os.toString());	
@@ -298,7 +292,6 @@ public class SocketHandler implements MessageHandler{
 	 * @param bjMessage the bj message
 	 */
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
-		// TODO test
 		Connector con = cache.getConnector();
 		if(con.getIdverteiler()==bjMessage.getConnectorId()){
 			//TODO was passiert wenn der Connector schon eine ID hat?
@@ -308,7 +301,8 @@ public class SocketHandler implements MessageHandler{
 			ConnectorDao.insertConnector(con);
 			cache.update();
 		}else{
-			//TODO Exception
+			logger.error("Unknown identifier for the connector: " + con.getIdverteiler());
+			System.exit(0);
 		}
 		
 	}

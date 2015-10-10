@@ -45,7 +45,12 @@ import de.bo.aid.boese.homematic.model.Component;
  */
 public class ComponentMapper {
 
-	//TODO test
+	/**
+	 * Maps the homematic components.
+	 *
+	 * @param obj THe answer from the getParamsets-rewuest for Homematic
+	 * @return A list of Components mapped from homematic
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Component> map(Object obj) {
 		HashMap<String, Object> paramsetDescriptionMap = (HashMap<String, Object>) obj;
