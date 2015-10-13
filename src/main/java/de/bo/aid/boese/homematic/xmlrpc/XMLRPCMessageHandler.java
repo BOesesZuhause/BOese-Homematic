@@ -36,7 +36,8 @@ package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
@@ -48,7 +49,7 @@ import de.bo.aid.boese.homematic.socket.SocketClient;
 public class XMLRPCMessageHandler {
 	
 	/** The logger from log4j. */
-	final static Logger logger = Logger.getLogger(XMLRPCMessageHandler.class);
+	final static Logger logger = LogManager.getLogger(XMLRPCMessageHandler.class);
 
 	/**
 	 * receives event-messages from the HomeMatic-System.

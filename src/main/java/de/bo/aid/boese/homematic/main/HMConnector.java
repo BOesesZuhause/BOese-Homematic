@@ -52,7 +52,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
@@ -145,7 +146,7 @@ public class HMConnector {
 	}
 
 	/** The Constant logger for log4j. */
-	final static Logger logger = Logger.getLogger(HMConnector.class);
+	final static Logger logger = LogManager.getLogger(HMConnector.class);
 
 	/** The object-reprasentation of the xml-file with known devices. */
 	DevicesXML xml;

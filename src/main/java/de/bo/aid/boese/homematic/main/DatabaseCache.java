@@ -36,7 +36,8 @@ package de.bo.aid.boese.homematic.main;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
@@ -51,7 +52,7 @@ import de.bo.aid.boese.homematic.model.Device;
 public class DatabaseCache {
 	
 	/** The logger for log4j. */
-	final static Logger logger = Logger.getLogger(DatabaseCache.class);
+	final static Logger logger = LogManager.getLogger(DatabaseCache.class);
 	
 	/** The singleton-instance. */
 	private static DatabaseCache instance = new DatabaseCache();

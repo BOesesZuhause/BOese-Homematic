@@ -48,7 +48,8 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.homematic.main.DatabaseCache;
 import de.bo.aid.boese.homematic.model.Connector;
@@ -64,7 +65,7 @@ import de.bo.aid.boese.json.SendValue;
 public class SocketClient {
 	
 	/** logger for log4j. */
-	final static Logger logger = Logger.getLogger(SocketClient.class);
+	final static Logger logger = LogManager.getLogger(SocketClient.class);
 	
     /** The session of the client. */
     Session userSession = null;
@@ -104,7 +105,7 @@ public class SocketClient {
 	 */
 	public void start(String serverUri){
 		URI uri = URI.create(serverUri);
-		MessageHandler handler = new SocketHandler(this);
+		MessageHandler handler = new ProtocolHandler(this);
 		addMessageHandler(handler);
 		connect(uri);
 	}

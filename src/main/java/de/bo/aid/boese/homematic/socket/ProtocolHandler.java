@@ -43,7 +43,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
@@ -70,7 +71,7 @@ import javassist.NotFoundException;
 /**
  * This singleton class defines a Websocketendpoint for Websocketconnections.
  */
-public class SocketHandler implements MessageHandler{
+public class ProtocolHandler implements MessageHandler{
 	
 	
 	/** The client used by the connection. */
@@ -83,14 +84,14 @@ public class SocketHandler implements MessageHandler{
 	DatabaseCache cache = DatabaseCache.getInstance();
 	
 	/** The logger for log4j. */
-	final static Logger logger = Logger.getLogger(SocketHandler.class);
+	final static Logger logger = LogManager.getLogger(ProtocolHandler.class);
 	
 	/**
 	 * Instantiates a new socket server.
 	 *
 	 * @param client websocketclient
 	 */
-	public SocketHandler(SocketClient client){
+	public ProtocolHandler(SocketClient client){
 		this.client = client;
 	}
 

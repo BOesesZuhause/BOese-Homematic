@@ -36,7 +36,8 @@ package de.bo.aid.boese.homematic.mapper;
 
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.homematic.xml.ChannelXML;
 import de.bo.aid.boese.homematic.xml.ComponentXML;
@@ -51,7 +52,7 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 public class DevicesXMLMapper {
 	
 	/** The logger for log4j. */
-	final static Logger logger = Logger.getLogger(DevicesXMLMapper.class);
+	final static Logger logger = LogManager.getLogger(DevicesXMLMapper.class);
 
 	/**
 	 * Maps the .

@@ -36,7 +36,8 @@ package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 import org.apache.xmlrpc.server.XmlRpcServer;
@@ -52,7 +53,7 @@ public class XMLRPCServer {
 	final int port = 8082;
 	
 	/** The logger from log4j. */
-	final static Logger logger = Logger.getLogger(XMLRPCServer.class);
+	final static Logger logger = LogManager.getLogger(XMLRPCServer.class);
 	
 	/**
 	 * Starts the server with the properties defined in MyHandlers.properties.

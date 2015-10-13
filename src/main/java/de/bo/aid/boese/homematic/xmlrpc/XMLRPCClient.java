@@ -38,7 +38,8 @@ import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -68,7 +69,7 @@ public class XMLRPCClient {
 	}
 
 	/** The logger for log4j. */
-	final static Logger logger = Logger.getLogger(XMLRPCClient.class);
+	final static Logger logger = LogManager.getLogger(XMLRPCClient.class);
 
 	/**
 	 * The id of the client. This is used by the homematic-server to identify
