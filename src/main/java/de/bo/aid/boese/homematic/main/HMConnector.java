@@ -41,8 +41,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -186,13 +189,14 @@ public class HMConnector {
 	private void initXMLRPCServer() {
 		XMLserver = new XMLRPCServer();
 		XMLserver.start();
-		try {
-			client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":" + XMLserver.getPort());
-		} catch (UnknownHostException e1) {
-			logger.error("Unknown Host: " + e1.getMessage());
-			e1.printStackTrace();
-			System.exit(0);
-		}
+//		try {
+			//client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":" + XMLserver.getPort());
+			client.sendInit(getOwnIP() + ":" + XMLserver.getPort());
+//		} catch (UnknownHostException e1) {
+//			logger.error("Unknown Host: " + e1.getMessage());
+//			e1.printStackTrace();
+//			System.exit(0);
+//		}
 	}
 
 	/**
@@ -489,5 +493,33 @@ public class HMConnector {
 			System.exit(0);
 		}
 	}
+	
+	//TODO is called when a new device is connected
+	public void addDevice(){
+		
+	}
+
+	public static String getOwnIP(){
+	    String ip = null;
+	    try {
+	        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+	        while (interfaces.hasMoreElements()) {
+	            NetworkInterface iface = interfaces.nextElement();
+	            // filters out 127.0.0.1 and inactive interfaces
+	            if (iface.isLoopback() || !iface.isUp())
+	                continue;
+
+	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+	            while(addresses.hasMoreElements()) {
+	                InetAddress addr = addresses.nextElement();
+	                ip = addr.getHostAddress();
+	            }
+	        }
+	    } catch (SocketException e) {
+	        throw new RuntimeException(e);
+	    }
+	    return ip;
+	}
+
 
 }

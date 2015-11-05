@@ -46,6 +46,8 @@ import de.bo.aid.boese.homematic.socket.SocketClient;
 /**
  * The messagehandler used by the XMLRPC-Server.
  */
+
+//TODO move non system-method in own handler
 public class XMLRPCMessageHandler {
 	
 	/** The logger from log4j. */
@@ -62,6 +64,21 @@ public class XMLRPCMessageHandler {
 	public void event(String interface_id, String address, String value_key, Object valueObj){
 		logger.info("received event: address: " + address + ", value_key: " + value_key + ", value: " + valueObj.toString());
 		
+		
+		//TODO finish and check component first
+		if(value_key.equals("UNREACH")){
+			if(valueObj.equals(true)){
+				//SocketClient.getInstance().sendStatus();
+			}else{
+				//SocketClient.getInstance().sendStatus();
+			}
+			
+		}else if(value_key.equals("LOWBAT")){
+			
+		}
+		
+		
+		
 		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
 		if(comp == null){
 			return;
@@ -69,6 +86,9 @@ public class XMLRPCMessageHandler {
 	
 		int devCompId = comp.getIdverteiler();
 		int devId = comp.getDevice().getIdverteiler();
+		
+		
+		
 		double value = 0;
 		String type = comp.getType();
 		switch(type){
@@ -103,30 +123,37 @@ public class XMLRPCMessageHandler {
 	 *
 	 * @param args the messages
 	 */
-	public void multicall(Object[] args) {
+	public Boolean[] multicall(Object[] args) {
+		Boolean res[] = new Boolean[args.length];
 	    for (int i=0; i<args.length; i++) {
 	      Map<?, ?> call = (Map<?, ?>) args[i];
 	      String method = (String)call.get("methodName");
 	      Object[] margs = (Object[])call.get("params");
-	      
 	      if ("event".equals(method)) {
 	        // hier erfolgt der Aufruf der "event"-Methode
 	        event(margs[0].toString(), margs[1].toString(), margs[2].toString(), margs[3]);
+	        res[i] = Boolean.TRUE;
 	      }
 	    }
+	    return res;
 	}
 	
-//	/**
-//	 * List methods.
-//	 */
-//	public void listMethods(){
-//		
-//	}
-//	
-//	/**
-//	 * List devices.
-//	 */
-//	public void listDevices(){
-//		
-//	}
+	public Integer newDevices(String interfaceId, Object[] deviceDescriptions){
+		System.out.println("new device");
+		return null;
+	}
+	
+	/**
+	 * List devices.
+	 */
+	public Object[] listDevices(String interfaceId){
+		System.out.println("listDevices");
+		return null;
+	}
+	
+	public String[] listMethods(){
+		System.out.println("listMethods");
+		return null;
+		
+	}
 }

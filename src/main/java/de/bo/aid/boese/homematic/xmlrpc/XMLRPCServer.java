@@ -72,12 +72,7 @@ public class XMLRPCServer {
 	           *   org.apache.xmlrpc.demo.proxy.Adder=org.apache.xmlrpc.demo.proxy.AdderImpl
 	           */
 	          try {
-				phm.load(Thread.currentThread().getContextClassLoader(),
-				           "MyHandlers.properties");
-			} catch (IOException e) {
-				logger.error("Could not load properties file for xmlrpc-server handler:");
-				e.printStackTrace();
-				System.exit(0);
+	        	  phm.addHandler("system", XMLRPCMessageHandler.class);
 			} catch (XmlRpcException e) {
 				logger.error("Error while loading properties for XMLRPC-Server:");
 				e.printStackTrace();
