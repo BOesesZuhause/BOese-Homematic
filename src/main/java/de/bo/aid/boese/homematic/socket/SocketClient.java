@@ -55,6 +55,7 @@ import de.bo.aid.boese.homematic.main.DatabaseCache;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.json.BoeseJson;
 import de.bo.aid.boese.json.RequestConnection;
+import de.bo.aid.boese.json.SendStatus;
 import de.bo.aid.boese.json.SendValue;
 
 
@@ -254,6 +255,15 @@ public class SocketClient {
 			BoeseJson.parseMessage(sendval, os);
 			sendMessage(os.toString());
 			
+		}
+
+		public void sendStatus(int devCompId, int statusCode, int statusTimestamp) {
+			int conId = cache.getConnector().getIdverteiler();
+			
+			SendStatus ss = new SendStatus(devCompId, statusCode, statusTimestamp, true, conId, 0, System.currentTimeMillis());
+			OutputStream os = new ByteArrayOutputStream();
+			BoeseJson.parseMessage(ss, os);
+			sendMessage(os.toString());
 		}
 
   

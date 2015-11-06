@@ -25,25 +25,24 @@
  *				::::@:::::::@::::    
  * 				:::::::::::::::::    
  *  			:::::::::::::::::      
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
- * ----------------------------------------------------------------------------
  */
+
+
 
 package de.bo.aid.boese.json;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
 import javax.json.*;
 
+//import de.bo.aid.boese.main.model.TempComponent;
+//import de.bo.aid.boese.main.model.TempDevice;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -97,6 +96,12 @@ public class BoeseJson {
 		/** The sendnotification. */
 		SENDNOTIFICATION,
 		
+		/** The sendstatus. */
+		SENDSTATUS,
+		
+		/** The confirmstatus. */
+		CONFIRMSTATUS,
+		
 		/** The userrequestalldevices. */
 		USERREQUESTALLDEVICES,
 		
@@ -137,7 +142,13 @@ public class BoeseJson {
 		USERSENDTEMPS,
 		
 		/** The userconfirmtemps. */
-		USERCONFIRMTEMPS
+		USERCONFIRMTEMPS,
+		
+		/** The usercreaterules. */
+		USERCREATERULES,
+		
+		/** The userconfirmrules. */
+		USERCONFIRMRULES
 	}
 
 	/**
@@ -334,6 +345,18 @@ public class BoeseJson {
 			String notificationStringSN = jo.getString("NotificationText", "");
 			bj = new SendNotification(deviceIdSN, deviceComponentIdSN, notificationType, timestampSN, notificationStringSN, headerConnectorID, headerStatus, headerTimestamp);
 			break;
+		case 13: // SendStatus
+			int deviceComponentIdSS = jo.getInt("DeviceComponentId", -1);
+			int statusCodeSS = jo.getInt("StatusCode", -1);
+			long timestampSS = jo.getJsonNumber("Timestamp").longValue();
+			bj = new SendStatus(deviceComponentIdSS, statusCodeSS, timestampSS, true, headerConnectorID, headerStatus, headerTimestamp);
+			break;
+		case 14: // ConfirmStatus
+			int deviceComponentIdCS = jo.getInt("DeviceComponentId", -1);
+			int statusCodeCS = jo.getInt("StatusCode", -1);
+			long timestampCS = jo.getJsonNumber("Timestamp").longValue();
+			bj = new SendStatus(deviceComponentIdCS, statusCodeCS, timestampCS, false, headerConnectorID, headerStatus, headerTimestamp);
+			break;
 		case 50: // UserRequestAllDevices
 			bj = new RequestAllDevices(headerConnectorID, headerStatus, headerTimestamp, true);
 			break;
@@ -448,11 +471,49 @@ public class BoeseJson {
 //			}
 //			bj = new UserSendTemps(tempConnectorsUST, tempDevicesUST, tempDeviceComponentsUST, 
 //					headerConnectorID, headerStatus, headerTimestamp);
-//			//TODO
 //			break;
 		case 82: // UserConfirmTemps
-			bj = new UserRequestGeneral(MessageType.USERCONFIRMTEMPS, headerConnectorID, headerStatus, headerTimestamp);
-			// TODO
+			HashSet<Integer> tempConnectorsSetUCT = new HashSet<Integer>();
+			HashMap<Integer, Integer> tempDevicesSetUCT = new HashMap<>();
+			HashSet<UserTempComponent> tempDeviceComponentsUCT = new HashSet<>();
+			JsonArray tempConnectorsUCT = jo.getJsonArray("TempConnectors");
+			for (JsonValue value : tempConnectorsUCT) {
+				tempConnectorsSetUCT.add(Integer.parseInt(value.toString()));
+			}
+			JsonArray tempDevicesUCT = jo.getJsonArray("TempDevices");
+			for (int i = 0; i < tempDevicesUCT.size(); i++) {
+				JsonObject dev = tempDevicesUCT.getJsonObject(i);
+				tempDevicesSetUCT.put(dev.getInt("DeviceTmpId"), dev.getInt("ZoneId"));
+			}
+			JsonArray tempComponentsUST = jo.getJsonArray("TempDevices");
+			for (int i = 0; i < tempComponentsUST.size(); i++) {
+				JsonObject dev = tempComponentsUST.getJsonObject(i);
+				tempDeviceComponentsUCT.add(new UserTempComponent(dev.getInt("ComponentTmpId"), 
+						dev.getInt("UnitId"), dev.getString("Name")));
+			}
+			bj = new UserConfirmTemps(tempConnectorsSetUCT, tempDevicesSetUCT, tempDeviceComponentsUCT, 
+					headerConnectorID, headerStatus, headerTimestamp);
+			break;
+		case 90: // UserCreateRules
+			HashSet<Rule> rulesSetUCR = new HashSet<>();
+			JsonArray rulesUCR = jo.getJsonArray("Rules");
+			for (int i = 0; i < rulesUCR.size(); i++) {
+				JsonObject rule = rulesUCR.getJsonObject(i);
+				long currentDateUCR = new Date().getTime();
+				rulesSetUCR.add(new Rule(-1, rule.getInt("TempRuleId", -1), rule.getBoolean("Active", false), 
+						currentDateUCR, currentDateUCR, rule.getString("Permissions"), rule.getString("Conditions"), 
+						rule.getString("Actions")));
+			}
+			bj = new UserCreateRules(rulesSetUCR, headerConnectorID, headerStatus, headerTimestamp);
+			break;
+		case 91: // UserConfirmRules
+			HashMap<Integer, Integer> tempRuleMapUCoR = new HashMap<>();
+			JsonArray tempRuleUCoR = jo.getJsonArray("Rules");
+			for (int i = 0; i < tempRuleUCoR.size(); i++) {
+				JsonObject rule = tempRuleUCoR.getJsonObject(i);
+				tempRuleMapUCoR.put(rule.getInt("TempRuleId"), rule.getInt("RuleId"));
+			}
+			bj = new UserConfirmRules(tempRuleMapUCoR, headerConnectorID, headerStatus, headerTimestamp);
 			break;
 		default:
 			break;
@@ -614,6 +675,18 @@ public class BoeseJson {
 			job.add("Timestamp", sn.getNotificationTimestamp());
 			job.add("NotificationText", sn.getNotificationText());
 			break;
+		case SENDSTATUS:
+			SendStatus ss = (SendStatus)message;
+			job.add("Header", addHeader(13, ss.getConnectorId(), ss.getStatus(), ss.getTimestamp()));
+			job.add("DeviceComponentId", ss.getDeviceComponentId());
+			job.add("Timestamp", ss.getStatusTimestamp());
+			break;
+		case CONFIRMSTATUS:
+			SendStatus cs = (SendStatus)message;
+			job.add("Header", addHeader(14, cs.getConnectorId(), cs.getStatus(), cs.getTimestamp()));
+			job.add("DeviceComponentId", cs.getDeviceComponentId());
+			job.add("Timestamp", cs.getStatusTimestamp());
+			break;
 		case USERREQUESTALLDEVICES:
 			RequestAllDevices urad = (RequestAllDevices)message;
 			job.add("Header", addHeader(50, urad.getConnectorId(), urad.getStatus(), urad.getTimestamp()));
@@ -732,6 +805,105 @@ public class BoeseJson {
 			}
 			job.add("Rules", rulesUSR);
 			break;
+		case USERREQUESTTEMPS:
+			UserRequestGeneral urt = (UserRequestGeneral)message;
+			job.add("Header", addHeader(80, urt.getConnectorId(), urt.getStatus(), urt.getTimestamp()));
+			break;
+//		case USERSENDTEMPS:
+//			UserSendTemps ust = (UserSendTemps)message;
+//			job.add("Header", addHeader(81, ust.getConnectorId(), ust.getStatus(), ust.getTimestamp()));
+//			JsonArrayBuilder tempConnectorsUST = Json.createArrayBuilder();
+//			JsonObjectBuilder tempConnectorUST;
+//			for (Entry<Integer, String> entry : ust.getTempConnectors().entrySet()) {
+//				tempConnectorUST = Json.createObjectBuilder();
+//				tempConnectorUST.add("ConnectorTmpId", entry.getKey());
+//				tempConnectorUST.add("ConnectorName", entry.getValue());
+//				tempConnectorsUST.add(tempConnectorUST);
+//			}
+//			job.add("TmpConnectors", tempConnectorsUST);
+//			JsonArrayBuilder tempDevicesUST = Json.createArrayBuilder();
+//			JsonObjectBuilder tempDeviceUST;
+//			for (Entry<Integer, TempDevice> entry : ust.getTempDevices().entrySet()) {
+//				tempDeviceUST = Json.createObjectBuilder();
+//				tempDeviceUST.add("DeviceTmpId", entry.getKey());
+//				tempDeviceUST.add("DeviceName", entry.getValue().getName());
+//				tempDeviceUST.add("ConnectorId", entry.getValue().getConnectorID());
+//				tempDevicesUST.add(tempDeviceUST);
+//			}
+//			job.add("TmpDevices", tempDevicesUST);
+//			JsonArrayBuilder tempDeviceComponentsUST = Json.createArrayBuilder();
+//			JsonObjectBuilder tempDeviceComponentUST;
+//			for (Entry<Integer, TempComponent> entry : ust.getTempDeviceComponents().entrySet()) {
+//				tempDeviceComponentUST = Json.createObjectBuilder();
+//				tempDeviceComponentUST.add("ComponentTmpId", entry.getKey());
+//				tempDeviceComponentUST.add("DeviceId", entry.getValue().getDeviceId());
+//				tempDeviceComponentUST.add("ConnectorId", entry.getValue().getConnectorId());
+//				tempDeviceComponentUST.add("Name", entry.getValue().getName());
+//				tempDeviceComponentUST.add("Description", entry.getValue().getDescription());
+//				tempDeviceComponentUST.add("Aktor", entry.getValue().isActor());
+//				tempDeviceComponentUST.add("Unit", entry.getValue().getValue());
+//				tempDeviceComponentsUST.add(tempDeviceComponentUST);
+//			}
+//			job.add("TmpDeviceComponents", tempDeviceComponentsUST);
+//			break;
+		case USERCONFIRMTEMPS:
+			UserConfirmTemps uct = (UserConfirmTemps)message;
+			job.add("Header", addHeader(82, uct.getConnectorId(), uct.getStatus(), uct.getTimestamp()));
+			JsonArrayBuilder tempConnectorsURC = Json.createArrayBuilder();
+			for (Integer conIdUCT : uct.getTempConnectors()) {
+				tempConnectorsURC.add(conIdUCT.intValue());
+			}
+			job.add("TmpConnectors", tempConnectorsURC);
+			JsonArrayBuilder tempDevicesURC = Json.createArrayBuilder();
+			JsonObjectBuilder tempDeviceURT;
+			for (Entry<Integer, Integer> entry : uct.getTempDevices().entrySet()) {
+				tempDeviceURT = Json.createObjectBuilder();
+				tempDeviceURT.add("DeviceTmpId", entry.getKey());
+				tempDeviceURT.add("ZoneId", entry.getValue());
+				tempDevicesURC.add(tempDeviceURT);
+			}
+			job.add("TmpDevices", tempDevicesURC);
+			JsonArrayBuilder tempDeviceComponentsUCT = Json.createArrayBuilder();
+			JsonObjectBuilder tempDeviceComponentUCT;
+			for (UserTempComponent utc : uct.getTempDeviceComponents()) {
+				tempDeviceComponentUCT = Json.createObjectBuilder();
+				tempDeviceComponentUCT.add("ComponentTmpId", utc.getTempComponentId());
+				tempDeviceComponentUCT.add("UnitID", utc.getUnitId());
+				tempDeviceComponentUCT.add("Name", utc.getName());
+				tempDeviceComponentsUCT.add(tempDeviceComponentUCT);
+			}
+			job.add("TmpDeviceComponents", tempDeviceComponentsUCT);
+			break;
+		case USERCREATERULES:
+			UserCreateRules ucr = (UserCreateRules)message;
+			job.add("Header", addHeader(90, ucr.getConnectorId(), ucr.getStatus(), ucr.getTimestamp()));
+			JsonArrayBuilder rulesUCR = Json.createArrayBuilder();
+			JsonObjectBuilder ruleUCR;
+			for (Rule rule : ucr.getRules()) {
+				ruleUCR = Json.createObjectBuilder();
+				ruleUCR.add("RuleId", -1);
+				ruleUCR.add("TempRuleId", rule.getTempRuleId());
+				ruleUCR.add("Active", rule.isActive());
+				ruleUCR.add("Permissions", rule.getPermissions());
+				ruleUCR.add("Conditions", rule.getConditions());
+				ruleUCR.add("Actions", rule.getActions());
+				rulesUCR.add(ruleUCR);
+			}
+			job.add("Rules", rulesUCR);
+			break;
+		case USERCONFIRMRULES:
+			UserConfirmRules ucor = (UserConfirmRules)message;
+			job.add("Header", addHeader(91, ucor.getConnectorId(), ucor.getStatus(), ucor.getTimestamp()));
+			JsonArrayBuilder rulesUCoR = Json.createArrayBuilder();
+			JsonObjectBuilder ruleUCoR;
+			for (Entry<Integer, Integer> entry : ucor.getTempRules().entrySet()) {
+				ruleUCoR = Json.createObjectBuilder();
+				ruleUCoR.add("RuleId", entry.getValue());
+				ruleUCoR.add("TempRuleId", entry.getKey());
+				rulesUCoR.add(ruleUCoR);
+			}
+			job.add("Rules", rulesUCoR);
+			break;
 		default:
 			break;
 		}
@@ -755,5 +927,11 @@ public class BoeseJson {
 		writer.writeObject(job.build());
 		writer.close();
 		return output;
+	}
+	
+	public static OutputStream parseMessage(BoeseJson message) {
+		OutputStream os = new ByteArrayOutputStream();
+		parseMessage(message, os);
+		return os;
 	}
 }

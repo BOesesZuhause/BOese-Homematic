@@ -28,37 +28,39 @@
  */
 
 
-
 package de.bo.aid.boese.json;
+
+import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ConfirmConnection.
+ * The Class UserConfirmRules.
  */
-public class ConfirmConnection extends BoeseJson {
+public class UserConfirmRules extends BoeseJson {
 	
-	/** The password. */
-	private String password;
+	/** The temp rules. */
+	HashMap<Integer, Integer> tempRules;
 	
 	/**
-	 * Instantiates a new confirm connection.
+	 * Instantiates a new user confirm rules.
 	 *
-	 * @param password the password
+	 * @param tempRules the temp rules
 	 * @param connectorId the connector id
 	 * @param status the status
 	 * @param timestamp the timestamp
 	 */
-	public ConfirmConnection(String password, int connectorId, int status, long timestamp) {
-		super(MessageType.CONFIRMCONNECTION, connectorId, status, timestamp);
-		this.password = password;
+	public UserConfirmRules(HashMap<Integer, Integer> tempRules, int connectorId, int status, long timestamp) {
+		super(MessageType.USERCONFIRMRULES, connectorId, status, timestamp);
+		this.tempRules = tempRules;
+	}
+	
+	/**
+	 * Gets the temp rules.
+	 *
+	 * @return the temp rules
+	 */
+	public HashMap<Integer, Integer> getTempRules() {
+		return tempRules;
 	}
 
-	/**
-	 * Gets the password.
-	 *
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
 }

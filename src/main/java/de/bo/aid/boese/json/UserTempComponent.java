@@ -28,37 +28,62 @@
  */
 
 
-
 package de.bo.aid.boese.json;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ConfirmConnection.
+ * The Class UserTempComponent.
  */
-public class ConfirmConnection extends BoeseJson {
+public class UserTempComponent {
 	
-	/** The password. */
-	private String password;
+	/** The temp component id. */
+	private int tempComponentId;
+	
+	/** The unit id. */
+	private int unitId;
+	
+	/** The name. */
+	private String name;
 	
 	/**
-	 * Instantiates a new confirm connection.
+	 * Instantiates a new user temp component.
 	 *
-	 * @param password the password
-	 * @param connectorId the connector id
-	 * @param status the status
-	 * @param timestamp the timestamp
+	 * @param tempComponentId the temp component id
+	 * @param unitId the unit id
+	 * @param name the name
 	 */
-	public ConfirmConnection(String password, int connectorId, int status, long timestamp) {
-		super(MessageType.CONFIRMCONNECTION, connectorId, status, timestamp);
-		this.password = password;
+	public UserTempComponent(int tempComponentId, int unitId, String name) {
+		this.tempComponentId = tempComponentId;
+		this.unitId = unitId;
+		this.name = name;
 	}
 
 	/**
-	 * Gets the password.
+	 * Gets the temp component id.
 	 *
-	 * @return the password
+	 * @return the temp component id
 	 */
-	public String getPassword() {
-		return password;
+	public int getTempComponentId() {
+		return tempComponentId;
 	}
+
+	/**
+	 * Gets the unit id.
+	 *
+	 * @return the unit id
+	 */
+	public int getUnitId() {
+		return unitId;
+	}
+
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	
 }

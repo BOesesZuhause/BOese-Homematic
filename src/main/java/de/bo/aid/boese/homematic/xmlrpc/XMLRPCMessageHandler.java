@@ -39,6 +39,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketClient;
@@ -63,32 +64,34 @@ public class XMLRPCMessageHandler {
 	 */
 	public void event(String interface_id, String address, String value_key, Object valueObj){
 		logger.info("received event: address: " + address + ", value_key: " + value_key + ", value: " + valueObj.toString());
-		
-		
-		//TODO finish and check component first
-		if(value_key.equals("UNREACH")){
-			if(valueObj.equals(true)){
-				//SocketClient.getInstance().sendStatus();
-			}else{
-				//SocketClient.getInstance().sendStatus();
-			}
-			
-		}else if(value_key.equals("LOWBAT")){
-			
-		}
-		
-		
-		
+	
 		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
 		if(comp == null){
 			return;
 		}
-	
+		
+
 		int devCompId = comp.getIdverteiler();
 		int devId = comp.getDevice().getIdverteiler();
 		
 		
 		
+		if(value_key.equals("UNREACH")){
+			if(valueObj.equals(true)){
+				SocketClient.getInstance().sendStatus(devCompId, Status.ACTOR_DOES_NOT_REACT, -1);
+			}else{
+				SocketClient.getInstance().sendStatus(devCompId, Status.ACTIVE, -1);
+			}
+			
+		}else if(value_key.equals("LOWBAT")){
+			if(valueObj.equals(true)){
+				SocketClient.getInstance().sendStatus(devCompId, Status.BATTERY, -1);
+			}else{
+				SocketClient.getInstance().sendStatus(devCompId, Status.ACTIVE, -1);
+			}
+			
+		}
+
 		double value = 0;
 		String type = comp.getType();
 		switch(type){
@@ -151,9 +154,5 @@ public class XMLRPCMessageHandler {
 		return null;
 	}
 	
-	public String[] listMethods(){
-		System.out.println("listMethods");
-		return null;
-		
-	}
+
 }

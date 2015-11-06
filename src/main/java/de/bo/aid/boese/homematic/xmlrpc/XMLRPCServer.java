@@ -66,25 +66,9 @@ public class XMLRPCServer {
 	          XmlRpcServer xmlRpcServer = webServer.getXmlRpcServer();
 	        
 	          PropertyHandlerMapping phm = new PropertyHandlerMapping();
-	          /* Load handler definitions from a property file.
-	           * The property file might look like:
-	           *   Calculator=org.apache.xmlrpc.demo.Calculator
-	           *   org.apache.xmlrpc.demo.proxy.Adder=org.apache.xmlrpc.demo.proxy.AdderImpl
-	           */
-	          try {
-	        	  phm.addHandler("system", XMLRPCMessageHandler.class);
-			} catch (XmlRpcException e) {
-				logger.error("Error while loading properties for XMLRPC-Server:");
-				e.printStackTrace();
-			}
+	          XMLRPCSystemHandler handler = new XMLRPCSystemHandler();
+	          handler.addHandler(phm);
 
-	          /* You may also provide the handler classes directly,
-	           * like this:
-	           * phm.addHandler("Calculator",
-	           *     org.apache.xmlrpc.demo.Calculator.class);
-	           * phm.addHandler(org.apache.xmlrpc.demo.proxy.Adder.class.getName(),
-	           *     org.apache.xmlrpc.demo.proxy.AdderImpl.class);
-	           */
 	          xmlRpcServer.setHandlerMapping(phm);
 	        
 	          XmlRpcServerConfigImpl serverConfig =

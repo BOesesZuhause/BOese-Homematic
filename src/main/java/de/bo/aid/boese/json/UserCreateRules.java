@@ -28,37 +28,39 @@
  */
 
 
-
 package de.bo.aid.boese.json;
+
+import java.util.HashSet;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ConfirmConnection.
+ * The Class UserCreateRules.
  */
-public class ConfirmConnection extends BoeseJson {
+public class UserCreateRules extends BoeseJson {
 	
-	/** The password. */
-	private String password;
-	
+	/** The rules. */
+	HashSet<Rule> rules;
+
 	/**
-	 * Instantiates a new confirm connection.
+	 * Instantiates a new user create rules.
 	 *
-	 * @param password the password
+	 * @param rules the rules
 	 * @param connectorId the connector id
 	 * @param status the status
 	 * @param timestamp the timestamp
 	 */
-	public ConfirmConnection(String password, int connectorId, int status, long timestamp) {
-		super(MessageType.CONFIRMCONNECTION, connectorId, status, timestamp);
-		this.password = password;
+	public UserCreateRules(HashSet<Rule> rules, int connectorId, int status, long timestamp) {
+		super(MessageType.USERCREATERULES, connectorId, status, timestamp);
+		this.rules = rules;
+	}
+	
+	/**
+	 * Gets the rules.
+	 *
+	 * @return the rules
+	 */
+	public HashSet<Rule> getRules() {
+		return rules;
 	}
 
-	/**
-	 * Gets the password.
-	 *
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
 }

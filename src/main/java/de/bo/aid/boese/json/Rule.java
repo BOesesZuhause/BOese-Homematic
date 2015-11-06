@@ -25,13 +25,9 @@
  *				::::@:::::::@::::    
  * 				:::::::::::::::::    
  *  			:::::::::::::::::      
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
- * ----------------------------------------------------------------------------
  */
+
+
 package de.bo.aid.boese.json;
 
 // TODO: Auto-generated Javadoc
@@ -42,6 +38,9 @@ public class Rule {
 	
 	/** The rule id. */
 	private int ruleId;
+	
+	/** The temp rule id. */
+	private int tempRuleId;
 	
 	/** The active. */
 	private boolean active;
@@ -81,6 +80,40 @@ public class Rule {
 		this.permissions = permissions;
 		this.conditions = conditions;
 		this.actions = actions;
+		this.tempRuleId = -1;
+	}
+	
+	/**
+	 * Instantiates a new rule.
+	 *
+	 * @param ruleId the rule id
+	 * @param tempRuleId the temp rule id
+	 * @param active the active
+	 * @param insertDate the insert date
+	 * @param modifyDate the modify date
+	 * @param permissions the permissions
+	 * @param conditions the conditions
+	 * @param actions the actions
+	 */
+	public Rule(int ruleId, int tempRuleId, boolean active, long insertDate, long modifyDate, String permissions, 
+			String conditions, String actions) {
+		this.ruleId = ruleId;
+		this.active = active;
+		this.insertDate = insertDate;
+		this.modifyDate = modifyDate;
+		this.permissions = permissions;
+		this.conditions = conditions;
+		this.actions = actions;
+		this.tempRuleId = tempRuleId;
+	}
+	
+	/**
+	 * Gets the temp rule id.
+	 *
+	 * @return the temp rule id
+	 */
+	public int getTempRuleId() {
+		return tempRuleId;
 	}
 
 	/**
