@@ -43,7 +43,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -249,14 +248,14 @@ public class HMConnector {
 
 				// insert all components of new device
 				for (Component comp : device.getComponents()) {
-					comp.setIdverteiler(-1);
-					ComponentDao.insertComponent(comp);
+						comp.setIdverteiler(-1);
+						ComponentDao.insertComponent(comp);
 				}
 			} else {
 				// check if new components exist for device
 				// TODO test
 				for (Component comp : device.getComponents()) {
-					if (ComponentDao.getComponentByAddressAndName(comp.getAddress(), comp.getName()) == null) {
+					if (ComponentDao.getComponentByAddressAndName(comp.getAddress(), comp.getHm_id()) == null) {
 						comp.setIdverteiler(-1);
 						comp.setDevice(deviceDB);
 						ComponentDao.insertComponent(comp);
