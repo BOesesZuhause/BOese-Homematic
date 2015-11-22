@@ -60,6 +60,7 @@ import de.bo.aid.boese.json.ConfirmDeviceComponents;
 import de.bo.aid.boese.json.ConfirmDevices;
 import de.bo.aid.boese.json.ConfirmValue;
 import de.bo.aid.boese.json.DeviceComponents;
+import de.bo.aid.boese.json.HeartBeatMessage;
 import de.bo.aid.boese.json.RequestAllDevices;
 import de.bo.aid.boese.json.RequestDeviceComponents;
 import de.bo.aid.boese.json.SendDeviceComponents;
@@ -136,6 +137,9 @@ public class ProtocolHandler implements MessageHandler{
 		case SENDVALUE:
 			handleSendvalue((SendValue) bjMessage);
 			break;
+		case HEARTBEATMESSAGE:
+			handleHeartBeat((HeartBeatMessage) bjMessage);
+			break;
 		default:
 			logger.warn("Unknown Messagetype: " + bjMessage.getType());
 			break;
@@ -146,6 +150,13 @@ public class ProtocolHandler implements MessageHandler{
 
 	
 	
+	private void handleHeartBeat(HeartBeatMessage bjMessage) {
+		BoeseJson bj = new HeartBeatMessage(bjMessage.getConnectorId(), bjMessage.getStatus(), System.currentTimeMillis());
+		OutputStream os = new ByteArrayOutputStream();
+		BoeseJson.parseMessage(bj, os);
+		client.sendMessage(os.toString());
+	}
+
 	/**
 	 * Handle the sendvalueMessage and switches devices. Receives a value from the distibutor and sends a message to the homematic-device.
 	 *

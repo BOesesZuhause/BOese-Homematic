@@ -89,16 +89,17 @@ public class DeviceComponents {
 	 * @param deviceComponentId the device component id
 	 * @param componentName the component name
 	 * @param value the value
+	 * @param timestamp the timestamp
 	 * @param unit the unit
 	 * @param description the description
 	 * @param actor the actor
 	 * @param status the status
 	 */
-	public DeviceComponents(int deviceComponentId, String componentName, double value, String unit, String description, boolean actor, int status) {
+	public DeviceComponents(int deviceComponentId, String componentName, double value, long timestamp, String unit, String description, boolean actor, int status) {
 		this.deviceComponentId = deviceComponentId;
 		this.componentName = componentName;
 		this.value = value;
-		this.timestamp = -1;
+		this.timestamp = timestamp;
 		this.actor = actor;
 		this.unit = unit;
 		this.description = description;
