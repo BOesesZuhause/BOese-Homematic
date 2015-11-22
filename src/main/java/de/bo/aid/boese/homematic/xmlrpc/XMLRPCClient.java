@@ -115,9 +115,9 @@ public class XMLRPCClient {
 		Object obj = null;
 		obj = makeRequest("listDevices", params);
 		if (obj == null) {
-			logger.error("no devices returned from homematic");
+			logger.error("no devices returned from homematic. Shutting down");
+			System.exit(0);
 		}
-
 		return obj;
 	}
 

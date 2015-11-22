@@ -77,6 +77,7 @@ public class DeviceMapper {
 			String firmware = (String)map.get("FIRMWARE");
 			int version = (int)map.get("VERSION");
 			
+			//TODO add unit from homematic if homematic has one
 			Device dev = new Device();
 			dev.setAdress(address);
 			dev.setVersion(version);

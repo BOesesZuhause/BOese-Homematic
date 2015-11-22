@@ -7,6 +7,7 @@
 				<description>Steckdose schalten</description>
 				<name>STATE</name>
 				<type>BOOL</type>
+				<unit>boolean</unit>
 			</component>
 
 			<number>1</number>
@@ -17,12 +18,14 @@
 				<description>Spannung messen</description>
 				<name>VOLTAGE</name>
 				<type>FLOAT</type>
+				<unit>U</unit>
 			</component>
 			<component>
 				<aktor>false</aktor>
 				<description>Strom messen</description>
 				<name>CURRENT</name>
 				<type>FLOAT</type>
+				<unit>A</unit>
 			</component>
 			<number>2</number>
 		</channel>
@@ -36,6 +39,7 @@
 				<description>kurz druecken 1</description>
 				<name>PRESS_SHORT</name>
 				<type>ACTION</type>
+				<unit>boolean</unit>
 			</component>
 			<number>1</number>
 		</channel>
@@ -45,9 +49,70 @@
 				<description>kurz druecken 2</description>
 				<name>PRESS_SHORT</name>
 				<type>ACTION</type>
+				<unit>boolean</unit>
 			</component>
 			<number>2</number>
 		</channel>
+		<channel>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken 3</description>
+                <name>PRESS_SHORT</name>
+                <type>ACTION</type>
+                <unit>boolean</unit>
+            </component>
+            <number>3</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken 4</description>
+                <name>PRESS_SHORT</name>
+                <type>ACTION</type>
+                <unit>boolean</unit>
+            </component>
+            <number>4</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken 5</description>
+                <name>PRESS_SHORT</name>
+                <type>ACTION</type>
+                <unit>boolean</unit>
+            </component>
+            <number>5</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken 6</description>
+                <name>PRESS_SHORT</name>
+                <type>ACTION</type>
+                <unit>boolean</unit>
+            </component>
+            <number>6</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken 7</description>
+                <name>PRESS_SHORT</name>
+                <type>ACTION</type>
+                <unit>boolean</unit>
+            </component>
+            <number>7</number>
+        </channel>
+        <channel>
+            <component>
+                <aktor>false</aktor>
+                <description>kurz druecken 8</description>
+                <name>PRESS_SHORT</name>
+                <type>ACTION</type>
+                <unit>boolean</unit>
+            </component>
+            <number>8</number>
+        </channel>
 		<model>HM-RC-8</model>
 	</device>
 </devices>

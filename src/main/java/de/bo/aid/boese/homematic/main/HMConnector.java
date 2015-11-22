@@ -314,6 +314,7 @@ public class HMConnector {
 							comp.setName(compXML.getDescription() + ":" + channelID);
 							comp.setHm_id(compXML.getName());
 							comp.setType(compXML.getType());
+							comp.setUnit(compXML.getUnit());
 							dev.getComponents().add(comp);
 							logger.info("Added Component via XML: " + comp);
 						}
