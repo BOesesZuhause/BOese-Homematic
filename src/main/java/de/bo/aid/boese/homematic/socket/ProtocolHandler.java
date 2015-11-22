@@ -69,6 +69,7 @@ import de.bo.aid.boese.json.SendValue;
 import javassist.NotFoundException;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * This singleton class defines a Websocketendpoint for Websocketconnections.
  */
@@ -150,6 +151,11 @@ public class ProtocolHandler implements MessageHandler{
 
 	
 	
+	/**
+	 * Handle heart beat.
+	 *
+	 * @param bjMessage the bj message
+	 */
 	private void handleHeartBeat(HeartBeatMessage bjMessage) {
 		BoeseJson bj = new HeartBeatMessage(bjMessage.getConnectorId(), bjMessage.getStatus(), System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();

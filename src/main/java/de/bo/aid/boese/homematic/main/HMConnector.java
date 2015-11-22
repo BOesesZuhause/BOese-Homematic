@@ -77,6 +77,7 @@ import de.bo.aid.boese.homematic.xml.DevicesXML;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
+// TODO: Auto-generated Javadoc
 /**
  * Mainclass for the connector.
  */
@@ -494,11 +495,19 @@ public class HMConnector {
 		}
 	}
 	
+	/**
+	 * Adds the device.
+	 */
 	//TODO is called when a new device is connected
 	public void addDevice(){
 		
 	}
 
+	/**
+	 * Gets the own ip.
+	 *
+	 * @return the own ip
+	 */
 	public static String getOwnIP(){
 	    String ip = null;
 	    try {

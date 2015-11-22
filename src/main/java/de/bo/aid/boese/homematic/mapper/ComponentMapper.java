@@ -40,6 +40,7 @@ import java.util.List;
 
 import de.bo.aid.boese.homematic.model.Component;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ComponentMapper.
  */

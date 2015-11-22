@@ -44,6 +44,7 @@ import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 
+// TODO: Auto-generated Javadoc
 /**
  * The messagehandler used by the XMLRPC-Server.
  */
@@ -125,6 +126,7 @@ public class XMLRPCMessageHandler {
 	 * handles multicall-messages which contain more than one message.
 	 *
 	 * @param args the messages
+	 * @return the boolean[]
 	 */
 	public Boolean[] multicall(Object[] args) {
 		Boolean res[] = new Boolean[args.length];
@@ -141,6 +143,13 @@ public class XMLRPCMessageHandler {
 	    return res;
 	}
 	
+	/**
+	 * New devices.
+	 *
+	 * @param interfaceId the interface id
+	 * @param deviceDescriptions the device descriptions
+	 * @return the integer
+	 */
 	public Integer newDevices(String interfaceId, Object[] deviceDescriptions){
 		System.out.println("new device");
 		return null;
@@ -148,6 +157,9 @@ public class XMLRPCMessageHandler {
 	
 	/**
 	 * List devices.
+	 *
+	 * @param interfaceId the interface id
+	 * @return the object[]
 	 */
 	public Object[] listDevices(String interfaceId){
 		System.out.println("listDevices");

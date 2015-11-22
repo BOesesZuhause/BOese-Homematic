@@ -46,6 +46,7 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
 /**
   * This class defines an interface to access Device-Objects from the database.
  */

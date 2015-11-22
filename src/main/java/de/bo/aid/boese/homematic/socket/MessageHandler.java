@@ -34,6 +34,7 @@
  */
 package de.bo.aid.boese.homematic.socket;
 
+// TODO: Auto-generated Javadoc
 /**
      * Interface for Message Handlers, which can subscribe to the WebsocketClient.
      *

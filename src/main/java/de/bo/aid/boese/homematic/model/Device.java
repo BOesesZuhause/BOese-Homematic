@@ -37,6 +37,7 @@ package de.bo.aid.boese.homematic.model;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
  * model-class for devices.
  */

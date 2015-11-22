@@ -45,6 +45,7 @@ import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Defines a cache for the database. Singleton class.
  * Holds instances of connector and device.
