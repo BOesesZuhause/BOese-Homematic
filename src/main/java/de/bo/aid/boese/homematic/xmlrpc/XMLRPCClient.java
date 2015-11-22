@@ -44,6 +44,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
+// TODO: Auto-generated Javadoc
 /**
  * Client to send requests to the HomeMatic-XMLRPC-Server.
  */

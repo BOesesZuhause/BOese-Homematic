@@ -44,6 +44,7 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Component;
 import javassist.NotFoundException;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class defines an interface to access Component-Objects from the database.
  */

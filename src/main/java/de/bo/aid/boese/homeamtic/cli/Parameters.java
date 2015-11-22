@@ -36,6 +36,7 @@ package de.bo.aid.boese.homeamtic.cli;
 
 import com.beust.jcommander.Parameter;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class defines the commandline-parameters.
  */

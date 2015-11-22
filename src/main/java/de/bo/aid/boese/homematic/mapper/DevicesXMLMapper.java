@@ -46,6 +46,7 @@ import de.bo.aid.boese.homematic.xml.DevicesXML;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Maps homematic devices and components to xml.
  */

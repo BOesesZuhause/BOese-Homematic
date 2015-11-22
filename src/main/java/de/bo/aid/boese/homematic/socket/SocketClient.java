@@ -59,6 +59,7 @@ import de.bo.aid.boese.json.SendStatus;
 import de.bo.aid.boese.json.SendValue;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * class which acts as a websocketclient.
  */
@@ -257,6 +258,13 @@ public class SocketClient {
 			
 		}
 
+		/**
+		 * Send status.
+		 *
+		 * @param devCompId the dev comp id
+		 * @param statusCode the status code
+		 * @param statusTimestamp the status timestamp
+		 */
 		public void sendStatus(int devCompId, int statusCode, int statusTimestamp) {
 			int conId = cache.getConnector().getIdverteiler();
 			

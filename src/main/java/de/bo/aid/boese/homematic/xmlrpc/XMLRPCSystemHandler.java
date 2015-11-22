@@ -7,13 +7,23 @@ import org.apache.logging.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XMLRPCSystemHandler.
+ */
 public class XMLRPCSystemHandler {
 	
 	/** The logger from log4j. */
 	final static Logger logger = LogManager.getLogger(XMLRPCSystemHandler.class);
 	
+	/** The handler. */
 	XMLRPCMessageHandler handler = new XMLRPCMessageHandler();
 	
+	/**
+	 * Adds the handler.
+	 *
+	 * @param phm the phm
+	 */
 	public void addHandler(PropertyHandlerMapping phm){
 		try {
 			phm.addHandler("system", XMLRPCSystemHandler.class);
@@ -30,6 +40,7 @@ public class XMLRPCSystemHandler {
 	 * handles multicall-messages which contain more than one message.
 	 *
 	 * @param args the messages
+	 * @return the boolean[]
 	 */
 	public Boolean[] multicall(Object[] args) {
 		Boolean res[] = new Boolean[args.length];
@@ -47,6 +58,11 @@ public class XMLRPCSystemHandler {
 	}
 	
 	
+	/**
+	 * List methods.
+	 *
+	 * @return the string[]
+	 */
 	public String[] listMethods(){
 		System.out.println("listMethods");
 		return null;	

@@ -148,10 +148,13 @@ public class BoeseJson {
 		/** The userconfirmrules. */
 		USERCONFIRMRULES,
 		
+		/** The usercreatezones. */
 		USERCREATEZONES,
 		
+		/** The userconfirmzones. */
 		USERCONFIRMZONES,
 		
+		/** The heartbeatmessage. */
 		HEARTBEATMESSAGE
 	}
 

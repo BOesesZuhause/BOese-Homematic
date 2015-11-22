@@ -40,6 +40,7 @@ import java.util.List;
 
 import de.bo.aid.boese.homematic.model.Device;
 
+// TODO: Auto-generated Javadoc
 /**
  * Mapping class for Devices.
  */

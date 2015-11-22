@@ -43,6 +43,7 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
 
 
+// TODO: Auto-generated Javadoc
 /**
  *  This class defines an interface to access Connector-Objects from the database.
  */

@@ -34,6 +34,7 @@
  */
 package de.bo.aid.boese.homematic.model;
 
+// TODO: Auto-generated Javadoc
 /**
  * Model class for components.
  */
