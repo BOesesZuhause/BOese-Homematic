@@ -75,7 +75,10 @@ public class XMLRPCMessageHandler {
 		int devCompId = comp.getIdverteiler();
 		int devId = comp.getDevice().getIdverteiler();
 		
-		
+		//Check if all components are confirmed
+		if(devCompId == -1 || devId == -1){
+			return;
+		}
 		
 		if(value_key.equals("UNREACH")){
 			if(valueObj.equals(true)){

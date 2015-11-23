@@ -226,7 +226,7 @@ public class SocketClient {
 		public void sendValue(double value, int devId, int devCompId, long time){
 
 			int conId = cache.getConnector().getIdverteiler();
-
+			
 			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
 			OutputStream os = new ByteArrayOutputStream();
 			BoeseJson.parseMessage(sendval, os);
