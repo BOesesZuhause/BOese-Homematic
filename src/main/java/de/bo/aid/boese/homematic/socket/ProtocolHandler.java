@@ -251,7 +251,8 @@ public class ProtocolHandler implements MessageHandler{
 		//Convert Set of Components to HashSet of DeviceComponents
 		HashSet<DeviceComponents> components = new HashSet<>();
 		for(Component comp : requestedDevice.getComponents()){
-			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), 0, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
+			double value = XMLRPCClient.getInstance().getValue(comp.getAddress(), comp.getType(), comp.getName());
+			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), value, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
 			components.add(devComp);
 		}
 		

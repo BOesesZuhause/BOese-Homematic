@@ -44,6 +44,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * Client to send requests to the HomeMatic-XMLRPC-Server.
@@ -166,6 +167,7 @@ public class XMLRPCClient {
 	 *            the type of the value (BOOL, FLOAT, ACTION, INTEGER, ENUM)
 	 */
 
+
 	// TODO Dataformat for String and Enum
 	public void setValue(String address, String name, double value, String type) {
 		Object valueSent = null;
@@ -192,9 +194,43 @@ public class XMLRPCClient {
 			// value=
 			break;
 		default:
+			logger.error("Unknown type: " + type + " for component with address: " + address);
 		}
 		Object[] params = new Object[] { address, name, valueSent };
 		makeRequest("setValue", params);
+	}
+	
+	public double getValue(String address, String type, String name){
+		
+		
+		Object[] params = new Object[]{ address, name};
+		Object valueObj = makeRequest("getValue", params);
+		
+		//TODO auslagern (ist bereits in XMRPCMessageHandler vorhanden
+		double value = 0;
+		switch(type){
+		case "BOOL":
+		case "ACTION":
+			if(valueObj.toString().equals("false")){
+				value = 0;
+			}else if(valueObj.toString().equals("true")){
+				value = 1;
+			}
+			break;
+		case "FLOAT":
+			value = Float.parseFloat(valueObj.toString());
+			break;
+		case "INTEGER":
+			value = Integer.parseInt(valueObj.toString());
+			break;
+		case "ENUM":
+			break;
+		case "STRING":
+			break;
+			default:
+			logger.error("Unknown type: " + type + " for component with address: " + address);
+		}
+		return value;
 	}
 
 	/**

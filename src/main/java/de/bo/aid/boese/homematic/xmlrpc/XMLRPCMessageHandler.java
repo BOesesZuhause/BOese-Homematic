@@ -121,6 +121,7 @@ public class XMLRPCMessageHandler {
 		case "STRING":
 			break;
 			default:
+				logger.error("Unknown type: " + type + " for component with address: " + address);
 		}
 		SocketClient.getInstance().sendValue(value, devId, devCompId, System.currentTimeMillis());		
 	}
