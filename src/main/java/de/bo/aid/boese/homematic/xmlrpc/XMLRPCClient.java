@@ -202,33 +202,36 @@ public class XMLRPCClient {
 	
 	public double getValue(String address, String type, String name){
 		
+		double value = 0; //default-value
 		
-		Object[] params = new Object[]{ address, name};
-		Object valueObj = makeRequest("getValue", params);
-		
-		//TODO auslagern (ist bereits in XMRPCMessageHandler vorhanden
-		double value = 0;
-		switch(type){
-		case "BOOL":
-		case "ACTION":
-			if(valueObj.toString().equals("false")){
-				value = 0;
-			}else if(valueObj.toString().equals("true")){
-				value = 1;
+		if(!type.equals("ACTION")){
+			//Wert abfragen
+			Object[] params = new Object[]{address, name};
+			Object valueObj = makeRequest("getValue", params);
+			
+			//Wert parsen
+			//TODO auslagern (ist bereits in XMRPCMessageHandler vorhanden
+			switch(type){
+			case "BOOL":
+				if(valueObj.toString().equals("false")){
+					value = 0;
+				}else if(valueObj.toString().equals("true")){
+					value = 1;
+				}
+				break;
+			case "FLOAT":
+				value = Float.parseFloat(valueObj.toString());
+				break;
+			case "INTEGER":
+				value = Integer.parseInt(valueObj.toString());
+				break;
+			case "ENUM":
+				break;
+			case "STRING":
+				break;
+				default:
+				logger.error("Unknown type: " + type + " for component with address: " + address);
 			}
-			break;
-		case "FLOAT":
-			value = Float.parseFloat(valueObj.toString());
-			break;
-		case "INTEGER":
-			value = Integer.parseInt(valueObj.toString());
-			break;
-		case "ENUM":
-			break;
-		case "STRING":
-			break;
-			default:
-			logger.error("Unknown type: " + type + " for component with address: " + address);
 		}
 		return value;
 	}

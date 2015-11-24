@@ -173,6 +173,7 @@ public class SocketClient {
     public void onError(Throwable error){
     	messageHandler.closeConnection();
     	logger.error(error.getMessage());
+    	error.printStackTrace();
     }
 
     /**
