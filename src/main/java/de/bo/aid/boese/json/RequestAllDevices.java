@@ -51,19 +51,6 @@ public class RequestAllDevices extends BoeseJson {
 	}
 	
 	/**
-	 * Instantiates a new request all devices.
-	 *
-	 * @param connectorId the connector id
-	 * @param status the status
-	 * @param timestamp the timestamp
-	 * @param isUserRequest the is user request
-	 */
-	public RequestAllDevices(int connectorId, int status, long timestamp, boolean isUserRequest) {
-		super(MessageType.USERREQUESTALLDEVICES, connectorId, status, timestamp);
-		this.userRequest = isUserRequest;
-	}
-	
-	/**
 	 * Checks if is user request.
 	 *
 	 * @return true, if is user request
