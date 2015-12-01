@@ -210,7 +210,7 @@ public class XMLRPCClient {
 			Object valueObj = makeRequest("getValue", params);
 			
 			//Wert parsen
-			//TODO auslagern (ist bereits in XMRPCMessageHandler vorhanden
+			//TODO ValueParser auslagern
 			switch(type){
 			case "BOOL":
 				if(valueObj.toString().equals("false")){

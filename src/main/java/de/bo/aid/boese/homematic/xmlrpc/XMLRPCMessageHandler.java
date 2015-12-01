@@ -41,6 +41,7 @@ import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
+import de.bo.aid.boese.homematic.main.HMConnector;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 
@@ -76,7 +77,7 @@ public class XMLRPCMessageHandler {
 		int devId = comp.getDevice().getIdverteiler();
 		
 		//Check if all components are confirmed
-		if(devCompId == -1 || devId == -1){
+		if(!HMConnector.confirmed){
 			return;
 		}
 		

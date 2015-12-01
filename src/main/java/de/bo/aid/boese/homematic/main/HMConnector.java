@@ -83,7 +83,9 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
  */
 public class HMConnector {
 
-	/** The client. */
+	public static boolean confirmed = false;
+
+    /** The client. */
 	private XMLRPCClient client;
 
 	/** The XMLRPC-Server. */
