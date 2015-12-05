@@ -314,7 +314,7 @@ public class ProtocolHandler implements MessageHandler{
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
 		Connector con = cache.getConnector();
 		if(con.getIdverteiler()==bjMessage.getConnectorId()){
-			//TODO was passiert wenn der Connector schon eine ID hat?
+		    HMConnector.confirmed = true;
 		}else if(con.getIdverteiler()== -1){
 			con.setIdverteiler(bjMessage.getConnectorId());
 			con.setSecret(bjMessage.getPassword());
@@ -323,7 +323,7 @@ public class ProtocolHandler implements MessageHandler{
 			HMConnector.confirmed = true;
 		}else{
 			logger.error("Unknown identifier for the connector: " + con.getIdverteiler());
-			System.exit(0);
+			System.exit(0); //TODO wird aufgerufen falls der Konektor
 		}
 		
 	}
