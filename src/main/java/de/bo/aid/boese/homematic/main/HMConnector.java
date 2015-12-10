@@ -191,14 +191,7 @@ public class HMConnector {
 	private void initXMLRPCServer() {
 		XMLserver = new XMLRPCServer();
 		XMLserver.start();
-//		try {
-			//client.sendInit(InetAddress.getLocalHost().getHostAddress() + ":" + XMLserver.getPort());
-			client.sendInit(getOwnIP() + ":" + XMLserver.getPort());
-//		} catch (UnknownHostException e1) {
-//			logger.error("Unknown Host: " + e1.getMessage());
-//			e1.printStackTrace();
-//			System.exit(0);
-//		}
+		client.sendInit(getOwnIP() + ":" + XMLserver.getPort());
 	}
 
 	/**

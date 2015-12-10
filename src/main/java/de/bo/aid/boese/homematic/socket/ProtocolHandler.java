@@ -46,6 +46,7 @@ import java.util.Set;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
@@ -252,9 +253,17 @@ public class ProtocolHandler implements MessageHandler{
 		//Convert Set of Components to HashSet of DeviceComponents
 		HashSet<DeviceComponents> components = new HashSet<>();
 		for(Component comp : requestedDevice.getComponents()){
-			double value = XMLRPCClient.getInstance().getValue(comp.getAddress(), comp.getType(), comp.getHm_id());
-			DeviceComponents devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), value, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
-			components.add(devComp);
+			double value = 0;
+			DeviceComponents devComp;
+			//check if component is reachable
+            try {
+                value = XMLRPCClient.getInstance().getValue(comp.getAddress(), comp.getType(), comp.getHm_id());
+                devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), value, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor());
+            } catch (Exception e) {
+                logger.warn("Unable to call component with id: " + comp.getCompid(), e);
+                devComp = new DeviceComponents(comp.getIdverteiler(), comp.getName(), value, System.currentTimeMillis(), comp.getUnit(), comp.getName(), comp.isAktor(), Status.UNAVAILABLE);
+            }		
+            components.add(devComp);
 		}
 		
 		//Send Components

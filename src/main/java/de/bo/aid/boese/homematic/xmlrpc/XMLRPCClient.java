@@ -200,7 +200,7 @@ public class XMLRPCClient {
 		makeRequest("setValue", params);
 	}
 	
-	public double getValue(String address, String type, String name){
+	public double getValue(String address, String type, String name) throws Exception{
 		
 		double value = 0; //default-value
 		
