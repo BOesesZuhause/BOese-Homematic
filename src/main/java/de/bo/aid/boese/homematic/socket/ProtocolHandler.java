@@ -75,7 +75,7 @@ public class ProtocolHandler implements MessageHandler{
 	
 	
 	/** The client used by the connection. */
-	private SocketClient client;
+	private AbstractSocketClient client;
 	
 	/** Is used to check, wether the connection should be closed. */
 	boolean connectionClosed = false;
@@ -91,8 +91,12 @@ public class ProtocolHandler implements MessageHandler{
 	 *
 	 * @param client websocketclient
 	 */
-	public ProtocolHandler(SocketClient client){
+	public ProtocolHandler(AbstractSocketClient client){
 		this.client = client;
+	}
+
+	public ProtocolHandler(SecureSocketClient secureSocketClient) {
+		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)

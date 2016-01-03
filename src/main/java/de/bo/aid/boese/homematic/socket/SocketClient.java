@@ -62,7 +62,7 @@ import de.bo.aid.boese.json.SendValue;
  * class which acts as a websocketclient.
  */
 @ClientEndpoint
-public class SocketClient {
+public class SocketClient extends AbstractSocketClient{
 	
 	/** logger for log4j. */
 	final static Logger logger = LogManager.getLogger(SocketClient.class);
