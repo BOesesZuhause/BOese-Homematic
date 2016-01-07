@@ -36,15 +36,26 @@ package de.bo.aid.boese.homematic.xml;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-// TODO: Auto-generated Javadoc
 /**
- * The xml-model-class for components.
+ * The model class for components to save them to an xml-file via jaxb.
  */
 @XmlRootElement(name = "component")
 public class ComponentXML {
 	
 	/** The description of the component. */
 	private String description;
+
+	/** The name of the component. */
+    private String name;
+    
+    /** Is set to true when the component is an actor. */
+    private boolean aktor;
+    
+    /** The unit of the component. */
+    private String unit;
+    
+    /** The homematic-type of the component. */
+    private String type;
 	
 	/**
 	 * Gets the description.
@@ -63,18 +74,7 @@ public class ComponentXML {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	/** The name of the component. */
-	private String name;
-	
-	/** Is set to true when the component is an actor. */
-	private boolean aktor;
-	
-	/** The unit of the component. */
-	private String unit;
-	
-	/** The homematic-type of the component. */
-	private String type;
+
 	
 	/**
 	 * Gets the type.
@@ -113,18 +113,18 @@ public class ComponentXML {
 	}
 	
 	/**
-	 * Checks if is aktor.
+	 * Checks if the component is an actor.
 	 *
-	 * @return true, if is aktor
+	 * @return true, if it is an actor
 	 */
 	public boolean isAktor() {
 		return aktor;
 	}
 	
 	/**
-	 * Sets the aktor.
+	 * Sets the isActor boolean.
 	 *
-	 * @param aktor the new aktor
+	 * @param aktor the boolean isActor
 	 */
 	public void setAktor(boolean aktor) {
 		this.aktor = aktor;

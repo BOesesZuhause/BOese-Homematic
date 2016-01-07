@@ -39,7 +39,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-// TODO: Auto-generated Javadoc
 /**
  * Singleton Util-class to configure and use hibernate.
  */

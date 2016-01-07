@@ -45,10 +45,9 @@ import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * Defines a cache for the database. Singleton class.
- * Holds instances of connector and device.
+ * Holds instances of connector and device for fast reads.
+ * Can be updated if data is changed in the database
  */
 public class DatabaseCache {
 	
@@ -58,10 +57,10 @@ public class DatabaseCache {
 	/** The singleton-instance. */
 	private static DatabaseCache instance = new DatabaseCache();
 	
-	/** The connector from the database. */
+	/** The connector-data from the database for quick access. */
 	private Connector connector;
 	
-	/**  A list of devices from the database. */
+	/**  A list of devices from the database for quick access. */
 	private List<Device> devices;
 	
 	/**
@@ -94,7 +93,7 @@ public class DatabaseCache {
 	}
 
 	/**
-	 * Gets the connector.
+	 * Gets the connector-data.
 	 *
 	 * @return the connector
 	 */
@@ -103,7 +102,7 @@ public class DatabaseCache {
 	}
 
 	/**
-	 * Sets the connector.
+	 * Sets the connector-data.
 	 *
 	 * @param connector the new connector
 	 */

@@ -45,9 +45,11 @@ import de.bo.aid.boese.homematic.main.HMConnector;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 
-// TODO: Auto-generated Javadoc
 /**
  * The messagehandler used by the XMLRPC-Server.
+ * Implements the XMLRPC-method which can be called by a client.
+ * In this case the HomeMatic-CCU will call these method to
+ * submit events.
  */
 
 //TODO move non system-method in own handler
@@ -149,23 +151,25 @@ public class XMLRPCMessageHandler {
 	}
 	
 	/**
-	 * New devices.
+	 * Handles "addDevice" calls..
 	 *
 	 * @param interfaceId the interface id
 	 * @param deviceDescriptions the device descriptions
 	 * @return the integer
 	 */
+	//TODO geht nicht
 	public Integer newDevices(String interfaceId, Object[] deviceDescriptions){
 		System.out.println("new device");
 		return null;
 	}
 	
 	/**
-	 * List devices.
+	 * Handles "listDevices calls.
 	 *
 	 * @param interfaceId the interface id
 	 * @return the object[]
 	 */
+	//TODO geht nicht
 	public Object[] listDevices(String interfaceId){
 		System.out.println("listDevices");
 		return null;

@@ -46,7 +46,6 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Device;
 import javassist.NotFoundException;
 
-// TODO: Auto-generated Javadoc
 /**
   * This class defines an interface to access Device-Objects from the database.
  */
@@ -56,7 +55,7 @@ public class DeviceDao {
 static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
 	/**
-	 * Gets the device.
+	 * Gets a device from the database.
 	 *
 	 * @param id the id of the device
 	 * @return the device
@@ -98,7 +97,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Inserts device in the database.
+	 * Inserts a device in the database.
 	 *
 	 * @param dev the device to be inserted
 	 */
@@ -111,7 +110,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 
 	/**
-	 * Updates device in the database.
+	 * Updates a device in the database.
 	 *
 	 * @param dev the device to be updated
 	 */
@@ -125,10 +124,10 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 	}
 	
 	/**
-	 * Gets the by address.
+	 * Gets a device by its address.
 	 *
 	 * @param address the address
-	 * @return the by address
+	 * @return the requested device
 	 */
 	public static Device getByAddress(String address){
 		Session session = factory.openSession();

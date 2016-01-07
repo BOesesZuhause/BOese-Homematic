@@ -46,9 +46,9 @@ import de.bo.aid.boese.homematic.xml.DevicesXML;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * Maps homematic devices and components to xml.
+ * MThis class maps data from the homematic-system
+ * to the xml-model-files in order to save them.
  */
 public class DevicesXMLMapper {
 	
@@ -56,7 +56,9 @@ public class DevicesXMLMapper {
 	final static Logger logger = LogManager.getLogger(DevicesXMLMapper.class);
 
 	/**
-	 * Maps the .
+	 * Maps the raw HomeMatic data into Objects of the xml-model classes.
+	 * These can be used to save the result in a xml-file. 
+	 * Offers the option to ignore virtual devices in HomeMatic.
 	 *
 	 * @param obj the answer from the listdevices request
 	 * @param ignoreVirtual  If true virtual devices are ignored

@@ -22,8 +22,12 @@ import de.bo.aid.boese.homematic.main.DatabaseCache;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.json.BoeseJson;
 import de.bo.aid.boese.json.RequestConnection;
+import de.bo.aid.boese.json.SendStatus;
 import de.bo.aid.boese.json.SendValue;
 
+/**
+ * This class manages a websocketclient with secured connection.
+ */
 @WebSocket
 public class SecureSocketClient extends AbstractSocketClient
 {
@@ -33,13 +37,14 @@ public class SecureSocketClient extends AbstractSocketClient
     /** The session of the client. */
     Session userSession = null;
     
-    /** The messagehandler which is subscribed. */
+    /** The messagehandler which is subscribed to receive messages. */
     private MessageHandler messageHandler;
     
 	/** The databasecache used to read data quickly. */
 	DatabaseCache cache = DatabaseCache.getInstance();
 	
-	 WebSocketClient client;
+	 /** The client. */
+ 	WebSocketClient client;
 	
 	/** The singleton-instance. */
 	private static SecureSocketClient instance;
@@ -64,7 +69,7 @@ public class SecureSocketClient extends AbstractSocketClient
 	}
     
     /**
-	 * Starts the server and connects to it.
+	 * Starts the client and connects to the server.
 	 *
 	 * @param serverUri the uri of the server
 	 */
@@ -97,6 +102,12 @@ public class SecureSocketClient extends AbstractSocketClient
 
     
 
+    /**
+     * Is called when a new connection is opened.
+     * Saves the session for later use.
+     *
+     * @param sess the session object of the new session.
+     */
     @OnWebSocketConnect
     public void onConnect(Session sess)
     {
@@ -104,6 +115,13 @@ public class SecureSocketClient extends AbstractSocketClient
         this.userSession = sess;
     }
 
+    /**
+     * Is called when a connection is closed.
+     * Deletes the saved session.
+     *
+     * @param statusCode the status code
+     * @param reason the reason
+     */
     @OnWebSocketClose
     public void onClose(int statusCode, String reason)
     {
@@ -112,6 +130,11 @@ public class SecureSocketClient extends AbstractSocketClient
         this.userSession = null;
     }
 
+    /**
+     * Is called when an error occured and logs the error.
+     *
+     * @param cause the cause of the error
+     */
     @OnWebSocketError
     public void onError(Throwable cause)
     {
@@ -119,6 +142,11 @@ public class SecureSocketClient extends AbstractSocketClient
     	logger.error(cause.getMessage());
     }
 
+    /**
+     * Is called when a message is received. Forwards the message to the messagehandler.
+     *
+     * @param msg the received message
+     */
     @OnWebSocketMessage
     public void onMessage(String msg)
     {
@@ -129,7 +157,7 @@ public class SecureSocketClient extends AbstractSocketClient
     }
     
     /**
-     * register message handler.
+     * registers a message handler.
      *
      * @param msgHandler the handler which should be registered
      */
@@ -154,64 +182,83 @@ public class SecureSocketClient extends AbstractSocketClient
     
     //Protocol specific methods
 
-	/**
-	 * Sends a request-connection message to the distributor.
-	 */
-	public void requestConnection(){
-		
-		cache.update();	
-		Connector con = cache.getConnector();
-		
-		// Request connection
-		RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
-		OutputStream os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(reqCon, os);
-		sendMessage(os.toString());
-	}
+    /**
+     * Sends a request-connection message to the distributor.
+     */
+    public void requestConnection(){
+        
+        cache.update(); 
+        Connector con = cache.getConnector();
+        
+        // Request connection
+        RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(reqCon, os);
+        sendMessage(os.toString());
+    }
 
-	/**
-	 * Sends a value to the distributor.
-	 *
-	 * @param value the value
-	 * @param devId the id of the device, which is saved in the distributor
-	 * @param devCompId the id of the deviceComponent, which is saved in the distributor
-	 * @param time the timestamp of the value
-	 */
-	//wird von HomeMatic-Gerät aufgerufen
-	public void sendValue(double value, int devId, int devCompId, long time){
+    /**
+     * Sends a value to the distributor.
+     *
+     * @param value the value
+     * @param devId the id of the device, which is saved in the distributor
+     * @param devCompId the id of the deviceComponent, which is saved in the distributor
+     * @param time the timestamp of the value
+     */
+    //wird von HomeMatic-Gerät aufgerufen
+    public void sendValue(double value, int devId, int devCompId, long time){
 
-		int conId = cache.getConnector().getIdverteiler();
+        int conId = cache.getConnector().getIdverteiler();
+        
+        SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(sendval, os);
+        sendMessage(os.toString());
+    }
+    
+    /**
+     * Sendvalue message for components with type=action.
+     * It automatically sends a second message which resets the value.
+     * It is used for switches which send a single "true" value when pressed,
+     * but never send a reset value.
+     *
+     * @param value the value
+     * @param devId the id of the device, which is saved in the distributor
+     * @param devCompId the id of the deviceComponent, which is saved in the distributor
+     * @param time the timestamp of the value
+     */
+    public void sendAction(double value, int devId, int devCompId, long time) {
 
-		SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
-		OutputStream os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(sendval, os);
-		sendMessage(os.toString());
-	}
-	
-	/**
-	 * Sendvalue message for components with type=action.
-	 * It automatically sends a second message which resets the value.
-	 *
-	 * @param value the value
-	 * @param devId the id of the device, which is saved in the distributor
-	 * @param devCompId the id of the deviceComponent, which is saved in the distributor
-	 * @param time the timestamp of the value
-	 */
-	public void sendAction(double value, int devId, int devCompId, long time) {
+        int conId = cache.getConnector().getIdverteiler();
 
-		int conId = cache.getConnector().getIdverteiler();
+        SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(sendval, os);
+        sendMessage(os.toString());
+        
+        sendval = new SendValue(devId, devCompId, 0, time, conId, 0, System.currentTimeMillis());
+        os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(sendval, os);
+        sendMessage(os.toString());
+        
+    }
 
-		SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
-		OutputStream os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(sendval, os);
-		sendMessage(os.toString());
-		
-		sendval = new SendValue(devId, devCompId, 0, time, conId, 0, System.currentTimeMillis());
-		os = new ByteArrayOutputStream();
-		BoeseJson.parseMessage(sendval, os);
-		sendMessage(os.toString());
-		
-	}
+    /**
+     * Senda a status message to the distributor. It can be used when the status of
+     * a device changes to inform the distributor.
+     *
+     * @param devCompId the dev comp id
+     * @param statusCode the status code
+     * @param statusTimestamp the status timestamp
+     */
+    public void sendStatus(int devCompId, int statusCode, int statusTimestamp) {
+        int conId = cache.getConnector().getIdverteiler();
+        
+        SendStatus ss = new SendStatus(devCompId, statusCode, statusTimestamp, true, conId, 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(ss, os);
+        sendMessage(os.toString());
+    }
 
 
 }

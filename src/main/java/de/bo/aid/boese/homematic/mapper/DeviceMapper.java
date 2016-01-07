@@ -40,18 +40,19 @@ import java.util.List;
 
 import de.bo.aid.boese.homematic.model.Device;
 
-// TODO: Auto-generated Javadoc
 /**
- * Mapping class for Devices.
+ * This class maps raw data from HomeMatic to objects
+ * of the hibernate model classes to process them.
  */
 public class DeviceMapper {
 	
 	/**
-	 * Maps the homematic devices to the device-model.
+	 * Maps the raw homematic data to objects of the model classes 
+	 * for further processing.
 	 *
 	 * @param obj the result-object from the listdevices request
 	 * @param ignoreVirtual If true virtual devices are ignored
-	 * @return a list of Devices
+	 * @return the list of all devices
 	 */
 	public static List<Device> map(Object obj, boolean ignoreVirtual){
 		Object[] devices = (Object[]) obj;

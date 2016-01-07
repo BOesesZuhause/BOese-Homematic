@@ -77,22 +77,21 @@ import de.bo.aid.boese.homematic.xml.DevicesXML;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
-// TODO: Auto-generated Javadoc
 /**
- * Mainclass for the connector.
+ * The mainclass for the HomeMatic connector.
  */
 public class HMConnector {
 
 	/** The confirmed. */
 	public static boolean confirmed = false;
 
-    /** The client. */
+    /** The XMLRPC-client. */
 	private XMLRPCClient client;
 
 	/** The XMLRPC-Server. */
 	XMLRPCServer XMLserver;
 
-	/** The Websocketserver. */
+	/** The Websocketclient. */
 	private SocketClient socketClient;
 
 	/** The url of the distributor. */
@@ -114,38 +113,36 @@ public class HMConnector {
 	private boolean validate;
 
 	/**
-	 * Gets the durl.
+	 * Gets the url of the distributor.
 	 *
-	 * @return the durl
+	 * @return the url of the distributor
 	 */
 	public String getDurl() {
 		return durl;
 	}
 
 	/**
-	 * Sets the durl.
+	 * Sets the url of the distributor.
 	 *
-	 * @param durl
-	 *            the new durl
+	 * @param durl the new url of the distributor
 	 */
 	public void setDurl(String durl) {
 		this.durl = durl;
 	}
 
 	/**
-	 * Gets the hmurl.
+	 * Gets the url of the HomeMatic XMLRPC-Server.
 	 *
-	 * @return the hmurl
+	 * @return the url of the HomeMatic XMLRPC-Server
 	 */
 	public String getHmurl() {
 		return hmurl;
 	}
 
 	/**
-	 * Sets the hmurl.
+	 * Sets the url of the HomeMatic XMLRPC-Server.
 	 *
-	 * @param hmurl
-	 *            the new hmurl
+	 * @param hmurl the url of the HomeMatic XMLRPC-Server
 	 */
 	public void setHmurl(String hmurl) {
 		this.hmurl = hmurl;
@@ -160,8 +157,7 @@ public class HMConnector {
 	/**
 	 * The main method. Starts the connector
 	 *
-	 * @param args
-	 *            the arguments
+	 * @param args the commandline-arguments
 	 */
 	public static void main(String[] args) {
 
@@ -180,7 +176,7 @@ public class HMConnector {
 	}
 
 	/**
-	 * Start flow with requesting connection from the distributor.
+	 * Start flow with the distributor by requesting a connection.
 	 */
 	private void startFlow() {
 		socketClient.requestConnection();
@@ -229,10 +225,9 @@ public class HMConnector {
 	}
 
 	/**
-	 * Inits the database.
+	 * Initalises the database and saves new devices
 	 *
-	 * @param devices
-	 *            the devices
+	 * @param devices the devices returned from HomeMatic
 	 */
 	private void initDatabase(List<Device> devices) {
 
@@ -264,7 +259,7 @@ public class HMConnector {
 	}
 
 	/**
-	 * Gets the devices.
+	 * Gets all devices from HomeMatic.
 	 *
 	 * @return the devices
 	 */
@@ -344,7 +339,7 @@ public class HMConnector {
 	}
 
 	/**
-	 * Check the commandline arguments.
+	 * Checks the commandline arguments.
 	 *
 	 * @param args
 	 *            the arguments for the programm
@@ -421,7 +416,7 @@ public class HMConnector {
 	}
 
 	/**
-	 * Load the properties-file.
+	 * Loads the properties-file.
 	 */
 	private void loadProperties() {
 
@@ -492,7 +487,7 @@ public class HMConnector {
 	}
 	
 	/**
-	 * Adds the device.
+	 * Adds  a new device while the connector is running
 	 */
 	//TODO is called when a new device is connected
 	public void addDevice(){
@@ -500,9 +495,9 @@ public class HMConnector {
 	}
 
 	/**
-	 * Gets the own ip.
+	 * Gets the own ip-adress.
 	 *
-	 * @return the own ip
+	 * @return the own ip-adress
 	 */
 	public static String getOwnIP(){
 	    String ip = null;

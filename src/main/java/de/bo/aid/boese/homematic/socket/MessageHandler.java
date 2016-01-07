@@ -34,7 +34,6 @@
  */
 package de.bo.aid.boese.homematic.socket;
 
-// TODO: Auto-generated Javadoc
 /**
      * Interface for Message Handlers, which can subscribe to the WebsocketClient.
      *
@@ -51,7 +50,7 @@ public interface MessageHandler {
         public void handleMessage(String message);
         
         /**
-         * Close connection.
+         * Method for closing the connection.
          */
         public void closeConnection();
     }

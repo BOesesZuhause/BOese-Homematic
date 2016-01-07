@@ -7,9 +7,9 @@ import org.apache.logging.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class XMLRPCSystemHandler.
+ * The Class XMLRPCSystemHandler handles system-messages from
+ * the HomeMatic-system.
  */
 public class XMLRPCSystemHandler {
 	
@@ -20,7 +20,7 @@ public class XMLRPCSystemHandler {
 	XMLRPCMessageHandler handler = new XMLRPCMessageHandler();
 	
 	/**
-	 * Adds the handler.
+	 * Adds the handler to a PropertyHandlerMapping object..
 	 *
 	 * @param phm the phm
 	 */
@@ -59,7 +59,7 @@ public class XMLRPCSystemHandler {
 	
 	
 	/**
-	 * List methods.
+	 * Handles "listMethods"-calls.
 	 *
 	 * @return the string[]
 	 */

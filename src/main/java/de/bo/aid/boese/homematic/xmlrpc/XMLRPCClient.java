@@ -45,7 +45,6 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * Client to send requests to the HomeMatic-XMLRPC-Server.
  */
@@ -79,18 +78,20 @@ public class XMLRPCClient {
 	 */
 	private final String clientId = "123"; // TODO save in DB
 
-	/** The client. */
+	/** The client object. */
 	private XmlRpcClient client;
 
-	/** The paramset description. */
+	/** The paramset description. It is used to save data from Homematic-
+	 * request. In the HomeMAtic datamodel a paramsetDescription contains
+	 * detailed information abaout a specifc sensor or actor. */
 	Object paramsetDescription;
 
 	/**
 	 * Initalizes the client and reads the xml-File (Devices.xml in the root
 	 * directory of the classpath)
+	 * If the url is invalid the programm will shut down.
 	 *
-	 * @param url
-	 *            the url of the homematic XMLRPS-Server
+	 * @param url the url of the homematic XMLRPC-Server
 	 */
 	public void init(String url) {
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -107,9 +108,10 @@ public class XMLRPCClient {
 	}
 
 	/**
-	 * Gets the HM devices.
+	 * Makes a request to get a list of all devices from
+	 * the HomeMatic system via the "listDevices" method.
 	 *
-	 * @return the HM devices
+	 * @return the raw data from HomeMatic
 	 */
 	public Object getDevices() {
 
@@ -124,10 +126,13 @@ public class XMLRPCClient {
 	}
 
 	/**
-	 * Gets the param sets.
+	 * Makes a request to get aall paramsets for a specific device from
+     * the HomeMatic system via the "getParamsetDescription" method.
+     * The Paramsets contain detailed information about all sensors and actors
+     * of the device.
 	 *
-	 * @param address the address
-	 * @return the param sets
+	 * @param address the address of the device
+	 * @return the raw data from HomeMatic
 	 */
 	public Object getParamSets(String address) {
 
@@ -145,7 +150,7 @@ public class XMLRPCClient {
 	 * Sends the init-message to the homematic XMLRPC-Server. This is needed to
 	 * register a callback for events
 	 *
-	 * @param url of the xmlrpc-server for callbacks
+	 * @param url THe url of the xmlrpc-server for callbacks
 	 *           
 	 */
 	public void sendInit(String url) {
@@ -155,7 +160,7 @@ public class XMLRPCClient {
 	}
 
 	/**
-	 * Sets a value in the homematic-system.
+	 * Sets a value in the homematic-system. It can be used to switch devices
 	 *
 	 * @param address
 	 *            the address of the device
@@ -201,15 +206,14 @@ public class XMLRPCClient {
 	}
 	
 	/**
-	 * Gets the value.
+	 * Gets the value of a specific component of a device.
 	 *
-	 * @param address the address
-	 * @param type the type
-	 * @param name the name
+	 * @param address the address of the device
+	 * @param type the type of the value
+	 * @param name the name of the component
 	 * @return the value
-	 * @throws Exception the exception
 	 */
-	public double getValue(String address, String type, String name) throws Exception{
+	public double getValue(String address, String type, String name){
 		
 		double value = 0; //default-value
 		
@@ -250,7 +254,7 @@ public class XMLRPCClient {
 	 *
 	 * @param method            the methodname of the called method
 	 * @param params            the parameters for the method
-	 * @return the answer
+	 * @return the answer as raw data
 	 */
 	private Object makeRequest(String method, Object[] params) {
 		try {

@@ -34,9 +34,11 @@
  */
 package de.bo.aid.boese.homematic.model;
 
-// TODO: Auto-generated Javadoc
 /**
- * Model class for components.
+ * hibernate model-class to persist components.
+ * A component represents a distinct sensor or actor
+ * in the homematic-system where one device can have many
+ * components.
  */
 public class Component implements java.io.Serializable {
 
@@ -53,7 +55,7 @@ public class Component implements java.io.Serializable {
 				+ address + ", hm_id=" + hm_id + ", unit=" + unit + ", aktor=" + aktor + ", type=" + type + "]";
 	}
 
-	/** The primary ey. */
+	/** The primary key. */
 	private int compid;
 	
 	/** The device. One Device can have many components. One component must have one device */
@@ -65,16 +67,17 @@ public class Component implements java.io.Serializable {
 	/** The name of the component. */
 	private String name;
 	
-	/** The homematic-address of the component. */
+	/** The homematic-address of the component for calling it in the homematic system. */
 	private String address;
 	
+	//TODO Wofür ist die? 
 	/** The homematic-id. */
 	private String hm_id;
 	
 	/** The unit of the component. */
 	private String unit;
 	
-	/** Defines whether the component is an acrot. */
+	/** Defines whether the component is an actor or a sensor. */
 	private boolean aktor;
 	
 	/** The homematic-type of the component. Values: ACTION, FLOAT, DOUBLE, BOOLEAN, INT */
@@ -146,9 +149,9 @@ public class Component implements java.io.Serializable {
 	/**
 	 * Instantiates a new component.
 	 *
-	 * @param compid the compid
-	 * @param device the device
-	 * @param idverteiler the idverteiler
+	 * @param compid the primary key of the component
+	 * @param device the device to which the component belongs
+	 * @param idverteiler the id saved in the distributor
 	 * @param name the name
 	 */
 	public Component(int compid, Device device, Integer idverteiler, String name) {

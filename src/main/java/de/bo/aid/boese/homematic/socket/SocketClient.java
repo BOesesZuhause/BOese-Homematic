@@ -59,9 +59,8 @@ import de.bo.aid.boese.json.SendStatus;
 import de.bo.aid.boese.json.SendValue;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * class which acts as a websocketclient.
+ * This class manages a websocketclient with unsecured connection. For secure connections use the secureSocketClient class.
  */
 @ClientEndpoint
 public class SocketClient extends AbstractSocketClient{
@@ -72,7 +71,8 @@ public class SocketClient extends AbstractSocketClient{
     /** The session of the client. */
     Session userSession = null;
     
-    /** The messagehandler which is subscribed. */
+    /** The messagehandler which is subscribed. The messagehandler will 
+     *  receive all messages 'which are sent over the websocket connection */
     private MessageHandler messageHandler;
     
 	/** The databasecache used to read data quickly. */
@@ -152,7 +152,7 @@ public class SocketClient extends AbstractSocketClient{
     }
 
     /**
-     * Callback hook for Message Events. This method will be invoked when a client send a message.
+     * Callback hook for Message Events. This method will be invoked when a message is received.
      *
      * @param message The text message
      */
@@ -165,7 +165,7 @@ public class SocketClient extends AbstractSocketClient{
     }
     
     /**
-     * On error-method. Called when errors occur.
+     * On error-method. Called when errors occur. Logs the error.
      *
      * @param error The Exception which occured
      */
@@ -177,7 +177,7 @@ public class SocketClient extends AbstractSocketClient{
     }
 
     /**
-     * register message handler.
+     * This method is used to register message handlers.
      *
      * @param msgHandler the handler which should be registered
      */
@@ -237,6 +237,8 @@ public class SocketClient extends AbstractSocketClient{
 		/**
 		 * Sendvalue message for components with type=action.
 		 * It automatically sends a second message which resets the value.
+		 * It is used for switches which send a single "true" value when pressed,
+		 * but never send a reset value.
 		 *
 		 * @param value the value
 		 * @param devId the id of the device, which is saved in the distributor
@@ -260,7 +262,8 @@ public class SocketClient extends AbstractSocketClient{
 		}
 
 		/**
-		 * Send status.
+		 * Senda a status message to the distributor. It can be used when the status of
+		 * a device changes to inform the distributor.
 		 *
 		 * @param devCompId the dev comp id
 		 * @param statusCode the status code

@@ -34,9 +34,10 @@
  */
 package de.bo.aid.boese.homematic.model;
 
-// TODO: Auto-generated Javadoc
 /**
- * model-class for connectors.
+ * hibernate model-class to persist the connector.
+ * It is used to store information such as passwords 
+ * and ids of the connector.
  */
 public class Connector implements java.io.Serializable {
 
@@ -62,9 +63,9 @@ public class Connector implements java.io.Serializable {
 	}
 
 	/**
-	 * Instantiates a new connector.
+	 * Instantiates a new connector with a given id.
 	 *
-	 * @param conid the conid
+	 * @param conid the id of the connector
 	 */
 	public Connector(int conid) {
 		this.conid = conid;

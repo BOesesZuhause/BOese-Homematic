@@ -40,16 +40,16 @@ import java.util.List;
 
 import de.bo.aid.boese.homematic.model.Component;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ComponentMapper.
+ * This class maps raw parametersets from HomeMatic to component-objects
+ * of the hibernate model classes for further processing.
  */
 public class ComponentMapper {
 
 	/**
-	 * Maps the homematic components.
+	 * Maps the homematic parametersets to components.
 	 *
-	 * @param obj THe answer from the getParamsets-rewuest for Homematic
+	 * @param obj The answer from the getParamsets-request for Homematic
 	 * @return A list of Components mapped from homematic
 	 */
 	@SuppressWarnings("unchecked")

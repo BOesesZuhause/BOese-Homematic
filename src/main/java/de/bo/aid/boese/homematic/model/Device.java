@@ -37,9 +37,10 @@ package de.bo.aid.boese.homematic.model;
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO: Auto-generated Javadoc
 /**
- * model-class for devices.
+ * hibernate model-class to persist devices.
+ * A device represents a distinct homematic device
+ * with its parameters.
  */
 public class Device implements java.io.Serializable {
 
@@ -63,16 +64,18 @@ public class Device implements java.io.Serializable {
 	/** The id under which the device is saved in the distributor. */
 	private Integer idverteiler;
 	
-	/** The homematic-address of the device. */
+	/** The homematic-address of the device. 
+	 * This is used to address and call the device in homematic*/
 	private String adress;
 	
-	/** The homematic-type. */
+	/** The homematic-type. It contains the model of the physical
+	 * homematic device. */
 	private String type;
 	
 	/** The homematic-version of the device. */
 	private int version;
 	
-	/** The firmware of the device. */
+	/** The firmware-version of the device. */
 	private String firmware;
 	
 	/**

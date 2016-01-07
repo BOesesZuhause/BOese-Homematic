@@ -40,9 +40,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-// TODO: Auto-generated Javadoc
 /**
- * The xml-model for channels.
+* The model class for channels to save them to an xml-file via jaxb.
  */
 @XmlRootElement( name = "channel")
 public class ChannelXML {

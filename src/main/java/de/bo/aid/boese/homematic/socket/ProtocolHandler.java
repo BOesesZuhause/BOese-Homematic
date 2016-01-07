@@ -71,14 +71,16 @@ import de.bo.aid.boese.json.SendValue;
 import javassist.NotFoundException;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * This singleton class defines a Websocketendpoint for Websocketconnections.
+ * THis class is a handler for the BOese protocol. It is 
+ * used to send messages according to the protocol 
+ * and implements the messagehandler interface. SO it can be
+ * registered to receive websocket-messages and handle them.
  */
 public class ProtocolHandler implements MessageHandler{
 	
 	
-	/** The client used by the connection. */
+	/** The websocketclient used to connect to the distributor */
 	private AbstractSocketClient client;
 	
 	/** Is used to check, wether the connection should be closed. */
@@ -97,10 +99,6 @@ public class ProtocolHandler implements MessageHandler{
 	 */
 	public ProtocolHandler(AbstractSocketClient client){
 		this.client = client;
-	}
-
-	public ProtocolHandler(SecureSocketClient secureSocketClient) {
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -158,9 +156,10 @@ public class ProtocolHandler implements MessageHandler{
 	
 	
 	/**
-	 * Handle heart beat.
+	 * Handles an incoming heartbeatmessage and sends it back
+	 * to the distributor.
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object for the heartbeatmessage
 	 */
 	private void handleHeartBeat(HeartBeatMessage bjMessage) {
 		BoeseJson bj = new HeartBeatMessage(bjMessage.getConnectorId(), bjMessage.getStatus(), System.currentTimeMillis());
@@ -170,9 +169,10 @@ public class ProtocolHandler implements MessageHandler{
 	}
 
 	/**
-	 * Handle the sendvalueMessage and switches devices. Receives a value from the distibutor and sends a message to the homematic-device.
+	 * Handle the sendvalueMessage and switches devices. 
+	 * Receives a value from the distributor and sends a message to the homematic-device.
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object for the sendvalue message
 	 */
 	private void handleSendvalue(SendValue bjMessage) {
 		Component comp = null;
@@ -189,16 +189,17 @@ public class ProtocolHandler implements MessageHandler{
 	 * Handle the confirm value message.
 	 * Doesn't do anything at the moment
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object for the confirmvalue message
 	 */
 	private void handleConfirmValue(ConfirmValue bjMessage) {
 		//TODO Abgleich ob confirmValue ankommt	
 	}
 	
 	/**
-	 * Handles confirm device components message and updates the database with the new information gained from the distributor.
+	 * Handles confirm device components message and updates 
+	 * the database with the new information gained from the distributor.
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object of the confirmdevicecomponents message
 	 */
 	private void handleConfirmDeviceComponents(ConfirmDeviceComponents bjMessage) {
 		
@@ -233,10 +234,10 @@ public class ProtocolHandler implements MessageHandler{
 	}
 	
 	/**
-	 * Handles the request device component message.
-	 * Sends all components to the distributor
+	 * Handles the request device component message and
+	 * sends all components of the requested device to the distributor
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object for the requestdevicecomponent message
 	 */
 	private void handleRequestDeviceComponents(RequestDeviceComponents bjMessage) {
 
@@ -279,10 +280,10 @@ public class ProtocolHandler implements MessageHandler{
 	}
 	
 	/**
-	 * Handles the confirm device message.
-	 * Updates the device-data in the database.
+	 * Handles the confirm device message
+	 * and updates the device-data in the database.
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object for the confirmdevices message
 	 */
 	private void handleConfirmDevices(ConfirmDevices bjMessage) {
 		HashMap<String, Integer> devMap = bjMessage.getDevices();
@@ -298,10 +299,10 @@ public class ProtocolHandler implements MessageHandler{
 	}
 	
 	/**
-	 * Handles the request all devices message.
-	 * Sends all known devices to the distributor
+	 * Handles the request all devices message and
+	 * sends all known devices to the distributor
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object for the requestAllDevices message
 	 */
 	private void handleRequestAllDevices(RequestAllDevices bjMessage) {
 
@@ -319,10 +320,10 @@ public class ProtocolHandler implements MessageHandler{
 	}
 	
 	/**
-	 * Handles the confirmconnection message.
-	 * Updates the connector in the database.
+	 * Handles the confirmconnection message and
+	 * updates the connector data in the database.
 	 *
-	 * @param bjMessage the bj message
+	 * @param bjMessage the object of the confirmConnection message
 	 */
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
 		Connector con = cache.getConnector();

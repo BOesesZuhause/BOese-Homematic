@@ -40,9 +40,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-// TODO: Auto-generated Javadoc
 /**
- * The xml-model for devices.
+ * This model class is used to save multiple devices to an xml-file via jaxb.
  */
 @XmlRootElement( name="devices")
 public class DevicesXML {

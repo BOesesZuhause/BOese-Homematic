@@ -41,9 +41,8 @@ import org.hibernate.SessionFactory;
 
 import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
+import javassist.NotFoundException;
 
-
-// TODO: Auto-generated Javadoc
 /**
  *  This class defines an interface to access Connector-Objects from the database.
  */
@@ -53,10 +52,11 @@ public class ConnectorDao {
 static SessionFactory factory = HibernateUtil.getSessionFactory();
 	
 	/**
-	 * Gets the connector. There is only one connector in the database, so no identifier is needed.
+	 * Gets the connector. There is only one connector in the database, 
+	 * so no identifier is needed.
 	 *
 	 * @return the connector
-	 * @throws Exception the exception
+	 * @throws NotFoundException occurs when no connector-data is found in the database.
 	 */
 	public static Connector getConnector() throws Exception  {
 		Session session = factory.openSession();
@@ -75,7 +75,7 @@ static SessionFactory factory = HibernateUtil.getSessionFactory();
 			return null;
 		}		
 		else {
-			throw new Exception("Failed to load connector from database");
+			throw new NotFoundException("Failed to load connector from database");
 		}
 		session.close();
 		return con;
