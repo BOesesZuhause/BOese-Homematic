@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -74,33 +75,30 @@ public class SecureSocketClient extends AbstractSocketClient
 	 * @param serverUri the uri of the server
 	 */
 	public void start(String serverUri){
-		URI uri = URI.create(serverUri);
+        URI uri = URI.create(serverUri);
+
+        
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setTrustAll(true); 
 
         client = new WebSocketClient(sslContextFactory);
-		MessageHandler handler = new ProtocolHandler(this);
-		addMessageHandler(handler);
-		connect(uri);
-	}
 
-    
-    /**
-     * Opens a Connection to a Websocketserver.
-     *
-     * @param endpointURI URI of the Websocketserver to which the connection should be opened.
-     */
-    public void connect(URI endpointURI){
-    	 try {
-    		 SecureSocketClient socket = new SecureSocketClient();
-    		 client.connect(socket, endpointURI);
-         } catch (Exception e) {
-             throw new RuntimeException(e);
-         }
+        
+        try {
+            client.start();
+            SecureSocketClient socket = this.getInstance();
+            
+            MessageHandler handler = new ProtocolHandler(socket);
+            addMessageHandler(handler);
+            
+            Future<Session> fut = client.connect(socket,uri);
+            userSession = fut.get();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
 
-    
 
     /**
      * Is called when a new connection is opened.
