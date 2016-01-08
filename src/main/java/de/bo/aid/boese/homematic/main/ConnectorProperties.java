@@ -1,3 +1,4 @@
+
 package de.bo.aid.boese.homematic.main;
 
 import java.io.FileInputStream;
@@ -16,22 +17,36 @@ import javax.validation.ValidatorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ConnectorProperties.
+ */
 @SuppressWarnings("serial")
 public class ConnectorProperties extends Properties{
     
+    /** The devices file. */
     private final String DEVICES_FILE = "KnownDevicesFilePath";
     
+    /** The distributor url. */
     private final String DISTRIBUTOR_URL = "DistributorURL";
     
+    /** The name. */
     private final String NAME = "ConnectorName";
     
+    /** The homematic. */
     private final String HOMEMATIC = "HomematicURL";
     
+    /** The tls. */
     private final String TLS = "tls_enabled";
     
     /** The logger. */
     final  Logger logger = LogManager.getLogger(ConnectorProperties.class);
     
+    /**
+     * Validate.
+     *
+     * @return true, if successful
+     */
     private boolean validate(){
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator(); 
@@ -42,6 +57,11 @@ public class ConnectorProperties extends Properties{
         return constraintViolations.isEmpty();
     }
     
+  /**
+   * Load.
+   *
+   * @param path the path
+   */
   //TODO validate properties
     public void load(String path){
         FileInputStream file = null;
@@ -96,6 +116,9 @@ public class ConnectorProperties extends Properties{
         }
     }
     
+    /**
+     * Sets the defaults.
+     */
     public void setDefaults(){
        this.setDevicesFile("Devices.xml");
        this.setDistributorURL("ws:\\\\example.org:8081\\events");
@@ -104,42 +127,92 @@ public class ConnectorProperties extends Properties{
        this.setName("HomematicConnector");
     }
     
+    /**
+     * Sets the devices file.
+     *
+     * @param path the new devices file
+     */
     public void setDevicesFile(String path){
         this.setProperty(DEVICES_FILE, path);
     }
     
+    /**
+     * Gets the devices file.
+     *
+     * @return the devices file
+     */
     public String getDevicesFile(){
         return this.getProperty(DEVICES_FILE);
     }
     
+    /**
+     * Sets the distributor url.
+     *
+     * @param path the new distributor url
+     */
     public void setDistributorURL(String path){
         this.setProperty(DISTRIBUTOR_URL, path);
     }
     
+    /**
+     * Gets the distributor url.
+     *
+     * @return the distributor url
+     */
     public String getDistributorURL(){
         return this.getProperty(DISTRIBUTOR_URL);
     }
     
+    /**
+     * Sets the homematic url.
+     *
+     * @param path the new homematic url
+     */
     public void setHomematicURL(String path){
         this.setProperty(HOMEMATIC, path);
     }
     
+    /**
+     * Gets the homematic url.
+     *
+     * @return the homematic url
+     */
     public String getHomematicURL(){
         return this.getProperty(HOMEMATIC);
     }
     
+    /**
+     * Sets the name.
+     *
+     * @param name the new name
+     */
     public void setName(String name){
         this.setProperty(NAME, name);
     }
     
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
     public String getName(){
         return this.getProperty(NAME);
     }
     
+    /**
+     * Sets the tls.
+     *
+     * @param tls the new tls
+     */
     public void setTLS(boolean tls){
         this.setProperty(TLS, tls + "");
     }
     
+    /**
+     * Gets the tls.
+     *
+     * @return the tls
+     */
     public boolean getTLS(){
         return Boolean.parseBoolean(this.getProperty(TLS));
     }

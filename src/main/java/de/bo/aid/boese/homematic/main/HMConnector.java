@@ -1,52 +1,16 @@
-/*             
- * 			  (                       
- *			 ( )\         (        (   
- *			 )((_)  (    ))\ (    ))\  
- *			((_)_   )\  /((_))\  /((_) 
- *			 | _ ) ((_)(_)) ((_)(_))   
- *			 | _ \/ _ \/ -_)(_-</ -_)  
- *			 |___/\___/\___|/__/\___|
- *       
- *           			;            
- *		      +        ;;;         + 
- *			  +       ;;;;;        + 
- *			  +      ;;;;;;;       + 
- *			  ++    ;;;;;;;;;     ++ 
- *			  +++++;;;;;;;;;;;+++++  
- *			   ++++;;;;;;;;;;;+++++  
- *				++;;;;;;;;;;;;;++    
- *			     ;;;;;;;;;;;;;;;     
- *			    ;;;;;;;;;;;;;;;;;     
- *				:::::::::::::::::    
- * 				:::::::::::::::::      
- *  			:::::::::::::::::    
- *   			::::::@@@@@::::::    
- *				:::::@:::::@:::::    
- *				::::@:::::::@::::    
- * 				:::::::::::::::::    
- *  			:::::::::::::::::      
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
- * ----------------------------------------------------------------------------
- */
+
 package de.bo.aid.boese.homematic.main;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
+
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -78,6 +42,7 @@ import de.bo.aid.boese.homematic.xml.DevicesXML;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCClient;
 import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
 
+// TODO: Auto-generated Javadoc
 /**
  * The mainclass for the HomeMatic connector.
  */
@@ -94,60 +59,17 @@ public class HMConnector {
 
 	/** The Websocketclient. */
 	private AbstractSocketClient socketClient;
-
-	/** The url of the distributor. */
-	private String durl;
-
-	/** The url of the homematic xmlrpc-server. */
-	private String hmurl;
+	
+	/** The props. */
+	ConnectorProperties props;
 
 	/** The path to the config file. */
 	private String configFilePath;
 
-	/** The name of the connector. */
-	private String name;
-
-	/** The path to the file with known-devices. */
-	private String devFilePath;
 
 	/** Stores if known devices should be validated. */
 	private boolean validate;
 
-	/**
-	 * Gets the url of the distributor.
-	 *
-	 * @return the url of the distributor
-	 */
-	public String getDurl() {
-		return durl;
-	}
-
-	/**
-	 * Sets the url of the distributor.
-	 *
-	 * @param durl the new url of the distributor
-	 */
-	public void setDurl(String durl) {
-		this.durl = durl;
-	}
-
-	/**
-	 * Gets the url of the HomeMatic XMLRPC-Server.
-	 *
-	 * @return the url of the HomeMatic XMLRPC-Server
-	 */
-	public String getHmurl() {
-		return hmurl;
-	}
-
-	/**
-	 * Sets the url of the HomeMatic XMLRPC-Server.
-	 *
-	 * @param hmurl the url of the HomeMatic XMLRPC-Server
-	 */
-	public void setHmurl(String hmurl) {
-		this.hmurl = hmurl;
-	}
 
 	/** The Constant logger for log4j. */
 	final static Logger logger = LogManager.getLogger(HMConnector.class);
@@ -165,7 +87,7 @@ public class HMConnector {
 		HMConnector connector = new HMConnector();
 
 		connector.checkArguments(args);
-		connector.loadProperties(); // TODO validate the config
+		connector.loadProperties(); 
 		connector.saveSettings();
 		connector.loadXML();
 		connector.initializeXMLRPCClient();
@@ -198,7 +120,7 @@ public class HMConnector {
 	private void initWebsocketServer() {
 		socketClient = SocketClient.getInstance();
 	//	socketClient = SecureSocketClient.getInstance();
-		socketClient.start(durl); // returns when server is started
+		socketClient.start(props.getDistributorURL()); // returns when server is started
 									// http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
 	}
 
@@ -214,7 +136,7 @@ public class HMConnector {
 			if (con == null) {
 				// insert defaultConnector
 				con = new Connector();
-				con.setName(name);
+				con.setName(props.getName());
 				con.setIdverteiler(-1);
 				con.setSecret(null);
 				ConnectorDao.insertConnector(con);
@@ -227,7 +149,7 @@ public class HMConnector {
 	}
 
 	/**
-	 * Initalises the database and saves new devices
+	 * Initalises the database and saves new devices.
 	 *
 	 * @param devices the devices returned from HomeMatic
 	 */
@@ -276,7 +198,7 @@ public class HMConnector {
 	 */
 	private void initializeXMLRPCClient() {
 		client = XMLRPCClient.getInstance();
-		client.init(hmurl);
+		client.init(props.getHomematicURL());
 	}
 
 	/**
@@ -330,7 +252,7 @@ public class HMConnector {
 	 */
 	private void loadXML() {
 		try {
-			File file = new File(devFilePath);
+			File file = new File(props.getDevicesFile());
 			JAXBContext context = JAXBContext.newInstance(DevicesXML.class);
 			Unmarshaller jaxbUnmarshaller = context.createUnmarshaller();
 			xml = (DevicesXML) jaxbUnmarshaller.unmarshal(file);
@@ -364,7 +286,8 @@ public class HMConnector {
 		validate = params.isValidate();
 
 		if (params.isGenConfig()) {
-			createDefaultProperties();
+			props.setDefaults();
+			props.save(configFilePath);
 			logger.info("created default properties-file at: " + configFilePath);
 			System.exit(0);
 		}
@@ -403,9 +326,9 @@ public class HMConnector {
 		}
 		FileOutputStream out = null;
 		try {
-			out = new FileOutputStream(devFilePath);
+			out = new FileOutputStream(props.getDevicesFile());
 		} catch (FileNotFoundException e) {
-			logger.error("File \"" + devFilePath + "\" not found:");
+			logger.error("File \"" + props.getDevicesFile() + "\" not found:");
 			e.printStackTrace();
 		}
 		try {
@@ -421,75 +344,12 @@ public class HMConnector {
 	 * Loads the properties-file.
 	 */
 	private void loadProperties() {
-
-		Properties props = new Properties();
-		FileInputStream file = null;
-
-		// load the file handle
-		try {
-			file = new FileInputStream(configFilePath);
-		} catch (FileNotFoundException e) {
-			logger.error("config File not found at: " + configFilePath);
-			e.printStackTrace();
-			System.exit(0);
-		}
-
-		// load all the properties from the file
-		try {
-			props.load(file);
-		} catch (IOException e) {
-			logger.error("IO-Exception while loading config-file");
-			e.printStackTrace();
-			System.exit(0);
-		}
-
-		// close the file handle
-		try {
-			file.close();
-		} catch (IOException e) {
-			logger.error("IO-Exception while closing config-file");
-			e.printStackTrace();
-			System.exit(0);
-		}
-
-		// retrieve the properties
-		hmurl = props.getProperty("HomematicURL");
-		durl = props.getProperty("DistributorURL");
-		name = props.getProperty("ConnectorName");
-		devFilePath = props.getProperty("KnownDevicesFilePath");
-	}
-
-	/**
-	 * Creates the default properties-file.
-	 */
-	private void createDefaultProperties() {
-		Properties prop = new Properties();
-		OutputStream output = null;
-
-		prop.setProperty("HomematicURL", "http:\\\\example.org:2001");
-		prop.setProperty("DistributorURL", "ws:\\\\example.org:8081\\events");
-		prop.setProperty("ConnectorName", "HomematicConnector");
-		prop.setProperty("KnownDevicesFilePath", "Devices.xml");
-
-		try {
-			output = new FileOutputStream(configFilePath);
-		} catch (FileNotFoundException e) {
-			logger.error("Could not open file: " + configFilePath);
-			e.printStackTrace();
-			System.exit(0);
-		}
-
-		try {
-			prop.store(output, null);
-		} catch (IOException e) {
-			logger.error("IO-Exception while saving default properties-file");
-			e.printStackTrace();
-			System.exit(0);
-		}
+		props = new ConnectorProperties();
+		props.load(configFilePath);
 	}
 	
 	/**
-	 * Adds  a new device while the connector is running
+	 * Adds  a new device while the connector is running.
 	 */
 	//TODO is called when a new device is connected
 	public void addDevice(){
