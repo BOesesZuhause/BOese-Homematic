@@ -7,10 +7,20 @@
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="${PATTERN}"/>
         </Console>
+        
+        
+        
+        
     </Appenders>
     <Loggers>
-        <Root level="INFO">
+               <logger name="org.hibernate.engine.transaction" level="DEBUG" additivity="false">
+            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="MyFile" />
+        </logger>
+                <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>
 </Configuration>
+
+
