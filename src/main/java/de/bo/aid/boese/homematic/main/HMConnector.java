@@ -70,7 +70,6 @@ import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.AbstractSocketClient;
-import de.bo.aid.boese.homematic.socket.SecureSocketClient;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 import de.bo.aid.boese.homematic.xml.ChannelXML;
 import de.bo.aid.boese.homematic.xml.ComponentXML;
