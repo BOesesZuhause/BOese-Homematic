@@ -327,14 +327,17 @@ public class ProtocolHandler implements MessageHandler{
 	 */
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
 		Connector con = cache.getConnector();
+		//Connector is confirmed
 		if(con.getIdverteiler()==bjMessage.getConnectorId()){
-		    HMConnector.confirmed = true;
+		
+		//Connector is not confirmed
 		}else if(con.getIdverteiler()== -1){
 			con.setIdverteiler(bjMessage.getConnectorId());
 			con.setSecret(bjMessage.getPassword());
 			ConnectorDao.insertConnector(con);
 			cache.update();
-			HMConnector.confirmed = true;
+			
+		//unknown id
 		}else{
 			logger.error("Unknown identifier for the connector: " + con.getIdverteiler());
 			System.exit(0); //TODO wird aufgerufen falls der Konektor
