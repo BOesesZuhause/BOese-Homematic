@@ -123,7 +123,7 @@ public class ConnectorProperties extends Properties{
        this.setDevicesFile("Devices.xml");
        this.setDistributorURL("ws:\\\\example.org:8081\\events");
        this.setHomematicURL("http:\\\\example.org:2001");
-       this.setTLS(false);
+       this.setTLS(true);
        this.setName("HomematicConnector");
     }
     

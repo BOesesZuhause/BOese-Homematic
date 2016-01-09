@@ -45,6 +45,7 @@ import de.bo.aid.boese.homematic.main.HMConnector;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 
+
 /**
  * The messagehandler used by the XMLRPC-Server.
  * Implements the XMLRPC-method which can be called by a client.
@@ -57,6 +58,8 @@ public class XMLRPCMessageHandler {
 	
 	/** The logger from log4j. */
 	final static Logger logger = LogManager.getLogger(XMLRPCMessageHandler.class);
+	
+	SocketClient wsClient = SocketClient.getInstance();
 
 	/**
 	 * receives event-messages from the HomeMatic-System.
@@ -85,16 +88,16 @@ public class XMLRPCMessageHandler {
 		
 		if(value_key.equals("UNREACH")){
 			if(valueObj.equals(true)){
-				SocketClient.getInstance().sendStatus(devCompId, Status.ACTOR_DOES_NOT_REACT, -1);
+				wsClient.sendStatus(devCompId, Status.ACTOR_DOES_NOT_REACT, -1);
 			}else{
-				SocketClient.getInstance().sendStatus(devCompId, Status.ACTIVE, -1);
+			    wsClient.sendStatus(devCompId, Status.ACTIVE, -1);
 			}
 			
 		}else if(value_key.equals("LOWBAT")){
 			if(valueObj.equals(true)){
-				SocketClient.getInstance().sendStatus(devCompId, Status.BATTERY, -1);
+			    wsClient.sendStatus(devCompId, Status.BATTERY, -1);
 			}else{
-				SocketClient.getInstance().sendStatus(devCompId, Status.ACTIVE, -1);
+			    wsClient.sendStatus(devCompId, Status.ACTIVE, -1);
 			}
 			
 		}
@@ -114,7 +117,7 @@ public class XMLRPCMessageHandler {
 			break;
 		case "ACTION":
 			value = 1;
-			SocketClient.getInstance().sendAction(value, devId, devCompId, System.currentTimeMillis());
+			wsClient.sendAction(value, devId, devCompId, System.currentTimeMillis());
 			return;
 		case "INTEGER":
 			value = Integer.parseInt(valueObj.toString());
@@ -126,7 +129,7 @@ public class XMLRPCMessageHandler {
 			default:
 				logger.error("Unknown type: " + type + " for component with address: " + address);
 		}
-		SocketClient.getInstance().sendValue(value, devId, devCompId, System.currentTimeMillis());		
+		wsClient.sendValue(value, devId, devCompId, System.currentTimeMillis());		
 	}
 	
 	/**

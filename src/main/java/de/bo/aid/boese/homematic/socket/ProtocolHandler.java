@@ -81,7 +81,7 @@ public class ProtocolHandler implements MessageHandler{
 	
 	
 	/** The websocketclient used to connect to the distributor */
-	private AbstractSocketClient client;
+	private SocketClient client;
 	
 	/** Is used to check, wether the connection should be closed. */
 	boolean connectionClosed = false;
@@ -97,7 +97,7 @@ public class ProtocolHandler implements MessageHandler{
 	 *
 	 * @param client websocketclient
 	 */
-	public ProtocolHandler(AbstractSocketClient client){
+	public ProtocolHandler(SocketClient client){
 		this.client = client;
 	}
 

@@ -33,7 +33,6 @@ import de.bo.aid.boese.homematic.mapper.DevicesXMLMapper;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
-import de.bo.aid.boese.homematic.socket.AbstractSocketClient;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 import de.bo.aid.boese.homematic.xml.ChannelXML;
 import de.bo.aid.boese.homematic.xml.ComponentXML;
@@ -58,7 +57,7 @@ public class HMConnector {
 	XMLRPCServer XMLserver;
 
 	/** The Websocketclient. */
-	private AbstractSocketClient socketClient;
+	private SocketClient socketClient;
 	
 	/** The props. */
 	ConnectorProperties props;
@@ -89,13 +88,13 @@ public class HMConnector {
 		connector.checkArguments(args);
 		connector.loadProperties(); 
 		connector.saveSettings();
-		connector.loadXML();
-		connector.initializeXMLRPCClient();
-		List<Device> devices = connector.getDevices();
-		connector.initDatabase(devices);
+//		connector.loadXML();
+//		connector.initializeXMLRPCClient();
+//		List<Device> devices = connector.getDevices();
+//		connector.initDatabase(devices);
 		connector.initWebsocketServer();
 		connector.startFlow();
-		connector.initXMLRPCServer();
+//		connector.initXMLRPCServer();
 	}
 
 	/**
@@ -118,8 +117,7 @@ public class HMConnector {
 	 * Inits the websocket client and starts it.
 	 */
 	private void initWebsocketServer() {
-		socketClient = SocketClient.getInstance();
-	//	socketClient = SecureSocketClient.getInstance();
+	    socketClient = SocketClient.getInstance();
 		socketClient.start(props.getDistributorURL()); // returns when server is started
 									// http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
 	}

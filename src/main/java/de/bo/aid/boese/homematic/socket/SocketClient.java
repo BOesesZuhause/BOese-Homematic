@@ -1,55 +1,23 @@
-/*             
- * 			  (                       
- *			 ( )\         (        (   
- *			 )((_)  (    ))\ (    ))\  
- *			((_)_   )\  /((_))\  /((_) 
- *			 | _ ) ((_)(_)) ((_)(_))   
- *			 | _ \/ _ \/ -_)(_-</ -_)  
- *			 |___/\___/\___|/__/\___|
- *       
- *           			;            
- *		      +        ;;;         + 
- *			  +       ;;;;;        + 
- *			  +      ;;;;;;;       + 
- *			  ++    ;;;;;;;;;     ++ 
- *			  +++++;;;;;;;;;;;+++++  
- *			   ++++;;;;;;;;;;;+++++  
- *				++;;;;;;;;;;;;;++    
- *			     ;;;;;;;;;;;;;;;     
- *			    ;;;;;;;;;;;;;;;;;     
- *				:::::::::::::::::    
- * 				:::::::::::::::::      
- *  			:::::::::::::::::    
- *   			::::::@@@@@::::::    
- *				:::::@:::::@:::::    
- *				::::@:::::::@::::    
- * 				:::::::::::::::::    
- *  			:::::::::::::::::      
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
- * ----------------------------------------------------------------------------
- */
 package de.bo.aid.boese.homematic.socket;
 
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-
-import javax.websocket.ClientEndpoint;
-import javax.websocket.CloseReason;
-import javax.websocket.ContainerProvider;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import de.bo.aid.boese.homematic.main.DatabaseCache;
 import de.bo.aid.boese.homematic.model.Connector;
@@ -58,25 +26,26 @@ import de.bo.aid.boese.json.RequestConnection;
 import de.bo.aid.boese.json.SendStatus;
 import de.bo.aid.boese.json.SendValue;
 
-
 /**
- * This class manages a websocketclient with unsecured connection. For secure connections use the secureSocketClient class.
+ * This class manages a websocketclient with secured connection.
  */
-@ClientEndpoint
-public class SocketClient extends AbstractSocketClient{
-	
+@WebSocket
+public class SocketClient
+{
 	/** logger for log4j. */
 	final static Logger logger = LogManager.getLogger(SocketClient.class);
 	
     /** The session of the client. */
     Session userSession = null;
     
-    /** The messagehandler which is subscribed. The messagehandler will 
-     *  receive all messages 'which are sent over the websocket connection */
+    /** The messagehandler which is subscribed to receive messages. */
     private MessageHandler messageHandler;
     
 	/** The databasecache used to read data quickly. */
 	DatabaseCache cache = DatabaseCache.getInstance();
+	
+	 /** The client. */
+ 	WebSocketClient client;
 	
 	/** The singleton-instance. */
 	private static SocketClient instance;
@@ -101,83 +70,92 @@ public class SocketClient extends AbstractSocketClient{
 	}
     
     /**
-	 * Starts the server and connects to it.
+	 * Starts the client and connects to the server.
 	 *
 	 * @param serverUri the uri of the server
 	 */
 	public void start(String serverUri){
-		URI uri = URI.create(serverUri);
-		MessageHandler handler = new ProtocolHandler(this);
-		addMessageHandler(handler);
-		connect(uri);
-	}
+        URI uri = URI.create(serverUri);
 
-    
-    /**
-     * Opens a Connection to a Websocketserver.
-     *
-     * @param endpointURI URI of the Websocketserver to which the connection should be opened.
-     */
-    public void connect(URI endpointURI){
-    	 try {
-             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-             container.connectToServer(this, endpointURI);
-         } catch (Exception e) {
-             throw new RuntimeException(e);
-         }
+        
+        SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setTrustAll(true); 
+
+        client = new WebSocketClient(sslContextFactory);
+
+        
+        try {
+            client.start();
+            SocketClient socket = this.getInstance();
+            
+            MessageHandler handler = new ProtocolHandler(socket);
+            addMessageHandler(handler);
+            
+            Future<Session> fut = client.connect(socket,uri);
+            userSession = fut.get();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
+
     /**
-     * Callback hook for Connection open events.
+     * Is called when a new connection is opened.
+     * Saves the session for later use.
      *
-     * @param userSession the userSession which is opened.
+     * @param sess the session object of the new session.
      */
-    @OnOpen
-    public void onOpen(Session userSession) {
+    @OnWebSocketConnect
+    public void onConnect(Session sess)
+    {
         System.out.println("opening websocket");
-        this.userSession = userSession;
+        this.userSession = sess;
     }
 
     /**
-     * Callback hook for Connection close events.
+     * Is called when a connection is closed.
+     * Deletes the saved session.
      *
-     * @param userSession the userSession which is getting closed.
-     * @param reason the reason for connection close
+     * @param statusCode the status code
+     * @param reason the reason
      */
-    @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
+    @OnWebSocketClose
+    public void onClose(int statusCode, String reason)
+    {
         System.out.println("closing websocket");
         messageHandler.closeConnection();
         this.userSession = null;
     }
 
     /**
-     * Callback hook for Message Events. This method will be invoked when a message is received.
+     * Is called when an error occured and logs the error.
      *
-     * @param message The text message
+     * @param cause the cause of the error
      */
-    @OnMessage
-    public void onMessage(String message) {
-        if (this.messageHandler != null) {
-        	logger.info("Client received Message: " + message);
-            this.messageHandler.handleMessage(message);
-        }
-    }
-    
-    /**
-     * On error-method. Called when errors occur. Logs the error.
-     *
-     * @param error The Exception which occured
-     */
-    @OnError
-    public void onError(Throwable error){
+    @OnWebSocketError
+    public void onError(Throwable cause)
+    {
     	messageHandler.closeConnection();
-    	logger.error(error.getMessage());
-    	error.printStackTrace();
+    	logger.error(cause.getMessage());
     }
 
     /**
-     * This method is used to register message handlers.
+     * Is called when a message is received. Forwards the message to the messagehandler.
+     *
+     * @param msg the received message
+     */
+    @OnWebSocketMessage
+    public void onMessage(String msg)
+    {
+    	 if (this.messageHandler != null) {
+         	logger.info("Client received Message: " + msg);
+             this.messageHandler.handleMessage(msg);
+         }
+    }
+    
+    /**
+     * registers a message handler.
      *
      * @param msgHandler the handler which should be registered
      */
@@ -192,92 +170,93 @@ public class SocketClient extends AbstractSocketClient{
      */
     public void sendMessage(String message) {
     	logger.info("Client sent Message: " + message);
-        this.userSession.getAsyncRemote().sendText(message);
+        try {
+			this.userSession.getRemote().sendString(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
-
-
-    
     
     //Protocol specific methods
 
-		/**
-		 * Sends a request-connection message to the distributor.
-		 */
-		public void requestConnection(){
-			
-			cache.update();	
-			Connector con = cache.getConnector();
-			
-			// Request connection
-			RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
-			OutputStream os = new ByteArrayOutputStream();
-			BoeseJson.parseMessage(reqCon, os);
-			sendMessage(os.toString());
-		}
+    /**
+     * Sends a request-connection message to the distributor.
+     */
+    public void requestConnection(){
+        
+        cache.update(); 
+        Connector con = cache.getConnector();
+        
+        // Request connection
+        RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(reqCon, os);
+        sendMessage(os.toString());
+    }
 
-		/**
-		 * Sends a value to the distributor.
-		 *
-		 * @param value the value
-		 * @param devId the id of the device, which is saved in the distributor
-		 * @param devCompId the id of the deviceComponent, which is saved in the distributor
-		 * @param time the timestamp of the value
-		 */
-		//wird von HomeMatic-Gerät aufgerufen
-		public void sendValue(double value, int devId, int devCompId, long time){
+    /**
+     * Sends a value to the distributor.
+     *
+     * @param value the value
+     * @param devId the id of the device, which is saved in the distributor
+     * @param devCompId the id of the deviceComponent, which is saved in the distributor
+     * @param time the timestamp of the value
+     */
+    //wird von HomeMatic-Gerät aufgerufen
+    public void sendValue(double value, int devId, int devCompId, long time){
 
-			int conId = cache.getConnector().getIdverteiler();
-			
-			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
-			OutputStream os = new ByteArrayOutputStream();
-			BoeseJson.parseMessage(sendval, os);
-			sendMessage(os.toString());
-		}
-		
-		/**
-		 * Sendvalue message for components with type=action.
-		 * It automatically sends a second message which resets the value.
-		 * It is used for switches which send a single "true" value when pressed,
-		 * but never send a reset value.
-		 *
-		 * @param value the value
-		 * @param devId the id of the device, which is saved in the distributor
-		 * @param devCompId the id of the deviceComponent, which is saved in the distributor
-		 * @param time the timestamp of the value
-		 */
-		public void sendAction(double value, int devId, int devCompId, long time) {
+        int conId = cache.getConnector().getIdverteiler();
+        
+        SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(sendval, os);
+        sendMessage(os.toString());
+    }
+    
+    /**
+     * Sendvalue message for components with type=action.
+     * It automatically sends a second message which resets the value.
+     * It is used for switches which send a single "true" value when pressed,
+     * but never send a reset value.
+     *
+     * @param value the value
+     * @param devId the id of the device, which is saved in the distributor
+     * @param devCompId the id of the deviceComponent, which is saved in the distributor
+     * @param time the timestamp of the value
+     */
+    public void sendAction(double value, int devId, int devCompId, long time) {
 
-			int conId = cache.getConnector().getIdverteiler();
+        int conId = cache.getConnector().getIdverteiler();
 
-			SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
-			OutputStream os = new ByteArrayOutputStream();
-			BoeseJson.parseMessage(sendval, os);
-			sendMessage(os.toString());
-			
-			sendval = new SendValue(devId, devCompId, 0, time, conId, 0, System.currentTimeMillis());
-			os = new ByteArrayOutputStream();
-			BoeseJson.parseMessage(sendval, os);
-			sendMessage(os.toString());
-			
-		}
+        SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(sendval, os);
+        sendMessage(os.toString());
+        
+        sendval = new SendValue(devId, devCompId, 0, time, conId, 0, System.currentTimeMillis());
+        os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(sendval, os);
+        sendMessage(os.toString());
+        
+    }
 
-		/**
-		 * Senda a status message to the distributor. It can be used when the status of
-		 * a device changes to inform the distributor.
-		 *
-		 * @param devCompId the dev comp id
-		 * @param statusCode the status code
-		 * @param statusTimestamp the status timestamp
-		 */
-		public void sendStatus(int devCompId, int statusCode, int statusTimestamp) {
-			int conId = cache.getConnector().getIdverteiler();
-			
-			SendStatus ss = new SendStatus(devCompId, statusCode, statusTimestamp, true, conId, 0, System.currentTimeMillis());
-			OutputStream os = new ByteArrayOutputStream();
-			BoeseJson.parseMessage(ss, os);
-			sendMessage(os.toString());
-		}
+    /**
+     * Senda a status message to the distributor. It can be used when the status of
+     * a device changes to inform the distributor.
+     *
+     * @param devCompId the dev comp id
+     * @param statusCode the status code
+     * @param statusTimestamp the status timestamp
+     */
+    public void sendStatus(int devCompId, int statusCode, int statusTimestamp) {
+        int conId = cache.getConnector().getIdverteiler();
+        
+        SendStatus ss = new SendStatus(devCompId, statusCode, statusTimestamp, true, conId, 0, System.currentTimeMillis());
+        OutputStream os = new ByteArrayOutputStream();
+        BoeseJson.parseMessage(ss, os);
+        sendMessage(os.toString());
+    }
 
-  
 
 }
