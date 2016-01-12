@@ -76,7 +76,7 @@ public class XMLRPCClient {
 	 * The id of the client. This is used by the homematic-server to identify
 	 * the client.
 	 */
-	private final String clientId = "123"; // TODO save in DB
+	private final String clientId = "1234"; // TODO save in DB
 
 	/** The client object. */
 	private XmlRpcClient client;

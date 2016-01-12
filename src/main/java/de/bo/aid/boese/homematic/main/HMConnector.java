@@ -207,8 +207,7 @@ public class HMConnector {
 	 */
 	private List<Device> filterDevices(List<Device> devices) {
 		List<Device> out = new ArrayList<>();
-
-		xml: for (DeviceXML devXML : xml.getDevices()) {
+		for (DeviceXML devXML : xml.getDevices()) {
 			for (Device dev : devices) {
 				if (devXML.getModel().equals(dev.getType())) {
 
@@ -233,7 +232,6 @@ public class HMConnector {
 					}
 					out.add(dev);
 					logger.info("Added Device via XML: " + dev);
-					continue xml;
 				} else {
 				}
 
