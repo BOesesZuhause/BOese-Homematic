@@ -123,6 +123,7 @@ public class ComponentDao {
 		}
 		comp = (Component) list.get(0);
 		session.getTransaction().commit();
+		session.close();
 		return comp;
 	}
 

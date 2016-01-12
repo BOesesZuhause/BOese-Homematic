@@ -49,6 +49,8 @@ public class DeviceXML {
 	/**  The model of the device (equivalent to the homematic-modellnumber). */
 	private String model;
 	
+	private String name;
+	
 	/** The firmware-version of the device. */
 	private String firmware;
 	
@@ -74,6 +76,20 @@ public class DeviceXML {
 	}
 	
 	/**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
 	 * Gets the firmware.
 	 *
 	 * @return the firmware
