@@ -86,13 +86,13 @@ public class HMConnector {
 		connector.checkArguments(args);
 		connector.loadProperties(); 
 		connector.saveSettings();
-//		connector.loadXML();
-//		connector.initializeXMLRPCClient();
-//		List<Device> devices = connector.getDevices();
-//		connector.initDatabase(devices);
+		connector.loadXML();
+		connector.initializeXMLRPCClient();
+		List<Device> devices = connector.getDevices();
+		connector.initDatabase(devices);
 		connector.initWebsocketServer();
 		connector.startFlow();
-//		connector.initXMLRPCServer();
+		connector.initXMLRPCServer();
 	}
 
 	/**
