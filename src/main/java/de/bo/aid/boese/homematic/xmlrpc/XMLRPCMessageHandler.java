@@ -73,6 +73,8 @@ public class XMLRPCMessageHandler {
 	public void event(String interface_id, String address, String value_key, Object valueObj){
 		logger.info("received event: address: " + address + ", value_key: " + value_key + ", value: " + valueObj.toString());
 	
+		//TODO use databasecache
+		
 		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
 		if(comp == null){
 			return;

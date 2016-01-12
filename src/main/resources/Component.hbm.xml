@@ -8,8 +8,8 @@
             <column name="compid" />
             <generator class="sequence" />
         </id>
-        <many-to-one name="device" class="de.bo.aid.boese.homematic.model.Device" fetch="select">
-            <column name="devid" not-null="true" />
+        <many-to-one name="device" class="de.bo.aid.boese.homematic.model.Device" lazy="false" fetch="select">
+            <column name="devid"  not-null="true" />
         </many-to-one>
         <property name="idverteiler" type="java.lang.Integer">
             <column name="idverteiler" unique="false" />
