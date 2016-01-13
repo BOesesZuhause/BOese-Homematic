@@ -118,12 +118,12 @@ public class ComponentDao {
 		query.setParameter("address", address);
 		query.setParameter("hm_id", name);
 		List<?> list = query.list();
+	      session.getTransaction().commit();
+	        session.close();
 		if(list.size() != 1){
 			return null;
 		}
 		comp = (Component) list.get(0);
-		session.getTransaction().commit();
-		session.close();
 		return comp;
 	}
 
