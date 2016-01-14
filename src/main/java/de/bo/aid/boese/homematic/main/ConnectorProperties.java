@@ -39,6 +39,8 @@ public class ConnectorProperties extends Properties{
     /** The tls. */
     private final String TLS = "tls_enabled";
     
+    private final String HM_ID = "homematic-clientID";
+    
     /** The logger. */
     final  Logger logger = LogManager.getLogger(ConnectorProperties.class);
     
@@ -69,6 +71,9 @@ public class ConnectorProperties extends Properties{
             file = new FileInputStream(path);
         } catch (FileNotFoundException e) {
             logger.error("config File not found at: " + path, e);
+            logger.info("Generating default properties file");
+            this.setDefaults();
+            this.save(path);
             System.exit(0);
         }
 
@@ -123,8 +128,9 @@ public class ConnectorProperties extends Properties{
        this.setDevicesFile("Devices.xml");
        this.setDistributorURL("ws:\\\\example.org:8081\\events");
        this.setHomematicURL("http:\\\\example.org:2001");
-       this.setTLS(true);
+       //this.setTLS(true);
        this.setName("HomematicConnector");
+       this.setHMClientID(666);
     }
     
     /**
@@ -197,6 +203,14 @@ public class ConnectorProperties extends Properties{
      */
     public String getName(){
         return this.getProperty(NAME);
+    }
+    
+    public void setHMClientID(int id){
+        this.setProperty(HM_ID, id + "");
+    }
+    
+    public int getHMClientID(){
+        return Integer.parseInt(this.getProperty(HM_ID));
     }
     
     /**

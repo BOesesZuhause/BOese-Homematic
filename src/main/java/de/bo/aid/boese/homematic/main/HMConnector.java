@@ -194,6 +194,7 @@ public class HMConnector {
 	 */
 	private void initializeXMLRPCClient() {
 		client = XMLRPCClient.getInstance();
+		client.setClientID(props.getHMClientID());
 		client.init(props.getHomematicURL());
 	}
 

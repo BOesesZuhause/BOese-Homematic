@@ -51,8 +51,8 @@ public class Parameters {
 	private boolean validate = false;
 	
 	/**  Describes the path to the config file. */
-	@Parameter(names = "-config", description = "Path to the config-file", required=true)
-	private String config;
+	@Parameter(names = "-config", description = "Path to the config-file")
+	private String config = "settings.properties";
 	
 	
 	/**  If set a defalt config is genrated. */
