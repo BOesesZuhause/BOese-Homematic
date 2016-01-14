@@ -126,9 +126,9 @@ public class ConnectorProperties extends Properties{
      */
     public void setDefaults(){
        this.setDevicesFile("Devices.xml");
-       this.setDistributorURL("ws:\\\\example.org:8081\\events");
-       this.setHomematicURL("http:\\\\example.org:2001");
-       //this.setTLS(true);
+       this.setDistributorURL("example.org:8081/events");
+       this.setHomematicURL("http://example.org:2001");
+       this.setTLS(true);
        this.setName("HomematicConnector");
        this.setHMClientID(666);
     }

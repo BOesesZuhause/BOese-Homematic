@@ -90,7 +90,7 @@ public class HMConnector {
 		connector.initializeXMLRPCClient();
 		List<Device> devices = connector.getDevices();
 		connector.initDatabase(devices);
-		connector.initWebsocketServer();
+		connector.initWebsocketClient();
 		connector.startFlow();
 		connector.initXMLRPCServer();
 	}
@@ -114,9 +114,18 @@ public class HMConnector {
 	/**
 	 * Inits the websocket client and starts it.
 	 */
-	private void initWebsocketServer() {
+	private void initWebsocketClient() {
 	    socketClient = SocketClient.getInstance();
-		socketClient.start(props.getDistributorURL()); // returns when server is started
+	    String url;
+	    if(props.getTLS()){
+	        url = "wss://";
+	    }else{
+	        url = "ws://";
+	    }
+	    url = url + props.getDistributorURL();
+	    
+	    
+		socketClient.start(url); // returns when server is started
 									// http://stackoverflow.com/questions/4483928/is-an-embedded-jetty-server-guaranteed-to-be-ready-for-business-when-the-call
 	}
 
