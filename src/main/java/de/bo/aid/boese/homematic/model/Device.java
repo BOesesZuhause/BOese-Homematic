@@ -48,14 +48,14 @@ public class Device implements java.io.Serializable {
 	private static final long serialVersionUID = 6215317994521160493L;
 
 	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Device [devid=" + devid + ",  idverteiler=" + idverteiler + ", adress="
-				+ adress + ", type=" + type + ", version=" + version + ", firmware=" + firmware + ", components="
-				+ components + "]";
-	}
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Device [devid=" + devid + ", idverteiler=" + idverteiler + ", adress=" + adress + ", type=" + type
+                + ", name=" + name + ", version=" + version + ", firmware=" + firmware + ", components=" + components
+                + "]";
+    }
 
 	/** The primary key. */
 	private int devid;
@@ -71,6 +71,8 @@ public class Device implements java.io.Serializable {
 	/** The homematic-type. It contains the model of the physical
 	 * homematic device. */
 	private String type;
+	
+	private String name;
 	
 	/** The homematic-version of the device. */
 	private int version;
@@ -122,9 +124,22 @@ public class Device implements java.io.Serializable {
 	public void setDevid(int devid) {
 		this.devid = devid;
 	}
+	
+	
 
 
 	/**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setUniqueName(String name){
+        this.name = name + " (" + this.adress + ")";
+    }
+
+    /**
 	 * Gets the idverteiler.
 	 *
 	 * @return the idverteiler
@@ -222,7 +237,7 @@ public class Device implements java.io.Serializable {
 	 * @return the unique name of the device
 	 */
 	public String getName(){
-		return "HM_" + type + "_" + adress;
+	    return name;
 	}
 
 }

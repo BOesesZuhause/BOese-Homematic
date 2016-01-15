@@ -30,7 +30,8 @@
                         <number>2</number>
                 </channel>
                 <firmware>1.6</firmware>
-                <model>HM-ES-PMSw1-Pl</model>
+                <model>Funk-Schaltaktor mit Leistungsmessung</model>
+                <name></name>
         </device>
         <device>
                 <channel>
@@ -114,6 +115,7 @@
                         <number>8</number>
                 </channel>
                 <model>HM-RC-8</model>
+                <name>Funk-Fernbedienung 8 Tasten</name>
         </device>
         <device>
                 <channel>
@@ -141,9 +143,11 @@
                         <number>4</number>
                 </channel>
                 <model>HM-CC-RT-DN</model>
+                <name>Funk-Heizkörperthermostat</name>
         </device>
         <device>
                 <model>HM-WDS10-TH-O</model>
+                <name>Funk-Temperatur-/Feuchtesensor außen</name>
                 <channel>
                         <number>1</number>
                         <component>
@@ -164,6 +168,7 @@
         </device>
         <device>
                 <model>HM-WDS40-TH-I-2</model>
+                <name>Funk-Temperatur-/Feuchtesensor innen</name>
                 <channel>
                         <number>1</number>
                         <component>
@@ -184,6 +189,7 @@
         </device>
         <device>
         <model>HM-TC-IT-WM-W-EU</model>
+        <name>Funk-Wandthermostat Aufputz</name>
         <channel>
             <number>1</number>
             <component>
@@ -204,6 +210,7 @@
     </device>
     <device>
      <model>HM-Sec-SCo</model>
+     <name>Tür-Fensterkontakt, optisch</name>
         <channel>
             <number>1</number>
             <component>

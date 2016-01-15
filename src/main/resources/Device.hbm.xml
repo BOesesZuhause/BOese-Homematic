@@ -15,6 +15,9 @@
         <property name="adress" type="string">
             <column name="adress" length="125" />
         </property>
+        <property name="name" type="string">
+            <column name="name" length="125" />
+        </property>
            <property name="type" type="string">
             <column name="typ" length="125" />
         </property>

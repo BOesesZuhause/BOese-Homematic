@@ -220,7 +220,7 @@ public class HMConnector {
 		for (DeviceXML devXML : xml.getDevices()) {
 			for (Device dev : devices) {
 				if (devXML.getModel().equals(dev.getType())) {
-
+				    dev.setUniqueName(devXML.getName());
 					for (ChannelXML channelXML : devXML.getChannels()) {
 						int channelID = channelXML.getNumber();
 						for (ComponentXML compXML : channelXML.getComponents()) {
