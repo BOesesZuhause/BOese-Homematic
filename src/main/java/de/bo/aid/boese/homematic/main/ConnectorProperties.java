@@ -25,21 +25,21 @@ import org.apache.logging.log4j.Logger;
 public class ConnectorProperties extends Properties{
     
     /** The devices file. */
-    private final String DEVICES_FILE = "KnownDevicesFilePath";
+    private final String DEVICES_FILE = "known_devices_file_path";
     
     /** The distributor url. */
-    private final String DISTRIBUTOR_URL = "DistributorURL";
+    private final String DISTRIBUTOR_URL = "distributor_url";
     
     /** The name. */
-    private final String NAME = "ConnectorName";
+    private final String NAME = "connector_name";
     
     /** The homematic. */
-    private final String HOMEMATIC = "HomematicURL";
+    private final String HOMEMATIC = "homematic_url";
     
     /** The tls. */
     private final String TLS = "tls_enabled";
     
-    private final String HM_ID = "homematic-clientID";
+    private final String HM_ID = "homematic_clientId";
     
     /** The logger. */
     final  Logger logger = LogManager.getLogger(ConnectorProperties.class);
