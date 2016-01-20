@@ -30,8 +30,8 @@
                         <number>2</number>
                 </channel>
                 <firmware>1.6</firmware>
-                <model>Funk-Schaltaktor mit Leistungsmessung</model>
-                <name></name>
+                <model>HM-ES-PMSw1-Pl</model>
+                <name>Funk-Schaltaktor mit Leistungsmessung</name>
         </device>
         <device>
                 <channel>
