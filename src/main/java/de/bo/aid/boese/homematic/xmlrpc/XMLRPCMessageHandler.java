@@ -90,12 +90,13 @@ public class XMLRPCMessageHandler {
 		}
 		
 		if(value_key.equals("UNREACH")){
+		    logger.warn("Device with address: " + address + " is unreachable");
 			if(valueObj.equals(true)){
 				wsClient.sendStatus(devCompId, Status.ACTOR_DOES_NOT_REACT, -1);
 			}else{
 			    wsClient.sendStatus(devCompId, Status.ACTIVE, -1);
 			}
-			
+			return;
 		}else if(value_key.equals("LOWBAT")){
 			if(valueObj.equals(true)){
 			    wsClient.sendStatus(devCompId, Status.BATTERY, -1);

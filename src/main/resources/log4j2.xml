@@ -13,10 +13,9 @@
         
     </Appenders>
     <Loggers>
-               <logger name="org.hibernate.engine.transaction" level="DEBUG" additivity="false">
-            <AppenderRef ref="STDOUT" />
-            <AppenderRef ref="MyFile" />
-        </logger>
+<!--                <logger name="org.hibernate.engine.transaction" level="DEBUG" additivity="false"> -->
+<!--             <AppenderRef ref="STDOUT" /> -->
+<!--         </logger> -->
                 <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
         </Root>
