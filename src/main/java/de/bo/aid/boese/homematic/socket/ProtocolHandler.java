@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
 import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.constants.Status;
@@ -182,7 +183,12 @@ public class ProtocolHandler implements MessageHandler{
 			logger.warn("requested component with id: " + bjMessage.getDeviceComponentId() + " not found");
 			e.printStackTrace();
 		}
-		XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue(), comp.getType());		
+		try {
+            XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue(), comp.getType());
+        } catch (XmlRpcException e) {
+            logger.error("Could not set component: " + comp.getName() + " to: " + bjMessage.getValue());
+            client.sendStatus(comp.getIdverteiler(), Status.ACTOR_DOES_NOT_REACT, System.currentTimeMillis());   
+        }		
 	}
 
 	/**

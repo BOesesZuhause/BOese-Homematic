@@ -117,7 +117,11 @@ public class XMLRPCClient {
 
 		Object[] params = new Object[] {};
 		Object obj = null;
-		obj = makeRequest("listDevices", params);
+		try {
+            obj = makeRequest("listDevices", params);
+        } catch (XmlRpcException e) {
+            logger.error("Could not retrieve devices:", e);
+        }
 		if (obj == null) {
 			logger.error("no devices returned from homematic. Shutting down");
 			System.exit(0);
@@ -138,7 +142,12 @@ public class XMLRPCClient {
 
 		Object[] params = new Object[] { address, "VALUES" };
 		Object obj = null;
-		obj = makeRequest("getParamsetDescription", params);
+		try {
+            obj = makeRequest("getParamsetDescription", params);
+        } catch (XmlRpcException e) {
+            logger.error("Could not retrieve paramsets", e);
+            //TODO Eventuell Status der Komponenten anpassen
+        }
 		if (obj == null) {
 			logger.warn("no paramsets returned from homematic for device with address: " + address);
 		}
@@ -156,7 +165,11 @@ public class XMLRPCClient {
 	public void sendInit(String url) {
 
 		Object[] params = new Object[] { url, clientId };
-		makeRequest("init", params);
+		try {
+            makeRequest("init", params);
+        } catch (XmlRpcException e) {
+            logger.error("Could not send init", e);
+        }
 	}
 	
 	public void setClientID(int id){
@@ -174,11 +187,12 @@ public class XMLRPCClient {
 	 *            the value
 	 * @param type
 	 *            the type of the value (BOOL, FLOAT, ACTION, INTEGER, ENUM)
+	 * @throws XmlRpcException 
 	 */
 
 
 	// TODO Dataformat for String and Enum
-	public void setValue(String address, String name, double value, String type) {
+	public void setValue(String address, String name, double value, String type) throws XmlRpcException {
 		Object valueSent = null;
 		switch (type) {
 		case "BOOL":
@@ -216,8 +230,9 @@ public class XMLRPCClient {
 	 * @param type the type of the value
 	 * @param name the name of the component
 	 * @return the value
+	 * @throws XmlRpcException 
 	 */
-	public double getValue(String address, String type, String name){
+	public double getValue(String address, String type, String name) throws XmlRpcException{
 		
 		double value = 0; //default-value
 		
@@ -259,8 +274,9 @@ public class XMLRPCClient {
 	 * @param method            the methodname of the called method
 	 * @param params            the parameters for the method
 	 * @return the answer as raw data
+	 * @throws XmlRpcException 
 	 */
-	private Object makeRequest(String method, Object[] params) {
+	private Object makeRequest(String method, Object[] params) throws XmlRpcException {
 		try {
 			logger.info("Send XMLRPC-Request: " + method);
 			return client.execute(method, params);
@@ -270,6 +286,7 @@ public class XMLRPCClient {
 			} else {
 				logger.error("error while sending xmlrpc-request:");
 				e.printStackTrace();
+				throw e;
 			}
 		}
 		return null;

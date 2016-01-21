@@ -249,7 +249,7 @@ public class SocketClient
      * @param statusCode the status code
      * @param statusTimestamp the status timestamp
      */
-    public void sendStatus(int devCompId, int statusCode, int statusTimestamp) {
+    public void sendStatus(int devCompId, int statusCode, long statusTimestamp) {
         int conId = cache.getConnector().getIdverteiler();
         
         SendStatus ss = new SendStatus(devCompId, statusCode, statusTimestamp, true, conId, 0, System.currentTimeMillis());

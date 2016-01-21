@@ -35,15 +35,18 @@
 package de.bo.aid.boese.homematic.xmlrpc;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
+import de.bo.aid.boese.homematic.dao.DeviceDao;
 import de.bo.aid.boese.homematic.main.DatabaseCache;
 import de.bo.aid.boese.homematic.main.HMConnector;
 import de.bo.aid.boese.homematic.model.Component;
+import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketClient;
 
 
@@ -75,6 +78,30 @@ public class XMLRPCMessageHandler {
 	
 		//TODO use databasecache
 		
+		
+        if (value_key.equals("UNREACH") || value_key.equals("LOWBAT")) {
+            String[] split = address.split(":");
+            address = split[0];
+            Device dev = DeviceDao.getByAddress(address);
+            Set<Component> components = dev.getComponents();
+            int status = Status.NO_STATUS;
+            switch (value_key) {
+            case "UNREACH":
+                status = Status.UNAVAILABLE;
+                break;
+            case "LOWBAT":
+                status = Status.BATTERY;
+                break;
+            default:
+                status = Status.UNKNOWN;
+            }
+            for (Component comp : components) {
+                wsClient.sendStatus(comp.getIdverteiler(), status, System.currentTimeMillis());
+            }
+            return;
+        }
+		
+	      
 		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
 		if(comp == null){
 			return;
@@ -89,22 +116,6 @@ public class XMLRPCMessageHandler {
 			return;
 		}
 		
-		if(value_key.equals("UNREACH")){
-		    logger.warn("Device with address: " + address + " is unreachable");
-			if(valueObj.equals(true)){
-				wsClient.sendStatus(devCompId, Status.ACTOR_DOES_NOT_REACT, -1);
-			}else{
-			    wsClient.sendStatus(devCompId, Status.ACTIVE, -1);
-			}
-			return;
-		}else if(value_key.equals("LOWBAT")){
-			if(valueObj.equals(true)){
-			    wsClient.sendStatus(devCompId, Status.BATTERY, -1);
-			}else{
-			    wsClient.sendStatus(devCompId, Status.ACTIVE, -1);
-			}
-			
-		}
 
 		double value = 0;
 		String type = comp.getType();
