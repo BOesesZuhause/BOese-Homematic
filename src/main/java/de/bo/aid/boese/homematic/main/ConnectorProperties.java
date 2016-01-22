@@ -19,7 +19,8 @@ import org.apache.logging.log4j.Logger;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ConnectorProperties.
+ * The Class represents the properties-file of the HomeMatic-Connector. 
+ * It contains all available properties as member variables. 
  */
 @SuppressWarnings("serial")
 public class ConnectorProperties extends Properties{
@@ -27,10 +28,10 @@ public class ConnectorProperties extends Properties{
     /** The devices file. */
     private final String DEVICES_FILE = "known_devices_file_path";
     
-    /** The distributor url. */
+    /** The url of the distributor. */
     private final String DISTRIBUTOR_URL = "distributor_url";
     
-    /** The name. */
+    /** The name of the connector. */
     private final String NAME = "connector_name";
     
     /** The homematic. */
@@ -60,9 +61,10 @@ public class ConnectorProperties extends Properties{
     }
     
   /**
-   * Load.
+   * This method loads the properties file from the given path. 
+   * The parameters are validated automatically. The connector shuts down if an error occured.
    *
-   * @param path the path
+   * @param path the path to the settings-file.
    */
   //TODO validate properties
     public void load(String path){
@@ -98,9 +100,10 @@ public class ConnectorProperties extends Properties{
     }
     
     /**
-     * Save.
+     * Saves the current settings to a file. It can be used
+     * to generate a new settings-file with default-values.
      *
-     * @param path the path
+     * @param path the path to the settings file.
      */
     public void save(String path){
         OutputStream output = null;
@@ -122,7 +125,7 @@ public class ConnectorProperties extends Properties{
     }
     
     /**
-     * Sets the defaults.
+     * Sets default-values for all attributes..
      */
     public void setDefaults(){
        this.setDevicesFile("Devices.xml");
@@ -134,63 +137,63 @@ public class ConnectorProperties extends Properties{
     }
     
     /**
-     * Sets the devices file.
+     * Sets the value of the devices-file-attribute.
      *
-     * @param path the new devices file
+     * @param path the new value of the devices-file-attribute.
      */
     public void setDevicesFile(String path){
         this.setProperty(DEVICES_FILE, path);
     }
     
     /**
-     * Gets the devices file.
+     * Gets the value of the devices-file-attribute.
      *
-     * @return the devices file
+     * @return the value of the devices-file-attribute.
      */
     public String getDevicesFile(){
         return this.getProperty(DEVICES_FILE);
     }
     
     /**
-     * Sets the distributor url.
+     * Sets the value of the distributor url-attribute.
      *
-     * @param path the new distributor url
+     * @param path the new value of the distributor url-attribute.
      */
     public void setDistributorURL(String path){
         this.setProperty(DISTRIBUTOR_URL, path);
     }
     
     /**
-     * Gets the distributor url.
+     * Gets the value of the distributor url-attribute.
      *
-     * @return the distributor url
+     * @return the value of the distributor url-attribute.
      */
     public String getDistributorURL(){
         return this.getProperty(DISTRIBUTOR_URL);
     }
     
     /**
-     * Sets the homematic url.
+     * Sets the value of the homematic url-attribute.
      *
-     * @param path the new homematic url
+     * @param path the new value of the homematic url-attribute.
      */
     public void setHomematicURL(String path){
         this.setProperty(HOMEMATIC, path);
     }
     
     /**
-     * Gets the homematic url.
+     * Gets the value of the homematic url-attribute.
      *
-     * @return the homematic url
+     * @return the value of the homematic url-attribute.
      */
     public String getHomematicURL(){
         return this.getProperty(HOMEMATIC);
     }
     
     /**
-     * Sets the name.
+     * Sets the option for the name-attribute.
      *
-     * @param name the new name
+     * @param name the new name.
      */
     public void setName(String name){
         this.setProperty(NAME, name);
@@ -205,27 +208,38 @@ public class ConnectorProperties extends Properties{
         return this.getProperty(NAME);
     }
     
+    /**
+     * Sets the option for the homematic_client_id-attribute.
+     *
+     * @param id the value for the homematic_client_id-attribute-atribute
+     */
     public void setHMClientID(int id){
         this.setProperty(HM_ID, id + "");
     }
     
+    
+    /**
+     * Gets the option for the homematic_client_id-attribute.
+     *
+     * @return  the value for the homematic_client_id-attribute-atribute
+     */
     public int getHMClientID(){
         return Integer.parseInt(this.getProperty(HM_ID));
     }
     
     /**
-     * Sets the tls.
+     * Sets the option for the tls-attribute.
      *
-     * @param tls the new tls
+     * @param tls the value for the tls-atribute
      */
     public void setTLS(boolean tls){
         this.setProperty(TLS, tls + "");
     }
     
     /**
-     * Gets the tls.
+     * Gets the option for tls.
      *
-     * @return the tls
+     * @return the value ot the tls-attribute
      */
     public boolean getTLS(){
         return Boolean.parseBoolean(this.getProperty(TLS));

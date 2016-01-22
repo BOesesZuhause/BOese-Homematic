@@ -43,8 +43,6 @@ import org.apache.logging.log4j.LogManager;
 import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.main.DatabaseCache;
-import de.bo.aid.boese.homematic.main.HMConnector;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketClient;
