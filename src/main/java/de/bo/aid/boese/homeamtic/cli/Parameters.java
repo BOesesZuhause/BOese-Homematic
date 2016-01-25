@@ -42,29 +42,52 @@ import com.beust.jcommander.Parameter;
  */
 public class Parameters {
 	
+	public static final boolean DEFAULT_VALIDATE = false;
+	public static final String DEFAULT_DURL = "127.0.0.1:8081/events/";
+	public static final String DEFAULT_DEVICES = "Devices.xml";
+	public static final int DEFAULT_HMID = 666;
+	public static final String DEFAULT_HMURL = "http://homematic-ccu2:2001";
+	public static final boolean DEFAULT_TLS = true;
+	public static final String DEFAULT_NAME = "BOese-HomeMatic";
+	
+	/**  Describes the path to the config file. */
+	@Parameter(names = "-c", description = "Path to the config-file")
+	private String config = "settings.properties";
+	
 	/**  Parameter for the generation of an xml-file with all devices. */
 	@Parameter(names = "-generate", description = "Generates XML-File with all responding HomeMatic-Devices")
 	private boolean generate = false;
 	
 	/**  If set, the devices configured in the xml-file are validated against the homematic system. */
-	@Parameter(names = "-validate", description = "Validates the content of the xml-file against homematic")
-	private boolean validate = false;
+	@Parameter(names = "-validate", description = "Validates the content of the xml-file against homematic", arity = 1)
+	private boolean validate = DEFAULT_VALIDATE;
 	
 	/**  Describes the path to the config file. */
-	@Parameter(names = "-config", description = "Path to the config-file")
-	private String config = "settings.properties";
+	@Parameter(names = "-dURL", description = "The URL of the Distributor.")
+	private String dURL = DEFAULT_DURL;
 	
+	/**  Describes the path to the config file. */
+	@Parameter(names = "-d", description = "The path to the devices-file.")
+	private String devices = DEFAULT_DEVICES;
 	
-	/**  If set a defalt config is genrated. */
-	@Parameter(names = "-genconfig", description = "Generates a default config file at the location configured with -config")
-	private boolean genConfig = false;
+	/**  Describes the path to the config file. */
+	@Parameter(names = "-hmID", description = "The client ID for the connection with HomeMatic.")
+	private Integer hmID = DEFAULT_HMID;
+	
+	/**  Describes the path to the config file. */
+	@Parameter(names = "-hmURL", description = "The URL of the Distributor of the HomeMatic CCU.")
+	private String hmURL = DEFAULT_HMURL;
+	
+	/**  Describes the path to the config file. */
+	@Parameter(names = "-tls", description = "encrypt the connection to the distributor.", arity = 1)
+	private boolean tls = DEFAULT_TLS;
 	
 	/**
 	 * Checks if is validate.
 	 *
 	 * @return true, if is validate
 	 */
-	public boolean isValidate() {
+	public Boolean isValidate() {
 		return validate;
 	}
 
@@ -76,14 +99,9 @@ public class Parameters {
 	public String getConfig() {
 		return config;
 	}
-
-	/**
-	 * Checks if is gen config.
-	 *
-	 * @return true, if is gen config
-	 */
-	public boolean isGenConfig() {
-		return genConfig;
+	
+	public Integer getHmID(){
+		return hmID;
 	}
 
 
@@ -95,6 +113,22 @@ public class Parameters {
 	 */
 	public boolean isGenerate() {
 		return generate;
+	}
+
+	public String getdURL() {
+		return dURL;
+	}
+
+	public String getDevices() {
+		return devices;
+	}
+
+	public String getHmURL() {
+		return hmURL;
+	}
+
+	public Boolean isTls() {
+		return tls;
 	}
 
 

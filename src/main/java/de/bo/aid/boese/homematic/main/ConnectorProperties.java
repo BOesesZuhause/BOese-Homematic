@@ -13,9 +13,12 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import de.bo.aid.boese.homeamtic.cli.Parameters;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -27,7 +30,7 @@ public class ConnectorProperties extends Properties{
     
     /** The devices file. */
     private final String DEVICES_FILE = "known_devices_file_path";
-    
+       
     /** The url of the distributor. */
     private final String DISTRIBUTOR_URL = "distributor_url";
     
@@ -39,6 +42,8 @@ public class ConnectorProperties extends Properties{
     
     /** The tls. */
     private final String TLS = "tls_enabled";
+    
+    private final String VALIDATE = "validate_devices_file";
     
     private final String HM_ID = "homematic_clientId";
     
@@ -67,17 +72,11 @@ public class ConnectorProperties extends Properties{
    * @param path the path to the settings-file.
    */
   //TODO validate properties
-    public void load(String path){
+    public void load(String path) throws FileNotFoundException{
         FileInputStream file = null;
-        try {
+        
             file = new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            logger.error("config File not found at: " + path, e);
-            logger.info("Generating default properties file");
-            this.setDefaults();
-            this.save(path);
-            System.exit(0);
-        }
+        
 
         // load all the properties from the file
         try {
@@ -94,9 +93,9 @@ public class ConnectorProperties extends Properties{
             logger.error("IO-Exception while closing config-file", e);
             System.exit(0);
         }
-        if(!validate()){
-            System.exit(0);
-        }
+//        if(!validate()){
+//            System.exit(0);
+//        }
     }
     
     /**
@@ -125,15 +124,97 @@ public class ConnectorProperties extends Properties{
     }
     
     /**
-     * Sets default-values for all attributes..
+     * Sets default-values for all attributes.
      */
-    public void setDefaults(){
-       this.setDevicesFile("Devices.xml");
-       this.setDistributorURL("example.org:8081/events");
-       this.setHomematicURL("http://example.org:2001");
-       this.setTLS(true);
-       this.setName("HomematicConnector");
-       this.setHMClientID(666);
+//    public void setDefaults(){
+//       this.setDevicesFile("Devices.xml");
+//       this.setDistributorURL("example.org:8081/events");
+//       this.setHomematicURL("http://example.org:2001");
+//       this.setTLS(true);
+//       this.setName("HomematicConnector");
+//       this.setHMClientID(666);
+//    }
+    
+    public void setParams(Parameters params){
+    	boolean change = false;
+    	if(this.getDevicesFile() == null){
+        	this.setDevicesFile(Parameters.DEFAULT_DEVICES);
+        	logger.warn(DEVICES_FILE + " was not set. Using default value");
+        	change = true;
+    	}
+    	if(this.getDistributorURL() == null){
+        	this.setDistributorURL(Parameters.DEFAULT_DURL);
+        	logger.warn(DISTRIBUTOR_URL + " was not set. Using default value");
+        	change = true;
+    	}
+    	if(this.getHMClientID() == null){
+        	this.setHMClientID(Parameters.DEFAULT_HMID);
+        	logger.warn(HM_ID + " was not set. Using default value");
+        	change = true;
+    	}
+    	if(this.getHomematicURL() == null){
+        	this.setHomematicURL(Parameters.DEFAULT_HMURL);	
+        	logger.warn(HOMEMATIC + " was not set. Using default value");
+        	change = true;
+    	}
+    	if(this.getValidate() == null){
+        	this.setValidate(Parameters.DEFAULT_VALIDATE);
+        	logger.warn(VALIDATE + " was not set. Using default value");
+        	change = true;
+    	}
+    	if(this.getTLS() == null){
+        	this.setTLS(Parameters.DEFAULT_TLS);
+        	logger.warn(TLS + " was not set. Using default value");
+        	change = true;
+    	}
+    	if(this.getName() == null){
+    		this.setName(Parameters.DEFAULT_NAME);
+    	}
+    	
+        if(!validate()){
+            System.exit(0);
+        }
+    	
+    	if(change){
+    		this.save(params.getConfig());
+    	}
+    }
+    
+    public void addParams(Parameters params){
+    	boolean change = false;
+    	if(!params.getDevices().equals(Parameters.DEFAULT_DEVICES)){
+    		this.setDevicesFile(params.getDevices());
+    		change = true;
+    	}
+    	if(!params.getdURL().equals(Parameters.DEFAULT_DURL)){
+        	this.setDistributorURL(params.getdURL());
+        	change = true;
+    	}
+    	if(!params.getHmURL().equals(Parameters.DEFAULT_HMURL)){
+        	this.setHomematicURL(params.getHmURL());   
+        	change = true;
+    	}
+    	if(params.isTls() != Parameters.DEFAULT_TLS){
+        	this.setTLS(params.isTls());  
+        	change = true;
+    	}
+    	if(params.isValidate() != Parameters.DEFAULT_VALIDATE){
+        	this.setValidate(params.isValidate()); 
+        	change = true;
+    	}
+    	if(params.getHmID() != Parameters.DEFAULT_HMID){
+        	this.setHMClientID(params.getHmID());    
+        	change = true;
+    	}
+    	
+        if(!validate()){
+            System.exit(0);
+        }
+    	
+    	if(change){
+    		this.save(params.getConfig());
+    		logger.info("Saved new values from parameters to settings-file");
+    	}
     }
     
     /**
@@ -150,8 +231,22 @@ public class ConnectorProperties extends Properties{
      *
      * @return the value of the devices-file-attribute.
      */
+    @NotNull
     public String getDevicesFile(){
         return this.getProperty(DEVICES_FILE);
+    }
+    
+    public void setValidate(boolean validate){
+    	this.setProperty(VALIDATE, validate + "");
+    }
+    
+    @NotNull
+    public Boolean getValidate(){
+    	if(this.getProperty(VALIDATE) == null){
+    		return null;
+    	}else{
+        	return Boolean.parseBoolean(this.getProperty(VALIDATE));
+    	}
     }
     
     /**
@@ -168,6 +263,7 @@ public class ConnectorProperties extends Properties{
      *
      * @return the value of the distributor url-attribute.
      */
+    @NotNull
     public String getDistributorURL(){
         return this.getProperty(DISTRIBUTOR_URL);
     }
@@ -186,6 +282,7 @@ public class ConnectorProperties extends Properties{
      *
      * @return the value of the homematic url-attribute.
      */
+    @NotNull
     public String getHomematicURL(){
         return this.getProperty(HOMEMATIC);
     }
@@ -204,6 +301,7 @@ public class ConnectorProperties extends Properties{
      *
      * @return the name
      */
+    @NotNull
     public String getName(){
         return this.getProperty(NAME);
     }
@@ -223,8 +321,13 @@ public class ConnectorProperties extends Properties{
      *
      * @return  the value for the homematic_client_id-attribute-atribute
      */
-    public int getHMClientID(){
-        return Integer.parseInt(this.getProperty(HM_ID));
+    @NotNull
+    public Integer getHMClientID(){
+    	if(this.getProperty(HM_ID) == null){
+    		return null;
+    	}else{
+            return Integer.parseInt(this.getProperty(HM_ID));	
+    	}
     }
     
     /**
@@ -241,7 +344,12 @@ public class ConnectorProperties extends Properties{
      *
      * @return the value ot the tls-attribute
      */
-    public boolean getTLS(){
-        return Boolean.parseBoolean(this.getProperty(TLS));
+    @NotNull
+    public Boolean getTLS(){
+    	if(this.getProperty(TLS) == null){
+    		return null;
+    	}else{
+            return Boolean.parseBoolean(this.getProperty(TLS));
+    	}
     }
 }

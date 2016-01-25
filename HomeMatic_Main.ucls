@@ -4,7 +4,7 @@
   <class id="1" language="java" name="de.bo.aid.boese.homeamtic.cli.Parameters" project="ConnectorJava" 
     file="/ConnectorJava/src/main/java/de/bo/aid/boese/homeamtic/cli/Parameters.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2024" y="270"/>    
+    <position height="-1" width="-1" x="2039" y="159"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -14,7 +14,7 @@
   <class id="2" language="java" name="de.bo.aid.boese.homematic.cli.validators.URLValidator" project="ConnectorJava" 
     file="/ConnectorJava/src/main/java/de/bo/aid/boese/homematic/cli/validators/URLValidator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2047" y="92"/>    
+    <position height="-1" width="-1" x="1405" y="-23"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -163,7 +163,7 @@
   <class id="17" language="java" name="de.bo.aid.boese.homematic.xml.DevicesXML" project="ConnectorJava" 
     file="/ConnectorJava/src/main/java/de/bo/aid/boese/homematic/xml/DevicesXML.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2068" y="459"/>    
+    <position height="-1" width="-1" x="2065" y="486"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -203,7 +203,7 @@
   <class id="21" language="java" name="de.bo.aid.boese.homematic.main.HMConnector" project="ConnectorJava" 
     file="/ConnectorJava/src/main/java/de/bo/aid/boese/homematic/main/HMConnector.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1643" y="308"/>    
+    <position height="-1" width="-1" x="1630" y="308"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -243,65 +243,66 @@
   <class id="25" language="java" name="de.bo.aid.boese.homematic.main.ConnectorProperties" project="ConnectorJava" 
     file="/ConnectorJava/src/main/java/de/bo/aid/boese/homematic/main/ConnectorProperties.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1853" y="195"/>    
+    <position height="-1" width="-1" x="1862" y="192"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="26">    
-    <end type="SOURCE" refId="8" navigable="false" variant="ASSOCIATION">      
-      <attribute id="27" name="devices">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="28" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="29">    
-    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
-      <attribute id="30" name="client">        
-        <position height="18" width="33" x="1481" y="410"/>      
-      </attribute>      
-      <multiplicity id="31" minimum="0" maximum="1">        
-        <position height="0" width="0" x="5" y="-192"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="13" navigable="false" variant="ASSOCIATION">      
-      <attribute id="33" name="components">        
-        <position height="18" width="67" x="1592" y="1621"/>      
-      </attribute>      
-      <multiplicity id="34" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="87" y="4"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="8" navigable="false" variant="ASSOCIATION">      
-      <attribute id="36" name="connector">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="37" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="38">    
+  <realization id="26">    
     <end type="SOURCE" refId="22"/>    
     <end type="TARGET" refId="14"/>  
   </realization>  
+  <association id="27">    
+    <end type="SOURCE" refId="24" navigable="false" variant="ASSOCIATION">      
+      <attribute id="28" name="messageHandler">        
+        <position height="18" width="89" x="1798" y="819"/>      
+      </attribute>      
+      <multiplicity id="29" minimum="0" maximum="1">        
+        <position height="16" width="23" x="1906" y="837"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <bendpoint x="1776" y="492"/>    
+    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
+      <attribute id="31" name="xml">        
+        <position height="18" width="26" x="1832" y="490"/>      
+      </attribute>      
+      <multiplicity id="32" minimum="0" maximum="1">        
+        <position height="16" width="23" x="1864" y="497"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
+      <attribute id="34" name="socketClient">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="35" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="15" navigable="false" variant="ASSOCIATION">      
+      <attribute id="37" name="components">        
+        <position height="0" width="0" x="73" y="-337"/>      
+      </attribute>      
+      <multiplicity id="38" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="73" y="-337"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association id="39">    
     <end type="SOURCE" refId="22" navigable="false" variant="ASSOCIATION">      
       <attribute id="40" name="cache">        
@@ -315,35 +316,39 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="42">    
-    <end type="SOURCE" refId="17" navigable="false" variant="ASSOCIATION">      
-      <attribute id="43" name="devices">        
-        <position height="18" width="46" x="1913" y="565"/>      
+    <end type="SOURCE" refId="8" navigable="false" variant="ASSOCIATION">      
+      <attribute id="43" name="connector">        
+        <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="44" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="29" y="-419"/>      
+      <multiplicity id="44" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="18" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="12" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="45">    
-    <end type="SOURCE" refId="24" navigable="false" variant="ASSOCIATION">      
-      <attribute id="46" name="instance">        
-        <position height="18" width="49" x="1796" y="896"/>      
+    <end type="SOURCE" refId="18" navigable="false" variant="ASSOCIATION">      
+      <attribute id="46" name="channels">        
+        <position height="0" width="0" x="38" y="-338"/>      
       </attribute>      
-      <multiplicity id="47" minimum="0" maximum="1">        
+      <multiplicity id="47" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="38" y="-338"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="19" navigable="false" variant="ASSOCIATION">      
+      <attribute id="49" name="wsClient">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="50" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="24" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
-      <attribute id="49" name="props"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="25" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="51">    
@@ -359,33 +364,33 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="54">    
-    <end type="SOURCE" refId="24" navigable="false" variant="ASSOCIATION">      
-      <attribute id="55" name="cache">        
-        <position height="18" width="40" x="1333" y="1011"/>      
+    <end type="SOURCE" refId="13" navigable="false" variant="ASSOCIATION">      
+      <attribute id="55" name="components">        
+        <position height="18" width="67" x="1592" y="1621"/>      
       </attribute>      
-      <multiplicity id="56" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="56" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="87" y="4"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="11" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="57">    
-    <end type="SOURCE" refId="11" navigable="false" variant="ASSOCIATION">      
-      <attribute id="58" name="device">        
+    <end type="SOURCE" refId="22" navigable="false" variant="ASSOCIATION">      
+      <attribute id="58" name="client">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="59" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="13" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="24" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="60">    
-    <end type="SOURCE" refId="19" navigable="false" variant="ASSOCIATION">      
-      <attribute id="61" name="wsClient">        
-        <position height="0" width="0" x="0" y="0"/>      
+    <end type="SOURCE" refId="24" navigable="false" variant="ASSOCIATION">      
+      <attribute id="61" name="instance">        
+        <position height="18" width="49" x="1796" y="896"/>      
       </attribute>      
       <multiplicity id="62" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
@@ -395,100 +400,99 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="63">    
-    <end type="SOURCE" refId="5" navigable="false" variant="ASSOCIATION">      
-      <attribute id="64" name="instance">        
-        <position height="0" width="0" x="5" y="-192"/>      
+    <end type="SOURCE" refId="24" navigable="false" variant="ASSOCIATION">      
+      <attribute id="64" name="cache">        
+        <position height="18" width="40" x="1333" y="1011"/>      
       </attribute>      
       <multiplicity id="65" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
+      <attribute id="67" name="client">        
+        <position height="18" width="33" x="1481" y="410"/>      
+      </attribute>      
+      <multiplicity id="68" minimum="0" maximum="1">        
         <position height="0" width="0" x="5" y="-192"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="66">    
-    <end type="SOURCE" refId="24" navigable="false" variant="ASSOCIATION">      
-      <attribute id="67" name="messageHandler">        
-        <position height="18" width="89" x="1798" y="819"/>      
-      </attribute>      
-      <multiplicity id="68" minimum="0" maximum="1">        
-        <position height="16" width="23" x="1906" y="837"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association id="69">    
-    <end type="SOURCE" refId="15" navigable="false" variant="ASSOCIATION">      
-      <attribute id="70" name="components">        
-        <position height="0" width="0" x="73" y="-337"/>      
+    <end type="SOURCE" refId="8" navigable="false" variant="ASSOCIATION">      
+      <attribute id="70" name="devices">        
+        <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="71" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="73" y="-337"/>      
+        <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="16" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="13" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="72">    
-    <end type="SOURCE" refId="18" navigable="false" variant="ASSOCIATION">      
-      <attribute id="73" name="channels">        
-        <position height="0" width="0" x="38" y="-338"/>      
+    <end type="SOURCE" refId="5" navigable="false" variant="ASSOCIATION">      
+      <attribute id="73" name="instance">        
+        <position height="0" width="0" x="5" y="-192"/>      
       </attribute>      
-      <multiplicity id="74" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="38" y="-338"/>      
+      <multiplicity id="74" minimum="0" maximum="1">        
+        <position height="0" width="0" x="5" y="-192"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="15" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="5" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="75">    
-    <bendpoint x="1776" y="492"/>    
-    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
-      <attribute id="76" name="xml">        
-        <position height="18" width="26" x="1835" y="463"/>      
-      </attribute>      
-      <multiplicity id="77" minimum="0" maximum="1">        
-        <position height="16" width="23" x="1864" y="459"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true" variant="ASSOCIATION"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="78">    
     <end type="SOURCE" refId="8" navigable="false" variant="ASSOCIATION">      
-      <attribute id="79" name="instance">        
+      <attribute id="76" name="instance">        
         <position height="0" width="0" x="-95" y="-54"/>      
       </attribute>      
-      <multiplicity id="80" minimum="0" maximum="1">        
+      <multiplicity id="77" minimum="0" maximum="1">        
         <position height="0" width="0" x="-95" y="-54"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="81">    
-    <end type="SOURCE" refId="22" navigable="false" variant="ASSOCIATION">      
-      <attribute id="82" name="client">        
-        <position height="0" width="0" x="0" y="0"/>      
+  <association id="78">    
+    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
+      <attribute id="79" name="props">        
+        <position height="18" width="38" x="1741" y="217"/>      
       </attribute>      
-      <multiplicity id="83" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="80" minimum="0" maximum="1">        
+        <position height="16" width="23" x="1750" y="252"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="24" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="25" navigable="true" variant="ASSOCIATION"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="81">    
+    <end type="SOURCE" refId="17" navigable="false" variant="ASSOCIATION">      
+      <attribute id="82" name="devices">        
+        <position height="18" width="46" x="2011" y="549"/>      
+      </attribute>      
+      <multiplicity id="83" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="29" y="-419"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="84">    
-    <end type="SOURCE" refId="21" navigable="false" variant="ASSOCIATION">      
-      <attribute id="85" name="socketClient">        
+    <end type="SOURCE" refId="11" navigable="false" variant="ASSOCIATION">      
+      <attribute id="85" name="device">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="86" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="24" navigable="true" variant="ASSOCIATION"/>    
+    <end type="TARGET" refId="13" navigable="true" variant="ASSOCIATION"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

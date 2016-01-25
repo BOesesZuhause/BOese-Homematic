@@ -59,13 +59,8 @@ public class HMConnector {
 	
 	/** The props. */
 	ConnectorProperties props;
-
-	/** The path to the config file. */
-	private String configFilePath;
-
-
-	/** Stores if known devices should be validated. */
-	private boolean validate;
+	
+	Parameters params;
 
 
 	/** The Constant logger for log4j. */
@@ -224,10 +219,10 @@ public class HMConnector {
 					for (ChannelXML channelXML : devXML.getChannels()) {
 						int channelID = channelXML.getNumber();
 						for (ComponentXML compXML : channelXML.getComponents()) {
-							if (validate) {
-								// TODO check if components in xml match the
-								// components in homematic
-							}
+//							if (validate) {
+//								// TODO check if components in xml match the
+//								// components in homematic
+//							}
 							Component comp = new Component();
 							comp.setDevice(dev);
 							comp.setAddress(dev.getAdress() + ":" + channelID);
@@ -274,7 +269,7 @@ public class HMConnector {
 	 */
 	private void checkArguments(String[] args) {
 
-		Parameters params = new Parameters();
+		params = new Parameters();
 		JCommander cmd = new JCommander(params);
 
 		try {
@@ -285,16 +280,7 @@ public class HMConnector {
 			cmd.usage();
 			System.exit(0);
 		}
-
-		configFilePath = params.getConfig();
-		validate = params.isValidate();
-
-		if (params.isGenConfig()) {
-			props.setDefaults();
-			props.save(configFilePath);
-			logger.info("created default properties-file at: " + configFilePath);
-			System.exit(0);
-		}
+		
 
 		if (params.isGenerate()) {
 			generateXML();
@@ -349,7 +335,17 @@ public class HMConnector {
 	 */
 	private void loadProperties() {
 		props = new ConnectorProperties();
-		props.load(configFilePath);
+
+		try {
+			//Load settings-file
+			props.load(params.getConfig());
+		} catch (FileNotFoundException e) {
+			logger.warn("Could not find settings-file at: " + params.getConfig());
+			logger.info("Generating new settings-file at: " + params.getConfig());
+		}
+		
+		props.setParams(params); //set default value if a value is not set
+		props.addParams(params); //overwrite values with cli-values
 	}
 	
 	/**
