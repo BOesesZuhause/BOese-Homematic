@@ -82,6 +82,9 @@ public class Parameters {
 	@Parameter(names = "-tls", description = "encrypt the connection to the distributor.", arity = 1)
 	private boolean tls = DEFAULT_TLS;
 	
+    @Parameter(names = "-h", help = true)
+    private boolean help = false;
+	
 	/**
 	 * Checks if is validate.
 	 *
@@ -129,6 +132,10 @@ public class Parameters {
 
 	public Boolean isTls() {
 		return tls;
+	}
+	
+	public boolean isHelp(){
+	    return help;
 	}
 
 

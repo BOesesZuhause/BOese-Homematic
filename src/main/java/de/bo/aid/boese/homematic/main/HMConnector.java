@@ -281,6 +281,11 @@ public class HMConnector {
 			System.exit(0);
 		}
 		
+		if(params.isHelp()){
+		    cmd.usage();
+		    System.exit(0);
+		}
+		
 
 		if (params.isGenerate()) {
 			generateXML();
