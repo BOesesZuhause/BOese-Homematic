@@ -82,7 +82,7 @@ public class Parameters {
 	@Parameter(names = "-tls", description = "encrypt the connection to the distributor.", arity = 1)
 	private boolean tls = DEFAULT_TLS;
 	
-    @Parameter(names = "-h", help = true)
+    @Parameter(names = "-h", description="Display this message", help = true)
     private boolean help = false;
 	
 	/**
