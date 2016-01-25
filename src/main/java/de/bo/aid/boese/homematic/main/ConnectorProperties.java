@@ -71,7 +71,6 @@ public class ConnectorProperties extends Properties{
    *
    * @param path the path to the settings-file.
    */
-  //TODO validate properties
     public void load(String path) throws FileNotFoundException{
         FileInputStream file = null;
         
@@ -122,20 +121,9 @@ public class ConnectorProperties extends Properties{
             System.exit(0);
         }
     }
+
     
-    /**
-     * Sets default-values for all attributes.
-     */
-//    public void setDefaults(){
-//       this.setDevicesFile("Devices.xml");
-//       this.setDistributorURL("example.org:8081/events");
-//       this.setHomematicURL("http://example.org:2001");
-//       this.setTLS(true);
-//       this.setName("HomematicConnector");
-//       this.setHMClientID(666);
-//    }
-    
-    public void setParams(Parameters params){
+    public void setDefaultsIfNotExist(String path){
     	boolean change = false;
     	if(this.getDevicesFile() == null){
         	this.setDevicesFile(Parameters.DEFAULT_DEVICES);
@@ -176,7 +164,7 @@ public class ConnectorProperties extends Properties{
         }
     	
     	if(change){
-    		this.save(params.getConfig());
+    		this.save(path);
     	}
     }
     

@@ -344,7 +344,7 @@ public class HMConnector {
 			logger.info("Generating new settings-file at: " + params.getConfig());
 		}
 		
-		props.setParams(params); //set default value if a value is not set
+		props.setDefaultsIfNotExist(params.getConfig()); //set default value if a value is not set
 		props.addParams(params); //overwrite values with cli-values
 	}
 	
