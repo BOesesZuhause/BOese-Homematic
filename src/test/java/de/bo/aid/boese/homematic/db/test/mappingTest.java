@@ -49,7 +49,7 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 		/**
 		 * Test.
 		 */
-		@Test
+	/*	@Test
 		public void test() {
 			//DEPRECATED
 //			SessionFactory sessionFactory = new Configuration().configure()
@@ -58,5 +58,5 @@ import de.bo.aid.boese.homematic.db.HibernateUtil;
 			Session session = sessionFactory.openSession();
 			session.close();
 		}
-
+*/
 	}

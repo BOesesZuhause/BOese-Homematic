@@ -43,6 +43,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.logging.log4j.LogManager;
@@ -51,7 +53,7 @@ import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.main.DatabaseCache;
+import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
@@ -79,6 +81,11 @@ import javassist.NotFoundException;
  */
 public class ProtocolHandler implements MessageHandler{
 	
+	private ConnectorDao connectorDao = new ConnectorDao();
+	private DeviceDao deviceDao = new DeviceDao();
+	private ComponentDao componentDao = new ComponentDao();
+
+	
 	
 	/** The websocketclient used to connect to the distributor */
 	private SocketClient client;
@@ -86,8 +93,6 @@ public class ProtocolHandler implements MessageHandler{
 	/** Is used to check, wether the connection should be closed. */
 	boolean connectionClosed = false;
 	
-	/** The databasecache used to read data quickly. */
-	DatabaseCache cache = DatabaseCache.getInstance();
 	
 	/** The logger for log4j. */
 	final static Logger logger = LogManager.getLogger(ProtocolHandler.class);
@@ -176,11 +181,14 @@ public class ProtocolHandler implements MessageHandler{
 	 */
 	private void handleSendvalue(SendValue bjMessage) {
 		Component comp = null;
-		try {
-			comp = ComponentDao.getByVertID(bjMessage.getDeviceComponentId());
-		} catch (NotFoundException e) {
+
+		    EntityManager em = HibernateUtil.getEntityManager();
+			em.getTransaction().begin();
+			comp = componentDao.getByVertID(em, bjMessage.getDeviceComponentId());
+			em.getTransaction().commit();
+			em.close();
+		 if(comp == null) {
 			logger.warn("requested component with id: " + bjMessage.getDeviceComponentId() + " not found");
-			e.printStackTrace();
 		}
 		try {
             XMLRPCClient.getInstance().setValue(comp.getAddress(), comp.getHm_id(), bjMessage.getValue(), comp.getType());
@@ -211,11 +219,19 @@ public class ProtocolHandler implements MessageHandler{
 		//find Device
 				int deviceId = bjMessage.getDeviceId();	
 				Device dev = null;
+				
+				EntityManager em = HibernateUtil.getEntityManager();
+				em.getTransaction().begin();
+				dev = deviceDao.getByIdVerteiler(em, deviceId);
+			
+				/*
 				for(Device d : cache.getDevices()){
 					if(d.getIdverteiler()== deviceId){
 						dev = d;
 					}
 				}
+				*/
+				
 				if(dev == null){
 					logger.warn("Could not find the device with id: " + bjMessage.getDeviceId() + " in the database");
 				}
@@ -231,11 +247,12 @@ public class ProtocolHandler implements MessageHandler{
 					for(Component component : actualComponents){
 						if(component.getName().equals(componentName)){
 							component.setIdverteiler(compMap.get(componentName));
-							ComponentDao.updateComponent(component); 
+							//componentDao.updateComponent(component); 
 						}
 					}
 				}
-		cache.update();
+		em.getTransaction().commit();
+		em.close();
 	}
 	
 	/**
@@ -248,17 +265,25 @@ public class ProtocolHandler implements MessageHandler{
 
 		//find Device
 		Device requestedDevice = null;
+		
+		EntityManager em = HibernateUtil.getEntityManager();
+		em.getTransaction().begin();
+		requestedDevice = deviceDao.getByIdVerteiler(em, bjMessage.getDeviceId());
+		
+		/*
 		for(Device dev : cache.getDevices()){
 			if(dev.getIdverteiler() == bjMessage.getDeviceId()){
 				requestedDevice = dev;
 			}
 		}
+		*/
 		
 		if(requestedDevice == null){
 			logger.warn("Could not find the device with id: " + bjMessage.getDeviceId() + " in the database");
 		}
 		
-		int conId = cache.getConnector().getIdverteiler();
+		
+		int conId = connectorDao.get(em).getIdverteiler();
 		
 		//Convert Set of Components to HashSet of DeviceComponents
 		HashSet<DeviceComponents> components = new HashSet<>();
@@ -275,6 +300,8 @@ public class ProtocolHandler implements MessageHandler{
             }		
             components.add(devComp);
 		}
+		em.getTransaction().commit();
+		em.close();
 		
 		//Send Components
 		SendDeviceComponents sendDevComp = new SendDeviceComponents(requestedDevice.getIdverteiler(), components, conId, 0, System.currentTimeMillis());
@@ -292,15 +319,18 @@ public class ProtocolHandler implements MessageHandler{
 	 */
 	private void handleConfirmDevices(ConfirmDevices bjMessage) {
 		HashMap<String, Integer> devMap = bjMessage.getDevices();
+		EntityManager em = HibernateUtil.getEntityManager();
+		em.getTransaction().begin();
 		for (String deviceName : devMap.keySet()) {	
-			for(Device dev : cache.getDevices()){
+			for(Device dev : deviceDao.getAll(em)){
 				if(dev.getName().equals(deviceName)){
 					dev.setIdverteiler(devMap.get(deviceName));
-					DeviceDao.updateDevice(dev);
+					//DeviceDao.updateDevice(dev);
 				}
 			}
 		}
-		cache.update();
+		em.getTransaction().commit();
+		em.close();
 	}
 	
 	/**
@@ -310,13 +340,18 @@ public class ProtocolHandler implements MessageHandler{
 	 * @param bjMessage the object for the requestAllDevices message
 	 */
 	private void handleRequestAllDevices(RequestAllDevices bjMessage) {
+		EntityManager em = HibernateUtil.getEntityManager();
+		em.getTransaction().begin();
 
 		HashMap<String, Integer> devHash = new HashMap<>();
-		for(Device dev : cache.getDevices()){
+		for(Device dev : deviceDao.getAll(em)){
 			devHash.put(dev.getName(), dev.getIdverteiler());
 		}
 		
-		int conId = cache.getConnector().getIdverteiler();
+		int conId = connectorDao.get(em).getIdverteiler();
+		
+		em.getTransaction().commit();
+		em.close();
 		
 		SendDevices sendDevs = new SendDevices(devHash, conId, 0, System.currentTimeMillis());
 		OutputStream os = new ByteArrayOutputStream();
@@ -331,7 +366,10 @@ public class ProtocolHandler implements MessageHandler{
 	 * @param bjMessage the object of the confirmConnection message
 	 */
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
-		Connector con = cache.getConnector();
+		EntityManager em = HibernateUtil.getEntityManager();
+		em.getTransaction().begin();
+		
+		Connector con = connectorDao.get(em);
 		//Connector is confirmed
 		if(con.getIdverteiler()==bjMessage.getConnectorId()){
 		
@@ -339,8 +377,9 @@ public class ProtocolHandler implements MessageHandler{
 		}else if(con.getIdverteiler()== -1){
 			con.setIdverteiler(bjMessage.getConnectorId());
 			con.setSecret(bjMessage.getPassword());
-			ConnectorDao.insertConnector(con);
-			cache.update();
+			//ConnectorDao.insertConnector(con);
+			em.getTransaction().commit();
+			em.close();
 			
 		//unknown id
 		}else{
@@ -351,7 +390,6 @@ public class ProtocolHandler implements MessageHandler{
 	}
 	
 	
-	
 	/* (non-Javadoc)
 	 * @see de.bo.aid.boese.homematic.socket.MessageHandler#closeConnection()
 	 */
@@ -359,7 +397,4 @@ public class ProtocolHandler implements MessageHandler{
 	public void closeConnection() {
 		// TODO Auto-generated method stub
 	}
-
-
-
 }

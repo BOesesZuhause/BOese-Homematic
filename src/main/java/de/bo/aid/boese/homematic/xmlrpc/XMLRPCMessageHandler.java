@@ -37,12 +37,15 @@ package de.bo.aid.boese.homematic.xmlrpc;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
+import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketClient;
@@ -57,6 +60,9 @@ import de.bo.aid.boese.homematic.socket.SocketClient;
 
 //TODO move non system-method in own handler
 public class XMLRPCMessageHandler {
+	
+	private DeviceDao deviceDao = new DeviceDao();
+	private ComponentDao componentDao = new ComponentDao();
 	
 	/** The logger from log4j. */
 	final static Logger logger = LogManager.getLogger(XMLRPCMessageHandler.class);
@@ -80,7 +86,13 @@ public class XMLRPCMessageHandler {
         if (value_key.equals("UNREACH") || value_key.equals("LOWBAT")) {
             String[] split = address.split(":");
             address = split[0];
-            Device dev = DeviceDao.getByAddress(address);
+            
+            EntityManager em = HibernateUtil.getEntityManager();
+            em.getTransaction().begin();
+            Device dev = deviceDao.getByAddress(em, address);
+            em.getTransaction().commit();
+            em.close();
+            
             Set<Component> components = dev.getComponents();
             int status = Status.NO_STATUS;
             switch (value_key) {
@@ -99,8 +111,12 @@ public class XMLRPCMessageHandler {
             return;
         }
 		
-	      
-		Component comp = ComponentDao.getComponentByAddressAndName(address, value_key);
+	    EntityManager em = HibernateUtil.getEntityManager();
+	    em.getTransaction().begin();
+		Component comp = componentDao.getComponentByAddressAndName(em, address, value_key);
+		em.getTransaction().commit();
+		em.close();
+		
 		if(comp == null){
 			return;
 		}

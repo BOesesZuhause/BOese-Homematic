@@ -34,6 +34,10 @@
  */
 package de.bo.aid.boese.homematic.xmlrpc;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -107,6 +111,30 @@ public class XMLRPCClient {
 
 	}
 
+	public Object getDevicesFromFile(){
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(new FileInputStream("response"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Object object = null;
+		try {
+			object = in.readObject();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return object;
+	}
+	
 	/**
 	 * Makes a request to get a list of all devices from
 	 * the HomeMatic system via the "listDevices" method.

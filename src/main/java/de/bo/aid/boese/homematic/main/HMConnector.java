@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-
+import javax.persistence.EntityManager;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -28,6 +28,7 @@ import de.bo.aid.boese.homeamtic.cli.Parameters;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
+import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.mapper.DeviceMapper;
 import de.bo.aid.boese.homematic.mapper.DevicesXMLMapper;
 import de.bo.aid.boese.homematic.model.Component;
@@ -46,7 +47,10 @@ import de.bo.aid.boese.homematic.xmlrpc.XMLRPCServer;
  * The mainclass for the HomeMatic connector.
  */
 public class HMConnector {
-
+	
+	private ConnectorDao connectorDao = new ConnectorDao();
+	private DeviceDao deviceDao = new DeviceDao();
+	private ComponentDao componentDao = new ComponentDao();
 
     /** The XMLRPC-client. */
 	private XMLRPCClient client;
@@ -130,18 +134,20 @@ public class HMConnector {
 	private void saveSettings() {
 		Connector con = null;
 		try { // check if connector is already saved in database
+			EntityManager em = HibernateUtil.getEntityManager();
+			em.getTransaction().begin();
+		//	con = connectorDao.get(em);
 
-			con = ConnectorDao.getConnector();
-
-			if (con == null) {
+			//if (con == null) {
 				// insert defaultConnector
-				con = new Connector();
-				con.setName(props.getName());
+				con = connectorDao.create(em, props.getName());
+			//	con.setName(props.getName());
 				con.setIdverteiler(-1);
 				con.setSecret(null);
-				ConnectorDao.insertConnector(con);
+				em.getTransaction().commit();
+				em.close();
 				logger.info("created initial data for connector in database");
-			}
+			//}
 		} catch (Exception e) {
 			logger.error("Unable to load connector details from database");
 			e.printStackTrace();
@@ -154,32 +160,34 @@ public class HMConnector {
 	 * @param devices the devices returned from HomeMatic
 	 */
 	private void initDatabase(List<Device> devices) {
-
+		EntityManager em = HibernateUtil.getEntityManager();
+		em.getTransaction().begin();
 		// check device and insert
 		for (Device device : devices) {
-			Device deviceDB = DeviceDao.getByAddress(device.getAdress());
+			Device deviceDB = deviceDao.getByAddress(em, device.getAdress());
 			if (deviceDB == null) {
 				device.setIdverteiler(-1);
-				DeviceDao.insertDevice(device);
+				deviceDao.insert(em, device);
 
 				// insert all components of new device
 				for (Component comp : device.getComponents()) {
 						comp.setIdverteiler(-1);
-						ComponentDao.insertComponent(comp);
+						componentDao.insert(em, comp);
 				}
 			} else {
 				// check if new components exist for device
 				// TODO test
 				for (Component comp : device.getComponents()) {
-					if (ComponentDao.getComponentByAddressAndName(comp.getAddress(), comp.getHm_id()) == null) {
+					if (componentDao.getComponentByAddressAndName(em, comp.getAddress(), comp.getHm_id()) == null) {
 						comp.setIdverteiler(-1);
 						comp.setDevice(deviceDB);
-						ComponentDao.insertComponent(comp);
+						componentDao.insert(em, comp);
 					}
 				}
 			}
 		}
-
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	/**
@@ -189,6 +197,7 @@ public class HMConnector {
 	 */
 	private List<Device> getDevices() {
 		List<Device> devices = DeviceMapper.map(client.getDevices(), true);
+		//List<Device> devices = DeviceMapper.map(client.getDevicesFromFile(), true);
 		devices = filterDevices(devices);
 		return devices;
 	}
@@ -199,7 +208,7 @@ public class HMConnector {
 	private void initializeXMLRPCClient() {
 		client = XMLRPCClient.getInstance();
 		client.setClientID(props.getHMClientID());
-		client.init(props.getHomematicURL());
+		//client.init(props.getHomematicURL());
 	}
 
 	/**

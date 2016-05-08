@@ -34,53 +34,67 @@
  */
 package de.bo.aid.boese.homematic.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 /**
  * hibernate model-class to persist components.
  * A component represents a distinct sensor or actor
  * in the homematic-system where one device can have many
  * components.
  */
+@Entity
 public class Component implements java.io.Serializable {
 
 	/** id for serialisation. */
 	private static final long serialVersionUID = -3549055388306323793L;
 
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Component [compid=" + compid + ", idverteiler=" + idverteiler + ", name=" + name + ", address="
-				+ address + ", hm_id=" + hm_id + ", unit=" + unit + ", aktor=" + aktor + ", type=" + type + "]";
-	}
 
 	/** The primary key. */
+	   @Id
+	    @GeneratedValue(strategy = GenerationType.AUTO)
 	private int compid;
 	
 	/** The device. One Device can have many components. One component must have one device */
-	private Device device;
+	   @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	   @JoinColumn(name = "device", nullable = false)
+	   private Device device;
 	
 	/** The id under which the component is saved in the distributor. */
+	@Column(name = "idverteiler", unique = false, nullable = false)
 	private Integer idverteiler;
 	
 	/** The name of the component. */
+	@Column(name = "name", unique = false, nullable = false)
 	private String name;
 	
 	/** The homematic-address of the component for calling it in the homematic system. */
+	@Column(name = "address", unique = false, nullable = false)
 	private String address;
 	
 	//TODO Wofür ist die? 
 	/** The homematic-id. */
+	@Column(name = "hm_id", unique = false, nullable = false)
 	private String hm_id;
 	
 	/** The unit of the component. */
+	@Column(name = "unit", unique = false, nullable = false)
 	private String unit;
 	
 	/** Defines whether the component is an actor or a sensor. */
+	@Column(name = "actor", unique = false, nullable = false)
 	private boolean aktor;
 	
 	/** The homematic-type of the component. Values: ACTION, FLOAT, DOUBLE, BOOLEAN, INT */
+	@Column(name = "type", unique = false, nullable = false)
 	private String type;
 	
 
@@ -159,6 +173,17 @@ public class Component implements java.io.Serializable {
 		this.device = device;
 		this.idverteiler = idverteiler;
 		this.name = name;
+	}
+
+	public Component(Device device, String name, String address, String hm_id, String unit, boolean aktor, String type) {
+		this.device = device;
+		this.name = name;
+		this.address = address;
+		this.hm_id = hm_id;
+		this.unit = unit;
+		this.aktor = aktor;
+		this.type = type;
+		this.idverteiler = -1;
 	}
 
 	/**

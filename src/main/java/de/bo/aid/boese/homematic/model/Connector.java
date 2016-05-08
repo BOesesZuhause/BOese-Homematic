@@ -34,26 +34,39 @@
  */
 package de.bo.aid.boese.homematic.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * hibernate model-class to persist the connector.
  * It is used to store information such as passwords 
  * and ids of the connector.
  */
+
+@Entity
 public class Connector implements java.io.Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 7737400320190925963L;
 
 	/** The primary key. */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int conid;
 	
 	/** The id under which the connector is saved in the distributor. */
+	//@Column(name = "idverteiler", unique = false, nullable = false)
 	private Integer idverteiler;
 	
 	/** The secret to authenticate with the distributor. */
+	//@Column(name = "password", unique = false, nullable = false)
 	private String secret;
 	
 	/** The name of the connector. */
+	//@Column(name = "name", unique = false, nullable = false)
 	private String name;
 	
 	/**
@@ -78,7 +91,13 @@ public class Connector implements java.io.Serializable {
 	 */
 
 
-	/**
+	public Connector(String name) {
+        setName(name);
+        setIdverteiler(-1);
+        setSecret("");   
+    }
+
+    /**
 	 * Gets the conid.
 	 *
 	 * @return the conid
@@ -149,5 +168,62 @@ public class Connector implements java.io.Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + conid;
+        result = prime * result + ((idverteiler == null) ? 0 : idverteiler.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((secret == null) ? 0 : secret.hashCode());
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Connector other = (Connector) obj;
+        if (conid != other.conid)
+            return false;
+        if (idverteiler == null) {
+            if (other.idverteiler != null)
+                return false;
+        } else if (!idverteiler.equals(other.idverteiler))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (secret == null) {
+            if (other.secret != null)
+                return false;
+        } else if (!secret.equals(other.secret))
+            return false;
+        return true;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Connector [conid=" + conid + ", idverteiler=" + idverteiler + ", secret=" + secret + ", name=" + name
+                + "]";
+    }
+	
+	
 
 }

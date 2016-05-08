@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.concurrent.Future;
 
+import javax.persistence.EntityManager;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -19,7 +21,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-import de.bo.aid.boese.homematic.main.DatabaseCache;
+import de.bo.aid.boese.homematic.dao.ConnectorDao;
+import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.json.BoeseJson;
 import de.bo.aid.boese.json.RequestConnection;
@@ -32,6 +35,8 @@ import de.bo.aid.boese.json.SendValue;
 @WebSocket
 public class SocketClient
 {
+	private ConnectorDao connectorDao = new ConnectorDao();
+	
 	/** logger for log4j. */
 	final static Logger logger = LogManager.getLogger(SocketClient.class);
 	
@@ -40,10 +45,7 @@ public class SocketClient
     
     /** The messagehandler which is subscribed to receive messages. */
     private MessageHandler messageHandler;
-    
-	/** The databasecache used to read data quickly. */
-	DatabaseCache cache = DatabaseCache.getInstance();
-	
+    	
 	 /** The client. */
  	WebSocketClient client;
 	
@@ -185,8 +187,11 @@ public class SocketClient
      */
     public void requestConnection(){
         
-        cache.update(); 
-        Connector con = cache.getConnector();
+    	EntityManager em = HibernateUtil.getEntityManager();
+    	
+    	em.getTransaction().begin();
+        Connector con = connectorDao.get(em);
+        em.getTransaction().commit();
         
         // Request connection
         RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
@@ -206,7 +211,14 @@ public class SocketClient
     //wird von HomeMatic-Gerät aufgerufen
     public void sendValue(double value, int devId, int devCompId, long time){
 
-        int conId = cache.getConnector().getIdverteiler();
+    	
+    	EntityManager em = HibernateUtil.getEntityManager();
+    	
+    	em.getTransaction().begin();
+        Connector con = connectorDao.get(em);
+        em.getTransaction().commit();
+    	
+        int conId = con.getIdverteiler();
         
         SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
         OutputStream os = new ByteArrayOutputStream();
@@ -227,7 +239,13 @@ public class SocketClient
      */
     public void sendAction(double value, int devId, int devCompId, long time) {
 
-        int conId = cache.getConnector().getIdverteiler();
+    	EntityManager em = HibernateUtil.getEntityManager();
+    	
+    	em.getTransaction().begin();
+        Connector con = connectorDao.get(em);
+        em.getTransaction().commit();
+        
+        int conId = con.getIdverteiler();
 
         SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
         OutputStream os = new ByteArrayOutputStream();
@@ -250,7 +268,14 @@ public class SocketClient
      * @param statusTimestamp the status timestamp
      */
     public void sendStatus(int devCompId, int statusCode, long statusTimestamp) {
-        int conId = cache.getConnector().getIdverteiler();
+    	
+    	EntityManager em = HibernateUtil.getEntityManager();
+    	
+    	em.getTransaction().begin();
+        Connector con = connectorDao.get(em);
+        em.getTransaction().commit();
+        
+        int conId = con.getIdverteiler();
         
         SendStatus ss = new SendStatus(devCompId, statusCode, statusTimestamp, true, conId, 0, System.currentTimeMillis());
         OutputStream os = new ByteArrayOutputStream();

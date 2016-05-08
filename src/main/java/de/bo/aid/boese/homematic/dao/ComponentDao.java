@@ -1,125 +1,50 @@
-/*             
- * 			  (                       
- *			 ( )\         (        (   
- *			 )((_)  (    ))\ (    ))\  
- *			((_)_   )\  /((_))\  /((_) 
- *			 | _ ) ((_)(_)) ((_)(_))   
- *			 | _ \/ _ \/ -_)(_-</ -_)  
- *			 |___/\___/\___|/__/\___|
- *       
- *           			;            
- *		      +        ;;;         + 
- *			  +       ;;;;;        + 
- *			  +      ;;;;;;;       + 
- *			  ++    ;;;;;;;;;     ++ 
- *			  +++++;;;;;;;;;;;+++++  
- *			   ++++;;;;;;;;;;;+++++  
- *				++;;;;;;;;;;;;;++    
- *			     ;;;;;;;;;;;;;;;     
- *			    ;;;;;;;;;;;;;;;;;     
- *				:::::::::::::::::    
- * 				:::::::::::::::::      
- *  			:::::::::::::::::    
- *   			::::::@@@@@::::::    
- *				:::::@:::::@:::::    
- *				::::@:::::::@::::    
- * 				:::::::::::::::::    
- *  			:::::::::::::::::      
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <sebastian.lechte@hs-bochum.de> wrote this file. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return Sebastian Lechte
- * ----------------------------------------------------------------------------
- */
 package de.bo.aid.boese.homematic.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import de.bo.aid.boese.homematic.db.HibernateUtil;
 import de.bo.aid.boese.homematic.model.Component;
-import javassist.NotFoundException;
+import de.bo.aid.boese.homematic.model.Device;
 
-/**
- * This class defines an interface to access Component-Objects from the database.
- */
 public class ComponentDao {
-	
-	/** The SessionFactory to create a hibernate-session. */
-	static SessionFactory factory = HibernateUtil.getSessionFactory();
-	
-	/**
-	 * Gets a single component from the database.
-	 *
-	 * @param id the id of the component
-	 * @return the component
-	 * @throws NotFoundException occurs when the requested component was not found
-	 */
-	public static Component getByVertID(int id) throws NotFoundException{
-		Session session = factory.openSession();
-		session.beginTransaction();
-		
-		Component comp;
-		Query query = session.createQuery("from Component where idVerteiler = :vertid");
-		query.setParameter("vertid", id);
-		List<?> list = query.list();
-		if(list.size() != 1){
-			return null;
+
+    
+   public Component create(EntityManager em, Device device, String name, String address, String hm_id, String unit, boolean aktor, String type) {
+	   Component comp = new Component(device, name, address, hm_id, unit, aktor, type);
+	   em.persist(comp);
+	   return comp;
+   }
+
+   public Component getById(EntityManager em, int id){
+	   Component comp = em.find(Component.class, id);
+	   return comp;
+   }
+   
+   public void remove(EntityManager em, Component comp){
+	   em.remove(comp);
+   }
+   
+	public List<Component> getAll(EntityManager em) {
+		Query q = em.createQuery("SELECT a FROM Component a");
+		List<?> erg = q.getResultList();
+		List<Component> entities = new ArrayList<Component>();
+		for(Object o : erg){
+			entities.add((Component)o);
 		}
-		comp = (Component) list.get(0);
-		session.getTransaction().commit();
-
-		session.close();
-		return comp;
-	}
-	
-	/**
-	 * Inserts a component in the database.
-	 *
-	 * @param comp the component to be inserted
-	 */
-	public static void insertComponent(Component comp){
-		Session session = factory.openSession();
-		session.beginTransaction();
-		session.save(comp);
-		session.getTransaction().commit();
-		session.close();
+		return entities;
 	}
 
-	/**
-	 * updates a component in the database.
-	 *
-	 * @param component the component to be updated
-	 */
-	public static void updateComponent(Component component) {
-		Session session = factory.openSession();
-		session.beginTransaction();
-		session.merge(component);
-		session.getTransaction().commit();
-		session.close();
-	}
-
-	/**
-	 * Gets a single component from the database by its address and name.
-	 *
-	 * @param address the address of the component
-	 * @param name the name of the component
-	 * @return the component. Returns null if no component was found.
-	 */
-	public static Component getComponentByAddressAndName(String address, String name) {
-		Session session = factory.openSession();
-		session.beginTransaction();
+	public Component getComponentByAddressAndName(EntityManager em, String address, String hm_id) {
 		Component comp;
-		Query query = session.createQuery("from Component where address = :address and hm_id = :hm_id");
+		Query query = em.createQuery("from Component where address = :address and hm_id = :hm_id");
 		query.setParameter("address", address);
-		query.setParameter("hm_id", name);
-		List<?> list = query.list();
-	      session.getTransaction().commit();
-	        session.close();
+		query.setParameter("hm_id", hm_id);
+		List<?> list = query.getResultList();
 		if(list.size() != 1){
 			return null;
 		}
@@ -127,5 +52,20 @@ public class ComponentDao {
 		return comp;
 	}
 
+	public void insert(EntityManager em, Component comp) {
+		em.persist(comp);		
+	}
 
+	public Component getByVertID(EntityManager em, int deviceComponentId) {
+		Component comp;
+		Query query = em.createQuery("from Component where idVerteiler = :vertid");
+		query.setParameter("vertid", deviceComponentId);
+		List<?> list = query.getResultList();
+		if(list.size() != 1){
+			return null;
+		}
+		comp = (Component) list.get(0);
+		return comp;
+	}
+   
 }

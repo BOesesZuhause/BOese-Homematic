@@ -37,47 +37,59 @@ package de.bo.aid.boese.homematic.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 /**
  * hibernate model-class to persist devices.
  * A device represents a distinct homematic device
  * with its parameters.
  */
+
+@Entity
 public class Device implements java.io.Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 6215317994521160493L;
 
-	/* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "Device [devid=" + devid + ", idverteiler=" + idverteiler + ", adress=" + adress + ", type=" + type
-                + ", name=" + name + ", version=" + version + ", firmware=" + firmware + ", components=" + components
-                + "]";
-    }
+
 
 	/** The primary key. */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int devid;
 	
 	
 	/** The id under which the device is saved in the distributor. */
-	private Integer idverteiler;
+	   @Column(name = "idverteiler", unique = false, nullable = false)
+	   private Integer idverteiler;
 	
 	/** The homematic-address of the device. 
 	 * This is used to address and call the device in homematic*/
-	private String adress;
+	   @Column(name = "address", unique = false, nullable = false)
+	   private String adress;
 	
 	/** The homematic-type. It contains the model of the physical
 	 * homematic device. */
-	private String type;
+	   @Column(name = "type", unique = false, nullable = false)
+	   private String type;
 	
+	@Column(name = "name", unique = false, nullable = false)
 	private String name;
 	
 	/** The homematic-version of the device. */
+	@Column(name = "version", unique = false, nullable = false)
 	private int version;
 	
 	/** The firmware-version of the device. */
+	@Column(name = "firmware", unique = false, nullable = false)
 	private String firmware;
 	
 	/**
@@ -99,12 +111,21 @@ public class Device implements java.io.Serializable {
 	}
 
 	/** The components of the device. One device can have many components. One component must have one device */
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "device")
 	private Set<Component> components = new HashSet<Component>(0);
 
 	/**
 	 * Instantiates a new device.
 	 */
 	public Device() {
+	}
+	
+	public Device(String address, String type, String name, int version, String firmware){
+		this.adress = address;
+		this.type = type;
+		this.name = name;
+		this.version = version;
+		this.firmware = firmware;
 	}
 
 	/**
@@ -239,5 +260,84 @@ public class Device implements java.io.Serializable {
 	public String getName(){
 	    return name;
 	}
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((adress == null) ? 0 : adress.hashCode());
+        result = prime * result + ((components == null) ? 0 : components.hashCode());
+        result = prime * result + devid;
+        result = prime * result + ((firmware == null) ? 0 : firmware.hashCode());
+        result = prime * result + ((idverteiler == null) ? 0 : idverteiler.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + version;
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Device other = (Device) obj;
+        if (adress == null) {
+            if (other.adress != null)
+                return false;
+        } else if (!adress.equals(other.adress))
+            return false;
+        if (components == null) {
+            if (other.components != null)
+                return false;
+        } else if (!components.equals(other.components))
+            return false;
+        if (devid != other.devid)
+            return false;
+        if (firmware == null) {
+            if (other.firmware != null)
+                return false;
+        } else if (!firmware.equals(other.firmware))
+            return false;
+        if (idverteiler == null) {
+            if (other.idverteiler != null)
+                return false;
+        } else if (!idverteiler.equals(other.idverteiler))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (type == null) {
+            if (other.type != null)
+                return false;
+        } else if (!type.equals(other.type))
+            return false;
+        if (version != other.version)
+            return false;
+        return true;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "Device [devid=" + devid + ", idverteiler=" + idverteiler + ", adress=" + adress + ", type=" + type
+                + ", name=" + name + ", version=" + version + ", firmware=" + firmware + ", components=" + components
+                + "]";
+    }
+	
+	
 
 }
