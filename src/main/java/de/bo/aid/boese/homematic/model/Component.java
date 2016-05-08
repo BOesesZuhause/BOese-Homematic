@@ -69,7 +69,7 @@ public class Component implements java.io.Serializable {
 	   private Device device;
 	
 	/** The id under which the component is saved in the distributor. */
-	@Column(name = "idverteiler", unique = false, nullable = false)
+	@Column(name = "idverteiler", unique = false, nullable = true)
 	private Integer idverteiler;
 	
 	/** The name of the component. */
