@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	version="2.0">
+
+	<persistence-unit name="Service" transaction-type="RESOURCE_LOCAL">
+
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		
+		<class>de.bo.aid.boese.homematic.model.Connector</class>
+		<class>de.bo.aid.boese.homematic.model.Device</class>
+		<class>de.bo.aid.boese.homematic.model.Component</class>
+		
+		<properties>
+
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:./data/db" />
+  
+  <!-- For debugging -->          
+<!--        <property name="javax.persistence.jdbc.driver" value="net.sf.log4jdbc.DriverSpy" /> -->
+<!--        <property name="javax.persistence.jdbc.url" value="jdbc:log4jdbc:h2:./data/db" /> -->
+            	
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+		</properties>
+
+	</persistence-unit>
+</persistence>
