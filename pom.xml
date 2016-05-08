@@ -55,12 +55,9 @@
   
   
   
-  <dependencies> 
-  <dependency>
-	<groupId>junit</groupId>
-	<artifactId>junit</artifactId>
-	<version>4.12</version>
-</dependency>
+ <dependencies> 
+    
+
  <!-- To compile javax.json-->  
     <dependency>
 	<groupId>javax.json</groupId>
@@ -106,16 +103,8 @@
 	<artifactId>xmlrpc-common</artifactId>
 	<version>${xmlrpc-version}</version>
 </dependency>
-<dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <version>1.4.188</version>
-</dependency>
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-core</artifactId>
-	<version>4.3.10.Final</version>
-</dependency>
+
+
   <dependency>
     <groupId>org.apache.logging.log4j</groupId>
     <artifactId>log4j-api</artifactId>
@@ -163,6 +152,28 @@
     <groupId>org.jboss.logging</groupId>
     <artifactId>jboss-logging</artifactId>
     <version>3.3.0.Final</version>
+</dependency>
+  <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+</dependency>
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <version>1.4.188</version>
+</dependency>
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.1.0.Final</version>
+</dependency>
+
+<!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-entitymanager</artifactId>
+    <version>5.1.0.Final</version>
 </dependency>
 
 <dependency>
