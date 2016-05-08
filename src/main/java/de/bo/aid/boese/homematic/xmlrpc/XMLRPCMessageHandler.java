@@ -45,7 +45,7 @@ import org.apache.logging.log4j.LogManager;
 import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.db.HibernateUtil;
+import de.bo.aid.boese.homematic.db.JPAUtil;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Device;
 import de.bo.aid.boese.homematic.socket.SocketClient;
@@ -87,7 +87,7 @@ public class XMLRPCMessageHandler {
             String[] split = address.split(":");
             address = split[0];
             
-            EntityManager em = HibernateUtil.getEntityManager();
+            EntityManager em = JPAUtil.getEntityManager();
             em.getTransaction().begin();
             Device dev = deviceDao.getByAddress(em, address);
             em.getTransaction().commit();
@@ -111,7 +111,7 @@ public class XMLRPCMessageHandler {
             return;
         }
 		
-	    EntityManager em = HibernateUtil.getEntityManager();
+	    EntityManager em = JPAUtil.getEntityManager();
 	    em.getTransaction().begin();
 		Component comp = componentDao.getComponentByAddressAndName(em, address, value_key);
 		em.getTransaction().commit();

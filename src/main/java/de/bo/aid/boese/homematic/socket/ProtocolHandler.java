@@ -53,7 +53,7 @@ import de.bo.aid.boese.constants.Status;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.db.HibernateUtil;
+import de.bo.aid.boese.homematic.db.JPAUtil;
 import de.bo.aid.boese.homematic.model.Component;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.homematic.model.Device;
@@ -182,7 +182,7 @@ public class ProtocolHandler implements MessageHandler{
 	private void handleSendvalue(SendValue bjMessage) {
 		Component comp = null;
 
-		    EntityManager em = HibernateUtil.getEntityManager();
+		    EntityManager em = JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 			comp = componentDao.getByVertID(em, bjMessage.getDeviceComponentId());
 			em.getTransaction().commit();
@@ -220,7 +220,7 @@ public class ProtocolHandler implements MessageHandler{
 				int deviceId = bjMessage.getDeviceId();	
 				Device dev = null;
 				
-				EntityManager em = HibernateUtil.getEntityManager();
+				EntityManager em = JPAUtil.getEntityManager();
 				em.getTransaction().begin();
 				dev = deviceDao.getByIdVerteiler(em, deviceId);
 			
@@ -266,7 +266,7 @@ public class ProtocolHandler implements MessageHandler{
 		//find Device
 		Device requestedDevice = null;
 		
-		EntityManager em = HibernateUtil.getEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		requestedDevice = deviceDao.getByIdVerteiler(em, bjMessage.getDeviceId());
 		
@@ -319,7 +319,7 @@ public class ProtocolHandler implements MessageHandler{
 	 */
 	private void handleConfirmDevices(ConfirmDevices bjMessage) {
 		HashMap<String, Integer> devMap = bjMessage.getDevices();
-		EntityManager em = HibernateUtil.getEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		for (String deviceName : devMap.keySet()) {	
 			for(Device dev : deviceDao.getAll(em)){
@@ -340,7 +340,7 @@ public class ProtocolHandler implements MessageHandler{
 	 * @param bjMessage the object for the requestAllDevices message
 	 */
 	private void handleRequestAllDevices(RequestAllDevices bjMessage) {
-		EntityManager em = HibernateUtil.getEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 
 		HashMap<String, Integer> devHash = new HashMap<>();
@@ -366,7 +366,7 @@ public class ProtocolHandler implements MessageHandler{
 	 * @param bjMessage the object of the confirmConnection message
 	 */
 	private void handleConfirmconnection(ConfirmConnection bjMessage) {
-		EntityManager em = HibernateUtil.getEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		
 		Connector con = connectorDao.get(em);

@@ -28,7 +28,7 @@ import de.bo.aid.boese.homeamtic.cli.Parameters;
 import de.bo.aid.boese.homematic.dao.ComponentDao;
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
 import de.bo.aid.boese.homematic.dao.DeviceDao;
-import de.bo.aid.boese.homematic.db.HibernateUtil;
+import de.bo.aid.boese.homematic.db.JPAUtil;
 import de.bo.aid.boese.homematic.mapper.DeviceMapper;
 import de.bo.aid.boese.homematic.mapper.DevicesXMLMapper;
 import de.bo.aid.boese.homematic.model.Component;
@@ -134,7 +134,7 @@ public class HMConnector {
 	private void saveSettings() {
 		Connector con = null;
 		try { // check if connector is already saved in database
-			EntityManager em = HibernateUtil.getEntityManager();
+			EntityManager em = JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 		//	con = connectorDao.get(em);
 
@@ -160,7 +160,7 @@ public class HMConnector {
 	 * @param devices the devices returned from HomeMatic
 	 */
 	private void initDatabase(List<Device> devices) {
-		EntityManager em = HibernateUtil.getEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 		em.getTransaction().begin();
 		// check device and insert
 		for (Device device : devices) {

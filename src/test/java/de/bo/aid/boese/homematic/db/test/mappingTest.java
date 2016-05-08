@@ -37,7 +37,7 @@ package de.bo.aid.boese.homematic.db.test;
 	import org.hibernate.SessionFactory;
 	import org.junit.Test;
 
-import de.bo.aid.boese.homematic.db.HibernateUtil;
+import de.bo.aid.boese.homematic.db.JPAUtil;
 
 
 	// TODO: Auto-generated Javadoc

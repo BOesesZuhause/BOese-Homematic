@@ -22,7 +22,7 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import de.bo.aid.boese.homematic.dao.ConnectorDao;
-import de.bo.aid.boese.homematic.db.HibernateUtil;
+import de.bo.aid.boese.homematic.db.JPAUtil;
 import de.bo.aid.boese.homematic.model.Connector;
 import de.bo.aid.boese.json.BoeseJson;
 import de.bo.aid.boese.json.RequestConnection;
@@ -187,7 +187,7 @@ public class SocketClient
      */
     public void requestConnection(){
         
-    	EntityManager em = HibernateUtil.getEntityManager();
+    	EntityManager em = JPAUtil.getEntityManager();
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
@@ -212,7 +212,7 @@ public class SocketClient
     public void sendValue(double value, int devId, int devCompId, long time){
 
     	
-    	EntityManager em = HibernateUtil.getEntityManager();
+    	EntityManager em = JPAUtil.getEntityManager();
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
@@ -239,7 +239,7 @@ public class SocketClient
      */
     public void sendAction(double value, int devId, int devCompId, long time) {
 
-    	EntityManager em = HibernateUtil.getEntityManager();
+    	EntityManager em = JPAUtil.getEntityManager();
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
@@ -269,7 +269,7 @@ public class SocketClient
      */
     public void sendStatus(int devCompId, int statusCode, long statusTimestamp) {
     	
-    	EntityManager em = HibernateUtil.getEntityManager();
+    	EntityManager em = JPAUtil.getEntityManager();
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
