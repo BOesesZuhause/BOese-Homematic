@@ -107,7 +107,7 @@ public class HMConnector {
 	private void initXMLRPCServer() {
 		XMLserver = new XMLRPCServer();
 		XMLserver.start();
-		client.sendInit(getOwnIP() + ":" + XMLserver.getPort());
+		client.sendInit(props.getOwnIp() + ":" + XMLserver.getPort());
 	}
 
 	/**
@@ -388,6 +388,7 @@ public class HMConnector {
 	            Enumeration<InetAddress> addresses = iface.getInetAddresses();
 	            while(addresses.hasMoreElements()) {
 	                InetAddress addr = addresses.nextElement();
+	                if(!addr.getHostAddress().contains(":"))
 	                ip = addr.getHostAddress();
 	            }
 	        }

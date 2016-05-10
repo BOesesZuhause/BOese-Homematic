@@ -114,8 +114,7 @@ public class XMLRPCMessageHandler {
 	    EntityManager em = JPAUtil.getEntityManager();
 	    em.getTransaction().begin();
 		Component comp = componentDao.getComponentByAddressAndName(em, address, value_key);
-		em.getTransaction().commit();
-		em.close();
+
 		
 		if(comp == null){
 			return;
@@ -158,7 +157,10 @@ public class XMLRPCMessageHandler {
 			default:
 				logger.error("Unknown type: " + type + " for component with address: " + address);
 		}
-		wsClient.sendValue(value, devId, devCompId, System.currentTimeMillis());		
+		wsClient.sendValue(value, devId, devCompId, System.currentTimeMillis());	
+		
+		em.getTransaction().commit();
+		em.close();
 	}
 	
 	/**

@@ -47,6 +47,7 @@ public class ConnectorProperties extends Properties{
     
     private final String HM_ID = "homematic_clientId";
     
+    private final String OWN_IP = "own-ip-address";
     /** The logger. */
     final  Logger logger = LogManager.getLogger(ConnectorProperties.class);
     
@@ -157,6 +158,11 @@ public class ConnectorProperties extends Properties{
     	}
     	if(this.getName() == null){
     		this.setName(Parameters.DEFAULT_NAME);
+    		change = true;
+    	}
+    	if(this.getOwnIp() == null){
+    		this.setOwnIp(Parameters.DEFAULT_IP);
+    		change = true;
     	}
     	
         if(!validate()){
@@ -193,6 +199,10 @@ public class ConnectorProperties extends Properties{
     	if(params.getHmID() != Parameters.DEFAULT_HMID){
         	this.setHMClientID(params.getHmID());    
         	change = true;
+    	}
+    	if(!params.getOwnIp().equals(Parameters.DEFAULT_IP)){
+    		this.setOwnIp(params.getOwnIp());
+    		change = true;
     	}
     	
         if(!validate()){
@@ -338,6 +348,19 @@ public class ConnectorProperties extends Properties{
     		return null;
     	}else{
             return Boolean.parseBoolean(this.getProperty(TLS));
+    	}
+    }
+    
+    public void setOwnIp(String ip){
+    	this.setProperty(OWN_IP, ip);
+    }
+    
+    @NotNull
+    public String getOwnIp(){
+    	if(this.getProperty(OWN_IP) == null){
+    		return null;
+    	}else{
+    		return this.getProperty(OWN_IP);
     	}
     }
 }

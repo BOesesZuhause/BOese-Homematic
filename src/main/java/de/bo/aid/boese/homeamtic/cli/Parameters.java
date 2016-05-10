@@ -34,6 +34,8 @@
  */
 package de.bo.aid.boese.homeamtic.cli;
 
+import java.net.InetAddress;
+
 import com.beust.jcommander.Parameter;
 
 /**
@@ -49,6 +51,15 @@ public class Parameters {
 	public static final String DEFAULT_HMURL = "http://homematic-ccu2:2001";
 	public static final boolean DEFAULT_TLS = true;
 	public static final String DEFAULT_NAME = "BOese-HomeMatic";
+	public static final String DEFAULT_IP = createDefaultIP();
+	
+	private static String createDefaultIP() {
+	    try {
+	        return InetAddress.getLocalHost().getHostAddress();
+	    } catch (final Exception e) {
+	        return "127.0.0.1";
+	    }  
+	}
 	
 	/**  Describes the path to the config file. */
 	@Parameter(names = "-c", description = "Path to the config-file")
@@ -81,6 +92,10 @@ public class Parameters {
 	/**  Describes the path to the config file. */
 	@Parameter(names = "-tls", description = "encrypt the connection to the distributor.", arity = 1)
 	private boolean tls = DEFAULT_TLS;
+	
+	/**  Describes the path to the config file. */
+	@Parameter(names = "-ip", description = "The ip of this machine, reachable by the HomeMatic-CCU.", arity = 1)
+	private String ownIp = DEFAULT_IP;
 	
     @Parameter(names = "-h", description="Display this message", help = true)
     private boolean help = false;
@@ -136,6 +151,10 @@ public class Parameters {
 	
 	public boolean isHelp(){
 	    return help;
+	}
+	
+	public String getOwnIp(){
+		return ownIp;
 	}
 
 
