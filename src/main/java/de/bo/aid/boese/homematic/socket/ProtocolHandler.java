@@ -70,8 +70,6 @@ import de.bo.aid.boese.json.RequestDeviceComponents;
 import de.bo.aid.boese.json.SendDeviceComponents;
 import de.bo.aid.boese.json.SendDevices;
 import de.bo.aid.boese.json.SendValue;
-import javassist.NotFoundException;
-
 
 /**
  * THis class is a handler for the BOese protocol. It is 

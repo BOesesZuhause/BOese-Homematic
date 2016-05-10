@@ -88,7 +88,7 @@ public class SocketClient
         
         try {
             client.start();
-            SocketClient socket = this.getInstance();
+            SocketClient socket = SocketClient.getInstance();
             
             MessageHandler handler = new ProtocolHandler(socket);
             addMessageHandler(handler);
