@@ -191,10 +191,12 @@ public class SocketClient
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
-        em.getTransaction().commit();
+        
         
         // Request connection
         RequestConnection reqCon = new RequestConnection(con.getName(), con.getSecret(), con.getIdverteiler(), 0, System.currentTimeMillis());
+        em.getTransaction().commit();
+        em.close();
         OutputStream os = new ByteArrayOutputStream();
         BoeseJson.parseMessage(reqCon, os);
         sendMessage(os.toString());
@@ -216,11 +218,12 @@ public class SocketClient
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
-        em.getTransaction().commit();
+        
     	
         int conId = con.getIdverteiler();
         
         SendValue sendval = new SendValue(devId, devCompId, value, time, conId, 0, System.currentTimeMillis());
+        em.getTransaction().commit();
         OutputStream os = new ByteArrayOutputStream();
         BoeseJson.parseMessage(sendval, os);
         sendMessage(os.toString());
@@ -243,7 +246,7 @@ public class SocketClient
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
-        em.getTransaction().commit();
+        
         
         int conId = con.getIdverteiler();
 
@@ -256,6 +259,7 @@ public class SocketClient
         os = new ByteArrayOutputStream();
         BoeseJson.parseMessage(sendval, os);
         sendMessage(os.toString());
+        em.getTransaction().commit();
         
     }
 
@@ -273,7 +277,7 @@ public class SocketClient
     	
     	em.getTransaction().begin();
         Connector con = connectorDao.get(em);
-        em.getTransaction().commit();
+        
         
         int conId = con.getIdverteiler();
         
@@ -281,6 +285,7 @@ public class SocketClient
         OutputStream os = new ByteArrayOutputStream();
         BoeseJson.parseMessage(ss, os);
         sendMessage(os.toString());
+        em.getTransaction().commit();
     }
 
 

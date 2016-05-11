@@ -35,8 +35,6 @@
 package de.bo.aid.boese.homematic.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -53,7 +51,6 @@ public class Connector implements java.io.Serializable {
 
 	/** The primary key. */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int conid;
 	
 	/** The id under which the connector is saved in the distributor. */

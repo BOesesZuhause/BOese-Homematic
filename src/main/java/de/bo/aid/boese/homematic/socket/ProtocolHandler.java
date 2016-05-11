@@ -183,8 +183,7 @@ public class ProtocolHandler implements MessageHandler{
 		    EntityManager em = JPAUtil.getEntityManager();
 			em.getTransaction().begin();
 			comp = componentDao.getByVertID(em, bjMessage.getDeviceComponentId());
-			em.getTransaction().commit();
-			em.close();
+
 		 if(comp == null) {
 			logger.warn("requested component with id: " + bjMessage.getDeviceComponentId() + " not found");
 		}
@@ -193,7 +192,9 @@ public class ProtocolHandler implements MessageHandler{
         } catch (XmlRpcException e) {
             logger.error("Could not set component: " + comp.getName() + " to: " + bjMessage.getValue());
             client.sendStatus(comp.getIdverteiler(), Status.ACTOR_DOES_NOT_REACT, System.currentTimeMillis());   
-        }		
+        }	
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	/**
@@ -298,11 +299,13 @@ public class ProtocolHandler implements MessageHandler{
             }		
             components.add(devComp);
 		}
-		em.getTransaction().commit();
-		em.close();
+
 		
 		//Send Components
 		SendDeviceComponents sendDevComp = new SendDeviceComponents(requestedDevice.getIdverteiler(), components, conId, 0, System.currentTimeMillis());
+		em.getTransaction().commit();
+		em.close();
+		
 		OutputStream os = new ByteArrayOutputStream();
 		BoeseJson.parseMessage(sendDevComp, os);
 		client.sendMessage(os.toString());
@@ -375,15 +378,18 @@ public class ProtocolHandler implements MessageHandler{
 		}else if(con.getIdverteiler()== -1){
 			con.setIdverteiler(bjMessage.getConnectorId());
 			con.setSecret(bjMessage.getPassword());
+			con.setConid(1);
+			connectorDao.merge(em, con);
 			//ConnectorDao.insertConnector(con);
-			em.getTransaction().commit();
-			em.close();
+
 			
 		//unknown id
 		}else{
 			logger.error("Unknown identifier for the connector: " + con.getIdverteiler());
 			System.exit(0); //TODO wird aufgerufen falls der Konektor
 		}
+		em.getTransaction().commit();
+		em.close();
 		
 	}
 	

@@ -35,7 +35,6 @@
 package de.bo.aid.boese.homematic.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -69,32 +68,32 @@ public class Component implements java.io.Serializable {
 	   private Device device;
 	
 	/** The id under which the component is saved in the distributor. */
-	@Column(name = "idverteiler", unique = false, nullable = true)
+	//@Column(name = "idverteiler", unique = false, nullable = true)
 	private Integer idverteiler;
 	
 	/** The name of the component. */
-	@Column(name = "name", unique = false, nullable = false)
+	//@Column(name = "name", unique = false, nullable = false)
 	private String name;
 	
 	/** The homematic-address of the component for calling it in the homematic system. */
-	@Column(name = "address", unique = false, nullable = false)
+	//@Column(name = "address", unique = false, nullable = false)
 	private String address;
 	
 	//TODO Wofür ist die? 
 	/** The homematic-id. */
-	@Column(name = "hm_id", unique = false, nullable = false)
+	//@Column(name = "hm_id", unique = false, nullable = false)
 	private String hm_id;
 	
 	/** The unit of the component. */
-	@Column(name = "unit", unique = false, nullable = false)
+	//@Column(name = "unit", unique = false, nullable = false)
 	private String unit;
 	
 	/** Defines whether the component is an actor or a sensor. */
-	@Column(name = "actor", unique = false, nullable = false)
+	//@Column(name = "actor", unique = false, nullable = false)
 	private boolean aktor;
 	
 	/** The homematic-type of the component. Values: ACTION, FLOAT, DOUBLE, BOOLEAN, INT */
-	@Column(name = "type", unique = false, nullable = false)
+	//@Column(name = "type", unique = false, nullable = false)
 	private String type;
 	
 

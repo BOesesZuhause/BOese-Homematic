@@ -10,7 +10,7 @@ public class ConnectorDao {
     	Connector c = this.get(em);
     	if(c == null){
 	        c = new Connector(name);
-	       // c.setConid(1);
+	        c.setConid(1);
 	        em.persist(c);
     	}
         return c;

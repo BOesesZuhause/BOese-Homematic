@@ -136,18 +136,15 @@ public class HMConnector {
 		try { // check if connector is already saved in database
 			EntityManager em = JPAUtil.getEntityManager();
 			em.getTransaction().begin();
-		//	con = connectorDao.get(em);
+			con = connectorDao.get(em);
 
-			//if (con == null) {
+			 if(con == null) {
 				// insert defaultConnector
 				con = connectorDao.create(em, props.getName());
-			//	con.setName(props.getName());
-				con.setIdverteiler(-1);
-				con.setSecret(null);
 				em.getTransaction().commit();
 				em.close();
 				logger.info("created initial data for connector in database");
-			//}
+			}
 		} catch (Exception e) {
 			logger.error("Unable to load connector details from database");
 			e.printStackTrace();
